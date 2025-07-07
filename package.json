@@ -1,0 +1,22 @@
+{
+  "name": "timesheets",
+  "version": "1.0.0",
+  "description": "Simple timesheet application",
+  "license": "ISC",
+  "author": "Proallone",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "watch": "tsx watch src",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
+  }
+}
