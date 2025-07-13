@@ -1,4 +1,4 @@
-import express from 'express';
+import express from "express";
 
 const app = express();
 app.use(express.json());
@@ -6,6 +6,5 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send(`Hello World, it's Sunday!`);
 });
-
 
 export default app;
