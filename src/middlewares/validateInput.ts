@@ -1,8 +1,11 @@
 import { Request, Response, NextFunction } from "express";
-import { z } from 'zod';
+import { z } from "zod";
 
-type MiddlewareFunction = ( req: Request, res: Response, next: NextFunction) => void;
-
+type MiddlewareFunction = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => void;
 
 type ValidateInput = (
     schema: z.ZodObject<{
@@ -12,20 +15,21 @@ type ValidateInput = (
     }>
 ) => MiddlewareFunction;
 
-const validateInput: ValidateInput = 
-    (schema) : MiddlewareFunction => (req,res,next) => {
+const validateInput: ValidateInput =
+    (schema): MiddlewareFunction =>
+    (req, res, next) => {
         const result = schema.safeParse({
             body: req.body,
             query: req.query,
             params: req.params
         });
 
-        if(!result.success) {
+        if (!result.success) {
             return res.status(400).json({
-                status: 'error',
-                message: 'Validation failed',
+                status: "error",
+                message: "Validation failed",
                 errors: result.error.issues.map((err) => ({
-                    path: err.path.join('.'),
+                    path: err.path.join("."),
                     message: err.message,
                     code: err.code
                 }))
@@ -35,4 +39,4 @@ const validateInput: ValidateInput =
         next();
     };
 
-    export default validateInput;
+export default validateInput;
