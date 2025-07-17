@@ -8,6 +8,7 @@ const init = `
     name TEXT NOT NULL,
     surname TEXT NOT NULL,
     email TEXT UNIQUE NOT NULL,
+    passwordHash TEXT NOT NULL,
     createdAt TEXT DEFAULT (datetime('now')),
     modifiedAt TEXT DEFAULT (datetime('now'))
   ) STRICT;

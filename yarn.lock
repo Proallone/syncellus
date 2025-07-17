@@ -273,6 +273,13 @@
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-1.1.2.tgz#ccb91445360179a04e7fe6aff78c00ffc1eeaf82"
   integrity sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==
 
+"@types/bcrypt@^5.0.2":
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/@types/bcrypt/-/bcrypt-5.0.2.tgz#22fddc11945ea4fbc3655b3e8b8847cc9f811477"
+  integrity sha512-6atioO8Y75fNcbmj0G7UjI9lXN2pQ/IGJ2FWT4a/btd0Lk9lQalHLKhkgKVZ3r+spnmWUKfbMi1GEe9wyHQfNQ==
+  dependencies:
+    "@types/node" "*"
+
 "@types/body-parser@*":
   version "1.19.6"
   resolved "https://registry.yarnpkg.com/@types/body-parser/-/body-parser-1.19.6.tgz#1859bebb8fd7dac9918a45d54c1971ab8b5af474"
@@ -335,9 +342,9 @@
     "@types/node" "*"
 
 "@types/node@*", "@types/node@^24.0.10":
-  version "24.0.13"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-24.0.13.tgz#93ed8c05c7b188a59760be0ce2ee3fa7ad0f83f6"
-  integrity sha512-Qm9OYVOFHFYg3wJoTSrz80hoec5Lia/dPp84do3X7dZvLikQvM1YpmvTBEdIr/e+U8HTkFjLHLnl78K/qjf+jQ==
+  version "24.0.14"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-24.0.14.tgz#6e3d4fb6d858c48c69707394e1a0e08ce1ecc1bc"
+  integrity sha512-4zXMWD91vBLGRtHK3YbIoFMia+1nqEz72coM42C5ETjnNCa/heoj7NT1G67iAfOqMmcfhuCZ4uNpyz8EjlAejw==
   dependencies:
     undici-types "~7.8.0"
 
@@ -567,6 +574,14 @@ basic-auth@~2.0.1:
   integrity sha512-NF+epuEdnUYVlGuhaxbbq+dvJttwLnGY+YixlXlME5KpQ5W3CnXA5cVTneY3SPbPDRkcjMbifrwmFYcClgOZeg==
   dependencies:
     safe-buffer "5.1.2"
+
+bcrypt@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/bcrypt/-/bcrypt-6.0.0.tgz#86643fddde9bcd0ad91400b063003fa4b0312835"
+  integrity sha512-cU8v/EGSrnH+HnxV2z0J7/blxH8gq7Xh2JFT6Aroax7UohdmiJJlxApMxtKfuI7z68NvvVcmR78k2LbT6efhRg==
+  dependencies:
+    node-addon-api "^8.3.0"
+    node-gyp-build "^4.8.4"
 
 bindings@^1.5.0:
   version "1.5.0"
@@ -1678,15 +1693,15 @@ mkdirp@^1.0.3, mkdirp@^1.0.4:
   integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
 
 morgan@^1.10.0:
-  version "1.10.0"
-  resolved "https://registry.yarnpkg.com/morgan/-/morgan-1.10.0.tgz#091778abc1fc47cd3509824653dae1faab6b17d7"
-  integrity sha512-AbegBVI4sh6El+1gNwvD5YIck7nSA36weD7xvIxG4in80j/UoK8AEGaWnnz8v1GxonMCltmlNs5ZKbGvl9b1XQ==
+  version "1.10.1"
+  resolved "https://registry.yarnpkg.com/morgan/-/morgan-1.10.1.tgz#4e02e6a4465a48e26af540191593955d17f61570"
+  integrity sha512-223dMRJtI/l25dJKWpgij2cMtywuG/WiUKXdvwfbhGKBhy1puASqXwFzmWZ7+K73vUPoR7SS2Qz2cI/g9MKw0A==
   dependencies:
     basic-auth "~2.0.1"
     debug "2.6.9"
     depd "~2.0.0"
     on-finished "~2.3.0"
-    on-headers "~1.0.2"
+    on-headers "~1.1.0"
 
 ms@2.0.0:
   version "2.0.0"
@@ -1729,6 +1744,16 @@ node-addon-api@^7.0.0:
   version "7.1.1"
   resolved "https://registry.yarnpkg.com/node-addon-api/-/node-addon-api-7.1.1.tgz#1aba6693b0f255258a049d621329329322aad558"
   integrity sha512-5m3bsyrjFWE1xf7nz7YXdN4udnVtXK6/Yfgn5qnahL6bCkf2yKt4k3nuTKAtT4r3IG8JNR2ncsIMdZuAzJjHQQ==
+
+node-addon-api@^8.3.0:
+  version "8.5.0"
+  resolved "https://registry.yarnpkg.com/node-addon-api/-/node-addon-api-8.5.0.tgz#c91b2d7682fa457d2e1c388150f0dff9aafb8f3f"
+  integrity sha512-/bRZty2mXUIFY/xU5HLvveNHlswNJej+RnxBjOMkidWfwZzgTbPG1E3K5TOxRLOR+5hX7bSofy8yf1hZevMS8A==
+
+node-gyp-build@^4.8.4:
+  version "4.8.4"
+  resolved "https://registry.yarnpkg.com/node-gyp-build/-/node-gyp-build-4.8.4.tgz#8a70ee85464ae52327772a90d66c6077a900cfc8"
+  integrity sha512-LA4ZjwlnUblHVgq0oBF3Jl/6h/Nvs5fzBLwdEF4nuxnFdsfajde4WfxtJr3CaiH+F6ewcIB/q4jQ4UzPyid+CQ==
 
 node-gyp@8.x:
   version "8.4.1"
@@ -1782,10 +1807,10 @@ on-finished@~2.3.0:
   dependencies:
     ee-first "1.1.1"
 
-on-headers@~1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/on-headers/-/on-headers-1.0.2.tgz#772b0ae6aaa525c399e489adfad90c403eb3c28f"
-  integrity sha512-pZAE+FJLoyITytdqK0U5s+FIpjN0JP3OzFi/u8Rx+EV5/W+JTWGXG8xFzevE7AjBfDqHv/8vL8qQsIhHnqRkrA==
+on-headers@~1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/on-headers/-/on-headers-1.1.0.tgz#59da4f91c45f5f989c6e4bcedc5a3b0aed70ff65"
+  integrity sha512-737ZY3yNnXy37FHkQxPzt4UZ2UWPWiCZWLvFZ4fu5cueciegX0zGPnrlY6bwRg4FdQOe9YU8MkmJwGhoMybl8A==
 
 once@^1.3.0, once@^1.3.1, once@^1.4.0:
   version "1.4.0"
