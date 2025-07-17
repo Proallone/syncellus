@@ -39,4 +39,4 @@ const validateInput: ValidateInput =
         next();
     };
 
-export default validateInput;
+export { validateInput };

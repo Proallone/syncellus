@@ -1,7 +1,7 @@
 import express from "express";
 import morgan from "morgan";
-import { errorHandler } from "./middlewares/errorHandler.js";
-import userRoutes from "./routes/userRoutes.js";
+import { errorHandler } from "./middlewares/error.middleware.js";
+import userRoutes from "./routes/user.routes.js";
 
 const app = express();
 app.use(express.json());
