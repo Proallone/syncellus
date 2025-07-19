@@ -9,12 +9,12 @@ const server = app.listen(config.port, () => {
 });
 
 const shutdown = () => {
-  console.log("\nShutting down...");
-  server.close(() => {
-    db.close();
-    console.log("Server closed. Database closed. Cleanup complete.");
-    process.exit(0);
-  });
+    console.log("\nShutting down...");
+    server.close(() => {
+        db.close();
+        console.log("Server closed. Database closed. Cleanup complete.");
+        process.exit(0);
+    });
 };
 
 process.on("SIGINT", shutdown);

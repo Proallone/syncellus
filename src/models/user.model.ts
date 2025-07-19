@@ -38,7 +38,6 @@ const getUserById = (id: string) => {
 const patchUserInDb = async (user: User) => {
     let passwordHash: string | null = null;
     if (user.password) passwordHash = await hashPassword(user.password);
-    console.log(user);
     const query = db.prepare(
         "UPDATE USERS SET name = COALESCE(? , name), surname = COALESCE(?, surname), email = COALESCE(?, email), passwordHash = COALESCE(?, passwordHash) WHERE id = ? RETURNING name, surname, email, createdAt, modifiedAt;"
     );

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const userCreateSchema = z.object({
+const userPostSchema = z.object({
     body: z.object({
         name: z.string().min(3).max(255),
         surname: z.string().min(3).max(255),
@@ -9,7 +9,7 @@ const userCreateSchema = z.object({
     })
 });
 
-const userUpdateSchema = z.object({
+const userPatchSchema = z.object({
     body: z.object({
         name: z.string().min(3).max(255).optional(),
         surname: z.string().min(3).max(255).optional(),
@@ -18,4 +18,4 @@ const userUpdateSchema = z.object({
     })
 });
 
-export { userCreateSchema, userUpdateSchema };
+export { userPostSchema, userPatchSchema };
