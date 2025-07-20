@@ -7,11 +7,10 @@ const createTimesheet = async (
     next: NextFunction
 ) => {
     try {
-        const timesheet: Timesheet = { ...req.body};
-        const newTimesheet = await createTimesheetInDb(timesheet)
+        const timesheet: Timesheet = { ...req.body };
+        const newTimesheet = await createTimesheetInDb(timesheet);
         res.status(201).json(newTimesheet);
-    }
-    catch(error) {
+    } catch (error) {
         next(error);
     }
 };
