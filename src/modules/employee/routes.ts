@@ -5,9 +5,9 @@ import {
     getUser,
     getUsers,
     patchUser
-} from "./user.controller.js";
+} from "./controller.js";
 import { validateInput } from "../../middlewares/validator.middleware.js";
-import { userPostSchema, userPatchSchema } from "./user.schema.js";
+import { userPostSchema, userPatchSchema } from "./schema.js";
 
 const router = Router();
 

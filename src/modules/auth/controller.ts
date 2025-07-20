@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { Auth } from "./auth.model.js";
-import { getUserAuth } from "./auth.model.js";
+import { Auth } from "./model.js";
+import { getUserAuth } from "./model.js";
 import { compareHash } from "../../utils/crypto.js";
 
 const signIn = async (req: Request, res: Response, next: NextFunction) => {
