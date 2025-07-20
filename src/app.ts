@@ -1,8 +1,8 @@
 import express from "express";
 import morgan from "morgan";
 import { errorHandler } from "./middlewares/error.middleware.js";
-import userRoutes from "./routes/user.routes.js";
-import authRoutes from "./routes/auth.routes.js";
+import userRoutes from "./modules/employee/user.routes.js";
+import authRoutes from "./modules/auth/auth.routes.js";
 
 const app = express();
 app.use(express.json());

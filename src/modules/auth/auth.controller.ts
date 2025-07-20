@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import { Auth } from "../models/auth.model.js";
-import { getUserAuth } from "../models/auth.model.js";
-import { compareHash } from "../utils/crypto.js";
+import { Auth } from "./auth.model.js";
+import { getUserAuth } from "./auth.model.js";
+import { compareHash } from "../../utils/crypto.js";
 
 const signIn = async (req: Request, res: Response, next: NextFunction) => {
     const { body } = req;
@@ -20,10 +20,12 @@ const signIn = async (req: Request, res: Response, next: NextFunction) => {
             String(user.passwordHash)
         );
 
-        if (match)
+        if (match) {
             res.status(200).send({
                 message: "Correct password! This is a placeholder!"
             });
+            return;
+        }
 
         res.status(401).send({ message: "Unauthorized!" });
     } catch (error) {

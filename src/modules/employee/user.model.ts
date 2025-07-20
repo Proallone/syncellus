@@ -1,5 +1,5 @@
-import db from "../database/database.js";
-import { hashPassword } from "../utils/crypto.js";
+import db from "../../database/database.js";
+import { hashPassword } from "../../utils/crypto.js";
 
 export interface User {
     id: number;

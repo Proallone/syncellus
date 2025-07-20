@@ -6,7 +6,7 @@ import {
     User,
     patchUserInDb,
     deleteUserInDb
-} from "../models/user.model.js";
+} from "./user.model.js";
 
 const createUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
