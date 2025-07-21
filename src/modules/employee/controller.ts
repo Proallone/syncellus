@@ -1,31 +1,31 @@
 import type { Request, Response, NextFunction } from "express";
 import {
-    createUserInDb,
-    getAllUsers,
-    getUserById,
-    User,
-    patchUserInDb,
-    deleteUserInDb
+    createNewEmployee,
+    getAllEmployees,
+    getEmployeeById,
+    patchEmployeeInDb,
+    deleteEmployeeInDb
 } from "./model.js";
+import type { EmployeeUpdate, NewEmployee } from "../../types/database.js";
 
 const createUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const user: User = { ...req.body };
-        const newUser = await createUserInDb(user);
+        const user: NewEmployee = { ...req.body };
+        const newUser = await createNewEmployee(user);
         res.status(201).json(newUser);
     } catch (error) {
         next(error);
     }
 };
 
-const getUsers = (req: Request, res: Response, next: NextFunction) => {
-    const users = getAllUsers();
-    res.status(200).json(users);
+const getUsers = async (req: Request, res: Response, next: NextFunction) => {
+    const users = await getAllEmployees();
+    return res.status(200).json(users);
 };
 
-const getUser = (req: Request, res: Response, next: NextFunction) => {
+const getUser = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
-    const user = getUserById(id);
+    const user = await getEmployeeById(Number(id));
     if (!user)
         res.status(404).send({ message: `User with ID ${id} not found!` });
 
@@ -36,25 +36,22 @@ const patchUser = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     const { body } = req;
     try {
-        const data: User = { id, ...body };
-        const patched = await patchUserInDb(data);
+        const data: EmployeeUpdate = { id, ...body };
+        const patched = await patchEmployeeInDb(data);
         if (!patched)
             return res
                 .status(404)
                 .send({ message: `User with ID ${id} not found!` });
-        return res
-            .status(200)
-            .send({ message: `User with ${id} updated!`, data: patched });
+        return res.status(200).send(patched);
     } catch (error) {
         next(error);
     }
 };
 
-const deleteUser = (req: Request, res: Response, next: NextFunction) => {
+const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
-
     try {
-        const deletion = deleteUserInDb(id);
+        const deletion = await deleteEmployeeInDb(Number(id));
         if (!deletion)
             return res
                 .status(404)

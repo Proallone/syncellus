@@ -13,7 +13,7 @@ app.use(morgan("common"));
 
 app.use("/health", healthRoutes);
 app.use("/auth", authRoutes);
-app.use("/users", userRoutes);
+app.use("/employees", userRoutes);
 app.use("/timesheets", timesheetsRoutes);
 
 app.use(errorHandler);

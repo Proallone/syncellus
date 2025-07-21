@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { createTimesheetInDb, Timesheet } from "./model.js";
+import { createTimesheetInDb, getAllTimesheets } from "./model.js";
+import type { NewTimesheet } from "../../types/database.js";
 
 const createTimesheet = async (
     req: Request,
@@ -7,7 +8,7 @@ const createTimesheet = async (
     next: NextFunction
 ) => {
     try {
-        const timesheet: Timesheet = { ...req.body };
+        const timesheet: NewTimesheet = { ...req.body };
         const newTimesheet = await createTimesheetInDb(timesheet);
         res.status(201).json(newTimesheet);
     } catch (error) {
@@ -20,7 +21,8 @@ const getTimesheets = async (
     res: Response,
     next: NextFunction
 ) => {
-    res.status(200).json({ test: "test timesheet get all" });
+    const timeshets = await getAllTimesheets();
+    res.status(200).send(timeshets);
 };
 
 const getTimesheetById = async (

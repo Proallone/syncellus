@@ -9,7 +9,11 @@ const getApplicationHealth = (
     res.status(200).send({ message: "Healthy!" });
 };
 
-const getDatabaseHealth = async (req: Request, res: Response, next: NextFunction) => {
+const getDatabaseHealth = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
     const version = await getDatabaseHealthDb();
     return res.status(200).json(version);
 };

@@ -1,6 +1,6 @@
 import app from "./app.js";
 import config from "./config/config.js";
-import db from "./database/database.js";
+import { db } from "./database/database.js";
 
 const server = app.listen(config.port, () => {
     console.log(
@@ -11,7 +11,7 @@ const server = app.listen(config.port, () => {
 const shutdown = () => {
     console.log("\nShutting down...");
     server.close(() => {
-        db.close();
+        db.destroy();
         console.log("Server closed. Database closed. Cleanup complete.");
         process.exit(0);
     });

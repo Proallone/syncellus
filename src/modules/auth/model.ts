@@ -1,4 +1,4 @@
-import db from "../../database/database.js";
+// import db from "../../database/database.js";
 
 export interface Auth {
     email: string;
@@ -6,10 +6,10 @@ export interface Auth {
 }
 
 const getUserAuth = (email: string) => {
-    const query = db.prepare(
-        "SELECT email, passwordHash FROM USERS where email = ?;"
-    );
-    return query.get(email);
+    // const query = db.prepare(
+    //     "SELECT email, passwordHash FROM USERS where email = ?;"
+    // );
+    // return query.get(email);
 };
 
 export { getUserAuth };

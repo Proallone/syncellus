@@ -1,66 +1,50 @@
-import db from "../../database/database.js";
+import { db } from "../../database/database.js";
 import { hashPassword } from "../../utils/crypto.js";
+import type { EmployeeUpdate, NewEmployee } from "../../types/database.js";
 
-export interface User {
-    id: number;
-    name: string;
-    surname: string;
-    email: string;
-    password: string;
-}
-
-const createUserInDb = async (user: User) => {
-    const query = db.prepare(
-        "INSERT INTO USERS (name, surname, email, passwordHash) VALUES (?, ?, ?, ?) RETURNING name, surname, email, createdAt, modifiedAt;"
-    );
-    return query.get(
-        user.name,
-        user.surname,
-        user.email,
-        await hashPassword(user.password)
-    );
+const createNewEmployee = async (employee: NewEmployee) => {
+    return await db
+        .insertInto("employees")
+        .values({
+            ...employee,
+            password: await hashPassword(employee.password)
+        })
+        .returningAll()
+        .executeTakeFirstOrThrow();
 };
 
-const getAllUsers = () => {
-    const query = db.prepare(
-        "SELECT name, surname, email, createdAt, modifiedAt FROM USERS"
-    );
-    return query.all();
+const getAllEmployees = async () => {
+    return await db.selectFrom("employees").selectAll().execute();
 };
 
-const getUserById = (id: string) => {
-    const query = db.prepare(
-        "SELECT name, surname, email, createdAt, modifiedAt FROM USERS WHERE ID = ?"
-    );
-    return query.get(id);
+const getEmployeeById = async (id: number) => {
+    return await db
+        .selectFrom("employees")
+        .select(["name", "surname", "email", "createdAt", "modifiedAt"])
+        .where("id", "=", id)
+        .execute();
 };
 
-const patchUserInDb = async (user: User) => {
-    let passwordHash: string | null = null;
-    if (user.password) passwordHash = await hashPassword(user.password);
-    const query = db.prepare(
-        "UPDATE USERS SET name = COALESCE(? , name), surname = COALESCE(?, surname), email = COALESCE(?, email), passwordHash = COALESCE(?, passwordHash) WHERE id = ? RETURNING name, surname, email, createdAt, modifiedAt;"
-    );
-    return query.get(
-        user.name ?? null,
-        user.surname ?? null,
-        user.email ?? null,
-        passwordHash ?? null,
-        user.id
-    );
+const patchEmployeeInDb = async (employee: EmployeeUpdate) => {
+    return await db
+        .updateTable("employees")
+        .set(employee)
+        .where("id", "=", Number(employee.id))
+        .returningAll()
+        .executeTakeFirst();
 };
 
-const deleteUserInDb = (id: string) => {
-    const query = db.prepare(
-        "DELETE FROM USERS WHERE ID = ? RETURNING name, surname, email, createdAt, modifiedAt;"
-    );
-    return query.get(id);
+const deleteEmployeeInDb = async (id: number) => {
+    return await db
+        .deleteFrom("employees")
+        .where("id", "=", id)
+        .executeTakeFirst();
 };
 
 export {
-    createUserInDb,
-    getAllUsers,
-    getUserById,
-    patchUserInDb,
-    deleteUserInDb
+    createNewEmployee,
+    getAllEmployees,
+    getEmployeeById,
+    patchEmployeeInDb,
+    deleteEmployeeInDb
 };

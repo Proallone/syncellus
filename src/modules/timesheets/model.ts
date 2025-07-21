@@ -1,4 +1,5 @@
-import db from "../../database/database.js";
+import { db } from "../../database/database.js";
+import type { NewTimesheet } from "../../types/database.js";
 
 export interface Timesheet {
     id?: number;
@@ -10,16 +11,31 @@ export interface Timesheet {
     approved: boolean;
 }
 
-const createTimesheetInDb = async (timesheet: Timesheet) => {
-    const query = db.prepare(
-        "INSERT INTO timesheets (employee_id, date, start_hour, end_hour) VALUES (?, ?, ?, ?) RETURNING id, employee_id, createdAt, modifiedAt, date, start_hour, end_hour, hours_worked, approved;"
-    );
-    return query.get(
-        timesheet.employee_id,
-        timesheet.date,
-        timesheet.start_hour,
-        timesheet.end_hour
-    );
+const createTimesheetInDb = async (timesheet: NewTimesheet) => {
+    return db
+        .insertInto("timesheets")
+        .values(timesheet)
+        .returningAll()
+        .executeTakeFirst();
 };
 
-export { createTimesheetInDb };
+const getAllTimesheets = async () => {
+    return await db.selectFrom("timesheets").selectAll().execute();
+};
+
+const getTimesheetById = async (id: number) => {
+    return await db
+        .selectFrom("timesheets")
+        .selectAll()
+        .where("id", "=", id)
+        .executeTakeFirstOrThrow();
+};
+
+const deleteTimesheet = async (id: number) => {
+    return await db
+        .deleteFrom("timesheets")
+        .where("id", "=", id)
+        .executeTakeFirstOrThrow();
+};
+
+export { createTimesheetInDb, getAllTimesheets, getTimesheetById };
