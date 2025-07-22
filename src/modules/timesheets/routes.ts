@@ -14,7 +14,7 @@ const router = Router();
 router.get("/", getTimesheets);
 router.get("/:id", getTimesheetById);
 router.post("/", validateInput(timesheetPostSchema), createTimesheet);
-router.patch("/:id", validateInput(timesheetUpdateSchema), patchTimesheet)
+router.patch("/:id", validateInput(timesheetUpdateSchema), patchTimesheet);
 router.delete("/:id", deleteTimesheet);
 
 export default router;

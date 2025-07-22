@@ -65,7 +65,6 @@ const patchTimesheet = async (
     }
 };
 
-
 const deleteTimesheet = async (
     req: Request,
     res: Response,
@@ -86,4 +85,10 @@ const deleteTimesheet = async (
     }
 };
 
-export { createTimesheet, getTimesheets, getTimesheetById, patchTimesheet, deleteTimesheet  };
+export {
+    createTimesheet,
+    getTimesheets,
+    getTimesheetById,
+    patchTimesheet,
+    deleteTimesheet
+};
