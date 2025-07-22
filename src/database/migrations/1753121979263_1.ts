@@ -106,7 +106,8 @@ export async function up(db: Kysely<any>): Promise<void> {
         )
         .addColumn("hours_worked", "text", (col) =>
             col.generatedAlwaysAs(
-                sql`timediff(time(end_hour), time(start_hour))`
+                //? SQLite equivalent for timediff and formatting as HH:MM
+                sql`strftime('%H:%M', (julianday('2000-01-01 ' || time(end_hour)) - julianday('2000-01-01 ' || time(start_hour))) * 86400, 'unixepoch')`
             )
         )
         .addColumn("approved", "boolean", (col) => col.defaultTo(false))
