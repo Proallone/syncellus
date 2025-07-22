@@ -1,14 +1,10 @@
 import { db } from "../../database/database.js";
-import { hashPassword } from "../../utils/crypto.js";
 import type { EmployeeUpdate, NewEmployee } from "../../types/database.js";
 
 const insertNewEmployeeToDb = async (employee: NewEmployee) => {
     return await db
         .insertInto("employees")
-        .values({
-            ...employee,
-            password: await hashPassword(employee.password)
-        })
+        .values(employee)
         .returningAll()
         .executeTakeFirstOrThrow();
 };
@@ -20,7 +16,7 @@ const selectAllEmployeesFromDb = async () => {
 const selectOneEmployeeByIdFromDb = async (id: number) => {
     return await db
         .selectFrom("employees")
-        .select(["name", "surname", "email", "createdAt", "modifiedAt"])
+        .select(["name", "surname", "createdAt", "modifiedAt"])
         .where("id", "=", id)
         .execute();
 };

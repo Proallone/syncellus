@@ -1,15 +1,27 @@
-// import db from "../../database/database.js";
+import { db } from "../../database/database.js";
+import { NewUser } from "../../types/database.js";
 
-export interface Auth {
-    email: string;
-    password: string;
-}
-
-const getUserAuth = (email: string) => {
-    // const query = db.prepare(
-    //     "SELECT email, passwordHash FROM USERS where email = ?;"
-    // );
-    // return query.get(email);
+const insertNewUserToDb = async (user: NewUser) => {
+    return await db
+        .insertInto("users")
+        .values(user)
+        .returning([
+            "id",
+            "email",
+            "createdAt",
+            "modifiedAt",
+            "is_active",
+            "role"
+        ])
+        .executeTakeFirst();
 };
 
-export { getUserAuth };
+const selectUserByEmailFromDb = async (email: string) => {
+    return await db
+        .selectFrom("users")
+        .select("password")
+        .where("email", "=", email)
+        .executeTakeFirst();
+};
+
+export { insertNewUserToDb, selectUserByEmailFromDb };

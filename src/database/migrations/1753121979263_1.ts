@@ -5,13 +5,52 @@ export async function up(db: Kysely<any>): Promise<void> {
     // up migration code goes here...
     // note: up migrations are mandatory. you must implement this function.
     // For more info, see: https://kysely.dev/docs/migrations
+
+    await db.schema
+        .createTable("users")
+        .addColumn("id", "integer", (col) => col.primaryKey())
+        .addColumn("email", "text", (col) => col.notNull().unique())
+        .addColumn("password", "text", (col) => col.notNull())
+        .addColumn("createdAt", "text", (col) =>
+            col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
+        )
+        .addColumn("modifiedAt", "text", (col) =>
+            col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
+        )
+        .addColumn("is_active", "boolean", (col) => col.defaultTo(true))
+        .addColumn("role", "text", (col) =>
+            col
+                .check(sql`role in ('admin', 'manager', 'employee')`)
+                .defaultTo("employee")
+        )
+        .execute();
+
+    await db.schema.createIndex("user_id").on("users").column("id").execute();
+
+    await db.schema
+        .createIndex("user_email")
+        .on("users")
+        .column("email")
+        .execute();
+
+    await sql`
+		CREATE TRIGGER IF NOT EXISTS update_users_modifiedAt BEFORE
+		UPDATE ON users FOR EACH ROW BEGIN
+			UPDATE users
+			SET
+			modifiedAT = datetime ('now')
+			WHERE
+			id = OLD.id;
+		END;`.execute(db);
+
     await db.schema
         .createTable("employees")
         .addColumn("id", "integer", (col) => col.primaryKey())
-        .addColumn("name", "text", (col) => col.notNull())
-        .addColumn("surname", "text", (col) => col.notNull())
-        .addColumn("email", "text", (col) => col.notNull().unique())
-        .addColumn("password", "text", (col) => col.notNull())
+        .addColumn("user_id", "integer", (col) =>
+            col.unique().references("users.id")
+        )
+        .addColumn("name", "text")
+        .addColumn("surname", "text")
         .addColumn("createdAt", "text", (col) =>
             col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
         )
@@ -25,11 +64,6 @@ export async function up(db: Kysely<any>): Promise<void> {
         .on("employees")
         .column("id")
         .execute();
-    await db.schema
-        .createIndex("employee_email")
-        .on("employees")
-        .column("email")
-        .execute();
 
     await sql`
 		CREATE TRIGGER IF NOT EXISTS update_employees_modifiedAt BEFORE
@@ -40,6 +74,14 @@ export async function up(db: Kysely<any>): Promise<void> {
 			WHERE
 			id = OLD.id;
 		END;`.execute(db);
+
+    await sql`CREATE TRIGGER after_user_insert_add_employee
+            AFTER INSERT ON users
+            FOR EACH ROW
+            BEGIN
+                INSERT INTO employees (user_id)
+                VALUES (NEW.id);
+            END;`.execute(db);
 
     await db.schema
         .createTable("timesheets")
@@ -101,7 +143,15 @@ export async function down(db: Kysely<any>): Promise<void> {
 
     await sql`DROP TRIGGER IF EXISTS update_employees_modifiedAt;`.execute(db);
     await db.schema.dropIndex("employee_id").execute();
-    await db.schema.dropIndex("employee_email").execute();
 
     await db.schema.dropTable("employees").execute();
+
+    await sql`DROP TRIGGER IF EXISTS update_users_modifiedAt;`.execute(db);
+    await sql`DROP TRIGGER IF EXISTS after_user_insert_add_employee;`.execute(
+        db
+    );
+
+    await db.schema.dropIndex("user_id").execute();
+    await db.schema.dropIndex("user_email").execute();
+    await db.schema.dropTable("users").execute();
 }

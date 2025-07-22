@@ -7,16 +7,30 @@ import {
 } from "kysely";
 
 export interface Database {
+    users: UsersTable;
     employees: EmployeeTable;
     timesheets: TimesheetTable;
 }
 
-export interface EmployeeTable {
+export interface UsersTable {
     id: Generated<number>;
-    name: string;
-    surname: string;
     email: string;
     password: string;
+    createdAt: ColumnType<Date, string | undefined, never>;
+    modifiedAt: ColumnType<Date, string | undefined, never>;
+    is_active: boolean;
+    role: string;
+}
+
+export type User = Selectable<UsersTable>;
+export type NewUser = Insertable<UsersTable>;
+export type UserUpdate = Updateable<UsersTable>;
+
+export interface EmployeeTable {
+    id: Generated<number>;
+    user_id: number;
+    name: string;
+    surname: string;
     createdAt: ColumnType<Date, string | undefined, never>;
     modifiedAt: ColumnType<Date, string | undefined, never>;
 }
