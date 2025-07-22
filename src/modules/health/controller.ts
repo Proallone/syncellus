@@ -1,12 +1,13 @@
 import type { Request, Response, NextFunction } from "express";
-import { getDatabaseHealthDb } from "./model.js";
+import { getApplicationStatus, getDatabaseVersion } from "./service.js";
 
 const getApplicationHealth = (
     req: Request,
     res: Response,
     next: NextFunction
 ) => {
-    res.status(200).send({ message: "Healthy!" });
+    const status = getApplicationStatus();
+    res.status(200).send({ message: status });
 };
 
 const getDatabaseHealth = async (
@@ -14,7 +15,7 @@ const getDatabaseHealth = async (
     res: Response,
     next: NextFunction
 ) => {
-    const version = await getDatabaseHealthDb();
+    const version = await getDatabaseVersion();
     return res.status(200).json(version);
 };
 

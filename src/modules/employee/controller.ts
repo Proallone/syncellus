@@ -1,65 +1,56 @@
 import type { Request, Response, NextFunction } from "express";
-import {
-    createNewEmployee,
-    getAllEmployees,
-    getEmployeeById,
-    patchEmployeeInDb,
-    deleteEmployeeInDb
-} from "./model.js";
+
+import { insertNewEmployee, selectAllEmployees, selectOneEmployeeById, updateEmployeeById, deleteEmployeeById } from "./service.js";
 import type { EmployeeUpdate, NewEmployee } from "../../types/database.js";
 
-const createUser = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const user: NewEmployee = { ...req.body };
-        const newUser = await createNewEmployee(user);
-        res.status(201).json(newUser);
-    } catch (error) {
-        next(error);
-    }
+const createEmployee = async (req: Request, res: Response, next: NextFunction) => {
+    const employee: NewEmployee = { ...req.body };
+    const newEmployee = await insertNewEmployee(employee);
+    return res.status(201).json(newEmployee);
 };
 
-const getUsers = async (req: Request, res: Response, next: NextFunction) => {
-    const users = await getAllEmployees();
-    return res.status(200).json(users);
+const getEmployees = async (req: Request, res: Response, next: NextFunction) => {
+    const employees = await selectAllEmployees();
+    return res.status(200).json(employees);
 };
 
-const getUser = async (req: Request, res: Response, next: NextFunction) => {
+const getEmployee = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
-    const user = await getEmployeeById(Number(id));
-    if (!user)
-        res.status(404).send({ message: `User with ID ${id} not found!` });
+    const employee = await selectOneEmployeeById(Number(id));
+    if (!employee)
+        return res.status(404).send({ message: `Employee with ID ${id} not found!` });
 
-    return res.json(user);
+    return res.json(employee);
 };
 
-const patchUser = async (req: Request, res: Response, next: NextFunction) => {
+const patchEmployee = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     const { body } = req;
     try {
         const data: EmployeeUpdate = { id, ...body };
-        const patched = await patchEmployeeInDb(data);
+        const patched = await updateEmployeeById(data);
         if (!patched)
             return res
                 .status(404)
-                .send({ message: `User with ID ${id} not found!` });
+                .send({ message: `Employee with ID ${id} not found!` });
         return res.status(200).send(patched);
     } catch (error) {
         next(error);
     }
 };
 
-const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
+const deleteEmployee = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-        const deletion = await deleteEmployeeInDb(Number(id));
+        const deletion = await deleteEmployeeById(Number(id));
         if (!deletion)
             return res
                 .status(404)
-                .send({ message: `User with ID ${id} not found!` });
-        return res.status(200).send({ message: `User with ID ${id} deleted!` });
+                .send({ message: `Employee with ID ${id} not found!` });
+        return res.status(200).send({ message: `Employee with ID ${id} deleted!` });
     } catch (error) {
         next(error);
     }
 };
 
-export { createUser, getUsers, getUser, patchUser, deleteUser };
+export { createEmployee, getEmployees, getEmployee, patchEmployee, deleteEmployee };

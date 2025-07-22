@@ -2,7 +2,7 @@ import { db } from "../../database/database.js";
 import { hashPassword } from "../../utils/crypto.js";
 import type { EmployeeUpdate, NewEmployee } from "../../types/database.js";
 
-const createNewEmployee = async (employee: NewEmployee) => {
+const insertNewEmployeeToDb = async (employee: NewEmployee) => {
     return await db
         .insertInto("employees")
         .values({
@@ -13,11 +13,11 @@ const createNewEmployee = async (employee: NewEmployee) => {
         .executeTakeFirstOrThrow();
 };
 
-const getAllEmployees = async () => {
+const selectAllEmployeesFromDb = async () => {
     return await db.selectFrom("employees").selectAll().execute();
 };
 
-const getEmployeeById = async (id: number) => {
+const selectOneEmployeeByIdFromDb = async (id: number) => {
     return await db
         .selectFrom("employees")
         .select(["name", "surname", "email", "createdAt", "modifiedAt"])
@@ -25,7 +25,7 @@ const getEmployeeById = async (id: number) => {
         .execute();
 };
 
-const patchEmployeeInDb = async (employee: EmployeeUpdate) => {
+const updateEmployeeByIdInDb = async (employee: EmployeeUpdate) => {
     return await db
         .updateTable("employees")
         .set(employee)
@@ -34,7 +34,7 @@ const patchEmployeeInDb = async (employee: EmployeeUpdate) => {
         .executeTakeFirst();
 };
 
-const deleteEmployeeInDb = async (id: number) => {
+const deleteEmployeeByIdInDb = async (id: number) => {
     return await db
         .deleteFrom("employees")
         .where("id", "=", id)
@@ -42,9 +42,9 @@ const deleteEmployeeInDb = async (id: number) => {
 };
 
 export {
-    createNewEmployee,
-    getAllEmployees,
-    getEmployeeById,
-    patchEmployeeInDb,
-    deleteEmployeeInDb
+    insertNewEmployeeToDb,
+    selectAllEmployeesFromDb,
+    selectOneEmployeeByIdFromDb,
+    updateEmployeeByIdInDb,
+    deleteEmployeeByIdInDb
 };
