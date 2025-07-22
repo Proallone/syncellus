@@ -10,7 +10,11 @@ export async function up(db: Kysely<any>): Promise<void> {
         .createTable("users")
         .addColumn("id", "integer", (col) => col.primaryKey())
         .addColumn("email", "text", (col) => col.notNull().unique())
-        .addColumn("password", "text", (col) => col.notNull())
+        .addColumn("password", "text", (col) =>
+            col
+                .notNull()
+                .check(sql`LENGTH(password) >= 3 AND LENGTH(password) <= 255`)
+        )
         .addColumn("createdAt", "text", (col) =>
             col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
         )

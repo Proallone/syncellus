@@ -1,4 +1,4 @@
-import { EmployeeUpdate, NewEmployee } from "../../types/database.js";
+import type { EmployeeUpdate, NewEmployee } from "../../types/database.js";
 import {
     insertNewEmployeeToDb,
     selectAllEmployeesFromDb,
