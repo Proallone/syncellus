@@ -7,9 +7,11 @@ import timesheetsRoutes from "./modules/timesheets/routes.js";
 import { logger } from "./utils/logger.js";
 import { pinoHttp } from "pino-http";
 import helmet from "helmet";
+import cors from "cors";
 
 const app = express();
 
+app.use(cors()); //todo configure cors later
 app.use(helmet());
 app.use(pinoHttp(logger));
 app.use(express.json());
