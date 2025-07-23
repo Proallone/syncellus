@@ -6,11 +6,13 @@ import authRoutes from "./modules/auth/routes.js";
 import timesheetsRoutes from "./modules/timesheets/routes.js";
 import { logger } from "./utils/logger.js";
 import { pinoHttp } from "pino-http";
+import helmet from "helmet";
 
 const app = express();
-app.use(express.json());
 
+app.use(helmet());
 app.use(pinoHttp(logger));
+app.use(express.json());
 
 app.use("/health", healthRoutes);
 app.use("/auth", authRoutes);
