@@ -4,11 +4,11 @@ import { defineConfig } from 'kysely-ctl'
 export default defineConfig({
 	// replace me with a real dialect instance OR a dialect name + `dialectConfig` prop.
 	kysely,
-	  migrations: {
-	    migrationFolder: "./src/database/migrations",
-	  },
+	migrations: {
+		migrationFolder: "./src/database/migrations",
+	},
 	//   plugins: [],
-	//   seeds: {
-	//     seedFolder: "seeds",
-	//   }
+	seeds: {
+		seedFolder: "./src/database/seeds",
+	}
 })

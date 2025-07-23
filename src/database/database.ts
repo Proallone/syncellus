@@ -3,7 +3,7 @@ import SQLite from "better-sqlite3";
 import { Kysely, SqliteDialect } from "kysely";
 
 const dialect = new SqliteDialect({
-    database: new SQLite("kysely.sqlite")
+    database: new SQLite("./src/database/kysely.sqlite")
 });
 
 export const db = new Kysely<Database>({

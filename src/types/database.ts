@@ -18,7 +18,7 @@ export interface UsersTable {
     password: string;
     createdAt: ColumnType<Date, string | undefined, never>;
     modifiedAt: ColumnType<Date, string | undefined, never>;
-    is_active: boolean;
+    is_active: Generated<boolean>;
     role: string;
 }
 
@@ -44,10 +44,11 @@ export interface TimesheetTable {
     employee_id: number;
     createdAt: ColumnType<Date, string | undefined, never>;
     modifiedAt: ColumnType<Date, string | undefined, never>;
+    date: ColumnType<Date, string>;
     start_hour: ColumnType<Date, string>;
     end_hour: ColumnType<Date, string>;
-    hours_worked: number;
-    approved: boolean;
+    hours_worked: Generated<number>;
+    approved: Generated<boolean>;
 }
 
 export type Timesheet = Selectable<TimesheetTable>;

@@ -51,7 +51,7 @@ export async function up(db: Kysely<any>): Promise<void> {
         .createTable("employees")
         .addColumn("id", "integer", (col) => col.primaryKey())
         .addColumn("user_id", "integer", (col) =>
-            col.unique().references("users.id")
+            col.unique().notNull().references("users.id")
         )
         .addColumn("name", "text")
         .addColumn("surname", "text")

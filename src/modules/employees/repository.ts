@@ -16,9 +16,18 @@ const selectAllEmployeesFromDb = async () => {
 const selectOneEmployeeByIdFromDb = async (id: number) => {
     return await db
         .selectFrom("employees")
-        .select(["name", "surname", "createdAt", "modifiedAt"])
-        .where("id", "=", id)
-        .execute();
+        .leftJoin("users", "employees.user_id", "users.id")
+        .select([
+            "name",
+            "surname",
+            "email",
+            "is_active",
+            "role",
+            "users.createdAt",
+            "users.modifiedAt"
+        ])
+        .where("users.id", "=", id)
+        .executeTakeFirst();
 };
 
 const updateEmployeeByIdInDb = async (employee: EmployeeUpdate) => {
