@@ -1,5 +1,5 @@
 import { db } from "../../database/database.js";
-import { NewUser } from "../../types/database.js";
+import type { NewUser } from "../../types/database.js";
 
 const insertNewUserToDb = async (user: NewUser) => {
     return await db

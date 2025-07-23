@@ -1,4 +1,4 @@
-import { NewUser } from "../../types/database.js";
+import type { NewUser } from "../../types/database.js";
 import { compareHash, hashPassword } from "../../utils/crypto.js";
 import { insertNewUserToDb, selectUserByEmailFromDb } from "./repository.js";
 

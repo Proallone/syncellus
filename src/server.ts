@@ -1,18 +1,19 @@
 import app from "./app.js";
 import config from "./configs/config.js";
 import { db } from "./database/database.js";
+import { logger } from "./core/logger.js";
 
 const server = app.listen(config.port, () => {
-    console.log(
+    logger.info(
         `Server running on port ${config.port} in ${config.nodeEnv} environment`
     );
 });
 
 const shutdown = () => {
-    console.log("\nShutting down...");
+    logger.info("\nShutting down...");
     server.close(() => {
         db.destroy();
-        console.log("Server closed. Database closed. Cleanup complete.");
+        logger.info("Server closed. Database closed. Cleanup complete.");
         process.exit(0);
     });
 };

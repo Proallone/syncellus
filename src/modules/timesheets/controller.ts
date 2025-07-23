@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import type { Request, Response, NextFunction } from "express";
 import type { NewTimesheet, TimesheetUpdate } from "../../types/database.js";
 import {
     deleteTimesheetById,
