@@ -7,7 +7,15 @@ import {
     updateEmployeeById,
     deleteEmployeeById
 } from "./service.js";
-import type { EmployeeUpdate, NewEmployee } from "../../types/database.js";
+import type {
+    EmployeeUpdate,
+    NewEmployee,
+    NewTimesheet
+} from "../../types/database.js";
+import {
+    insertNewTimesheet,
+    selectAllTimesheetsByEmployeeId
+} from "../timesheets/service.js";
 
 const createEmployee = async (
     req: Request,
@@ -79,10 +87,36 @@ const deleteEmployee = async (
     }
 };
 
+const getTimesheetsByEmployeeId = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const { employeeId } = req.params;
+
+    const timesheets = await selectAllTimesheetsByEmployeeId(
+        Number(employeeId)
+    );
+    return res.status(200).send(timesheets);
+};
+
+const createTimesheetForEmployee = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const { employeeId } = req.params;
+    const timesheet: NewTimesheet = { ...req.body, employee_id: employeeId };
+    const newTimesheet = await insertNewTimesheet(timesheet);
+    return res.status(201).json(newTimesheet);
+};
+
 export {
     createEmployee,
     getEmployees,
     getEmployee,
     patchEmployee,
-    deleteEmployee
+    deleteEmployee,
+    getTimesheetsByEmployeeId,
+    createTimesheetForEmployee
 };

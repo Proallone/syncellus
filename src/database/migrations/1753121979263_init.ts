@@ -105,10 +105,12 @@ export async function up(db: Kysely<any>): Promise<void> {
             col.notNull().check(sql`end_hour > start_hour`)
         )
         .addColumn("hours_worked", "text", (col) =>
-            col.generatedAlwaysAs(
-                //? SQLite equivalent for timediff and formatting as HH:MM
-                sql`strftime('%H:%M', (julianday('2000-01-01 ' || time(end_hour)) - julianday('2000-01-01 ' || time(start_hour))) * 86400, 'unixepoch')`
-            )
+            col
+                .generatedAlwaysAs(
+                    //? SQLite equivalent for timediff and formatting as HH:MM
+                    sql`strftime('%H:%M', (julianday('2000-01-01 ' || time(end_hour)) - julianday('2000-01-01 ' || time(start_hour))) * 86400, 'unixepoch')`
+                )
+                .stored()
         )
         .addColumn("approved", "boolean", (col) => col.defaultTo(false))
         .execute();

@@ -4,7 +4,8 @@ import {
     selectAllTimesheetsFromDb,
     selectTimesheetByIdFromDb,
     updateTimesheetByIdInDb,
-    deleteTimesheetFromDb
+    deleteTimesheetFromDb,
+    selectTimesheetsByEmployeeIdFromDb
 } from "./repository.js";
 
 const insertNewTimesheet = async (timesheet: NewTimesheet) => {
@@ -27,10 +28,15 @@ const deleteTimesheetById = async (id: number) => {
     return await deleteTimesheetFromDb(id);
 };
 
+const selectAllTimesheetsByEmployeeId = async (id: number) => {
+    return await selectTimesheetsByEmployeeIdFromDb(id);
+};
+
 export {
     insertNewTimesheet,
     selectAllTimesheets,
     selectOneTimesheetById,
     updateTimesheetById,
-    deleteTimesheetById
+    deleteTimesheetById,
+    selectAllTimesheetsByEmployeeId
 };

@@ -31,6 +31,14 @@ const selectTimesheetByIdFromDb = async (id: number) => {
         .executeTakeFirst();
 };
 
+const selectTimesheetsByEmployeeIdFromDb = async (employeeId: number) => {
+    return await db
+        .selectFrom("timesheets")
+        .selectAll()
+        .where("employee_id", "=", employeeId)
+        .execute();
+};
+
 const updateTimesheetByIdInDb = async (timesheet: TimesheetUpdate) => {
     return await db
         .updateTable("timesheets")
@@ -51,6 +59,7 @@ export {
     insertTimesheetInDb,
     selectAllTimesheetsFromDb,
     selectTimesheetByIdFromDb,
+    selectTimesheetsByEmployeeIdFromDb,
     updateTimesheetByIdInDb,
     deleteTimesheetFromDb
 };
