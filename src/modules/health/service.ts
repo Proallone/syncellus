@@ -1,11 +1,11 @@
-import { getDatabaseHealthDb } from "./repository.js";
+import { getDatabaseVersionFromDb } from "./repository.js";
 
 const getApplicationStatus = () => {
     return `Healthy!`;
 };
 
 const getDatabaseVersion = async () => {
-    const version = await getDatabaseHealthDb();
+    const version = await getDatabaseVersionFromDb();
     return {
         status: "Healthy",
         ...version

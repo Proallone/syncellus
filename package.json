@@ -10,7 +10,7 @@
         "start": "tsx --env-file=.env src/server.ts",
         "start:dist": "node dist/server.js",
         "watch": "NODE_ENV=dev DEBUG=* tsx watch --env-file=.env src/server.ts | pino-pretty",
-        "test": "vitest",
+        "test": "vitest --reporter=verbose",
         "test:coverage": "vitest run --coverage",
         "lint": "eslint 'src/**/*.ts'",
         "format": "NODE_OPTIONS='--experimental-strip-types' prettier ./src --write"
