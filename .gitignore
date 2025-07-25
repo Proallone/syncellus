@@ -1,7 +1,9 @@
-dist/
 node_modules/
+dist/
+**/coverage/
 .env
 env/
 
 **/*.session.sql
 **/*.sqlite
+
