@@ -48,7 +48,7 @@ export interface TimesheetTable {
     start_hour: ColumnType<Date, string>;
     end_hour: ColumnType<Date, string>;
     hours_worked: Generated<number>;
-    approved: Generated<boolean>;
+    status: Generated<string>;
 }
 
 export type Timesheet = Selectable<TimesheetTable>;

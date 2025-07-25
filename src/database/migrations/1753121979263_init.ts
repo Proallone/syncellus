@@ -112,7 +112,13 @@ export async function up(db: Kysely<any>): Promise<void> {
                 )
                 .stored()
         )
-        .addColumn("approved", "boolean", (col) => col.defaultTo(false))
+        .addColumn("status", "text", (col) =>
+            col
+                .check(
+                    sql`status in ('draft', 'submitted', 'approved', 'rejected')`
+                )
+                .defaultTo("draft")
+        )
         .execute();
 
     await db.schema
