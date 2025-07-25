@@ -1,11 +1,10 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { Kysely, SqliteDialect } from 'kysely';
 import Database from 'better-sqlite3';
-import { getDatabaseVersionFromDb } from "../../../src/modules/health/repository.js";
-import { Database as DB } from '../../../src/types/database.js';
-import { getApplicationStatus, getDatabaseVersion } from '../../../src/modules/health/service.js'
+import { getDatabaseVersionFromDb } from "../../src/modules/health/repository.js";
+import { Database as DB } from '../../src/types/database.js';
 
-vi.mock('../../database/database', () => {
+vi.mock('../../../src/database/database', () => {
   const inMemoryDb = new Database(':memory:');
   return {
     db: new Kysely<DB>({

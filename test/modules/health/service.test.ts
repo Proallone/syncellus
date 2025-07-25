@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getDatabaseVersionFromDb } from "../../../src/modules/health/repository";
+import { getDatabaseVersionFromDb } from "../../../src/modules/health/repository.js";
 import { getApplicationStatus, getDatabaseVersion } from '../../../src/modules/health/service.js'
 
 vi.mock('../../../src/modules/health/repository');
