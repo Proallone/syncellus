@@ -32,7 +32,8 @@ const getEmployees = async (
     res: Response,
     next: NextFunction
 ) => {
-    const employees = await selectAllEmployees();
+    const query = req.query;
+    const employees = await selectAllEmployees(query);
     return res.status(200).json(employees);
 };
 
@@ -97,6 +98,14 @@ const getTimesheetsByEmployeeId = async (
     const timesheets = await selectAllTimesheetsByEmployeeId(
         Number(employeeId)
     );
+
+    if (!timesheets || timesheets.length === 0) {
+        return res.status(404).json({
+            message:
+                "No timesheets found for this employee with the given criteria."
+        });
+    }
+
     return res.status(200).send(timesheets);
 };
 

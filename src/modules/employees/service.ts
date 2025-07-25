@@ -1,4 +1,5 @@
 import type { EmployeeUpdate, NewEmployee } from "../../types/database.js";
+import { GetEmployeeQuery } from "../../types/index.js";
 import {
     insertNewEmployeeToDb,
     selectAllEmployeesFromDb,
@@ -11,8 +12,8 @@ const insertNewEmployee = async (employee: NewEmployee) => {
     return await insertNewEmployeeToDb(employee);
 };
 
-const selectAllEmployees = async () => {
-    return await selectAllEmployeesFromDb();
+const selectAllEmployees = async (query: GetEmployeeQuery) => {
+    return await selectAllEmployeesFromDb(query);
 };
 
 const selectOneEmployeeById = async (id: number) => {
