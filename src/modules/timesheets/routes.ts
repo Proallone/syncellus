@@ -1,11 +1,5 @@
 import { Router } from "express";
-import {
-    createTimesheet,
-    deleteTimesheet,
-    getTimesheetById,
-    getTimesheets,
-    patchTimesheet
-} from "./controller.js";
+import { createTimesheet, deleteTimesheet, getTimesheetById, getTimesheets, patchTimesheet } from "./controller.js";
 import { validate } from "../../middlewares/validator.middleware.js";
 import { timesheetPostSchema, timesheetUpdateSchema } from "./schema.js";
 

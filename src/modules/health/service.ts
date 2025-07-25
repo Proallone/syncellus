@@ -6,7 +6,10 @@ const getApplicationStatus = () => {
 
 const getDatabaseVersion = async () => {
     const version = await getDatabaseHealthDb();
-    return { status: "Healthy", ...version };
+    return {
+        status: "Healthy",
+        ...version
+    };
 };
 
 export { getApplicationStatus, getDatabaseVersion };

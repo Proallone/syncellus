@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const employeeGetQuery = z.object({
     is_active: z.enum(["true", "false"]).optional(),
-    role: z.enum(['employee', 'manager', 'admin']).optional(), //todo fix later so multiple roles are available to query
+    role: z.enum(["employee", "manager", "admin"]).optional() //todo fix later so multiple roles are available to query
 });
 
 const employeesGetSchema = z.object({
@@ -27,11 +27,4 @@ const employeePatchSchema = z.object({
     body: employeeUpdatePayload
 });
 
-export {
-    employeePostPayload,
-    employeePostSchema,
-    employeeUpdatePayload,
-    employeePatchSchema,
-    employeeGetQuery,
-    employeesGetSchema
-};
+export { employeePostPayload, employeePostSchema, employeeUpdatePayload, employeePatchSchema, employeeGetQuery, employeesGetSchema };

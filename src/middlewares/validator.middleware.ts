@@ -1,11 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { z } from "zod";
 
-type MiddlewareFunction = (
-    req: Request,
-    res: Response,
-    next: NextFunction
-) => void;
+type MiddlewareFunction = (req: Request, res: Response, next: NextFunction) => void;
 
 type validate = (
     schema: z.ZodObject<{

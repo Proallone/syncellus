@@ -4,20 +4,17 @@ import type { Database, NewTimesheet, NewUser } from "../../types/database.js";
 const users: NewUser[] = [
     {
         email: "bartek@test.com",
-        password:
-            "$2a$12$VTsLufkVlFbUtCSuE31ku.D1uLlSNpC4/uZAMKm0QWF/j5SmPBXcC",
+        password: "$2a$12$VTsLufkVlFbUtCSuE31ku.D1uLlSNpC4/uZAMKm0QWF/j5SmPBXcC",
         role: "employee"
     },
     {
         email: "bartek@admin.com",
-        password:
-            "$2a$12$VTsLufkVlFbUtCSuE31ku.D1uLlSNpC4/uZAMKm0QWF/j5SmPBXcC",
+        password: "$2a$12$VTsLufkVlFbUtCSuE31ku.D1uLlSNpC4/uZAMKm0QWF/j5SmPBXcC",
         role: "admin"
     },
     {
         email: "bartek@manager.com",
-        password:
-            "$2a$12$VTsLufkVlFbUtCSuE31ku.D1uLlSNpC4/uZAMKm0QWF/j5SmPBXcC",
+        password: "$2a$12$VTsLufkVlFbUtCSuE31ku.D1uLlSNpC4/uZAMKm0QWF/j5SmPBXcC",
         role: "manager"
     }
 ];

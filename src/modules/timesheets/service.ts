@@ -1,12 +1,5 @@
 import type { NewTimesheet, TimesheetUpdate } from "../../types/database.js";
-import {
-    insertTimesheetInDb,
-    selectAllTimesheetsFromDb,
-    selectTimesheetByIdFromDb,
-    updateTimesheetByIdInDb,
-    deleteTimesheetFromDb,
-    selectTimesheetsByEmployeeIdFromDb
-} from "./repository.js";
+import { insertTimesheetInDb, selectAllTimesheetsFromDb, selectTimesheetByIdFromDb, updateTimesheetByIdInDb, deleteTimesheetFromDb, selectTimesheetsByEmployeeIdFromDb } from "./repository.js";
 
 const insertNewTimesheet = async (timesheet: NewTimesheet) => {
     return await insertTimesheetInDb(timesheet);
@@ -32,11 +25,4 @@ const selectAllTimesheetsByEmployeeId = async (id: number) => {
     return await selectTimesheetsByEmployeeIdFromDb(id);
 };
 
-export {
-    insertNewTimesheet,
-    selectAllTimesheets,
-    selectOneTimesheetById,
-    updateTimesheetById,
-    deleteTimesheetById,
-    selectAllTimesheetsByEmployeeId
-};
+export { insertNewTimesheet, selectAllTimesheets, selectOneTimesheetById, updateTimesheetById, deleteTimesheetById, selectAllTimesheetsByEmployeeId };

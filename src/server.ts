@@ -4,9 +4,7 @@ import { db } from "./database/database.js";
 import { logger } from "./core/logger.js";
 
 const server = app.listen(config.port, () => {
-    logger.info(
-        `Server running on port ${config.port} in ${config.nodeEnv} environment`
-    );
+    logger.info(`Server running on port ${config.port} in ${config.nodeEnv} environment`);
 });
 
 const shutdown = () => {

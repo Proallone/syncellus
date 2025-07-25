@@ -10,32 +10,16 @@ export async function up(db: Kysely<any>): Promise<void> {
         .createTable("users")
         .addColumn("id", "integer", (col) => col.primaryKey())
         .addColumn("email", "text", (col) => col.notNull().unique())
-        .addColumn("password", "text", (col) =>
-            col
-                .notNull()
-                .check(sql`LENGTH(password) >= 3 AND LENGTH(password) <= 255`)
-        )
-        .addColumn("createdAt", "text", (col) =>
-            col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
-        )
-        .addColumn("modifiedAt", "text", (col) =>
-            col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
-        )
+        .addColumn("password", "text", (col) => col.notNull().check(sql`LENGTH(password) >= 3 AND LENGTH(password) <= 255`))
+        .addColumn("createdAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("modifiedAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .addColumn("is_active", "boolean", (col) => col.defaultTo(true))
-        .addColumn("role", "text", (col) =>
-            col
-                .check(sql`role in ('admin', 'manager', 'employee')`)
-                .defaultTo("employee")
-        )
+        .addColumn("role", "text", (col) => col.check(sql`role in ('admin', 'manager', 'employee')`).defaultTo("employee"))
         .execute();
 
     await db.schema.createIndex("user_id").on("users").column("id").execute();
 
-    await db.schema
-        .createIndex("user_email")
-        .on("users")
-        .column("email")
-        .execute();
+    await db.schema.createIndex("user_email").on("users").column("email").execute();
 
     await sql`
 		CREATE TRIGGER IF NOT EXISTS update_users_modifiedAt BEFORE
@@ -50,24 +34,14 @@ export async function up(db: Kysely<any>): Promise<void> {
     await db.schema
         .createTable("employees")
         .addColumn("id", "integer", (col) => col.primaryKey())
-        .addColumn("user_id", "integer", (col) =>
-            col.unique().notNull().references("users.id")
-        )
+        .addColumn("user_id", "integer", (col) => col.unique().notNull().references("users.id"))
         .addColumn("name", "text")
         .addColumn("surname", "text")
-        .addColumn("createdAt", "text", (col) =>
-            col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
-        )
-        .addColumn("modifiedAt", "text", (col) =>
-            col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
-        )
+        .addColumn("createdAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("modifiedAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .execute();
 
-    await db.schema
-        .createIndex("employee_id")
-        .on("employees")
-        .column("id")
-        .execute();
+    await db.schema.createIndex("employee_id").on("employees").column("id").execute();
 
     await sql`
 		CREATE TRIGGER IF NOT EXISTS update_employees_modifiedAt BEFORE
@@ -90,20 +64,12 @@ export async function up(db: Kysely<any>): Promise<void> {
     await db.schema
         .createTable("timesheets")
         .addColumn("id", "integer", (col) => col.primaryKey())
-        .addColumn("employee_id", "integer", (col) =>
-            col.references("employees.id")
-        )
-        .addColumn("createdAt", "text", (col) =>
-            col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
-        )
-        .addColumn("modifiedAt", "text", (col) =>
-            col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
-        )
+        .addColumn("employee_id", "integer", (col) => col.references("employees.id"))
+        .addColumn("createdAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("modifiedAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .addColumn("date", "text", (col) => col.notNull())
         .addColumn("start_hour", "text", (col) => col.notNull())
-        .addColumn("end_hour", "text", (col) =>
-            col.notNull().check(sql`end_hour > start_hour`)
-        )
+        .addColumn("end_hour", "text", (col) => col.notNull().check(sql`end_hour > start_hour`))
         .addColumn("hours_worked", "text", (col) =>
             col
                 .generatedAlwaysAs(
@@ -112,25 +78,11 @@ export async function up(db: Kysely<any>): Promise<void> {
                 )
                 .stored()
         )
-        .addColumn("status", "text", (col) =>
-            col
-                .check(
-                    sql`status in ('draft', 'submitted', 'approved', 'rejected')`
-                )
-                .defaultTo("draft")
-        )
+        .addColumn("status", "text", (col) => col.check(sql`status in ('draft', 'submitted', 'approved', 'rejected')`).defaultTo("draft"))
         .execute();
 
-    await db.schema
-        .createIndex("timesheets_id")
-        .on("timesheets")
-        .column("id")
-        .execute();
-    await db.schema
-        .createIndex("timesheets_employee_id")
-        .on("timesheets")
-        .column("employee_id")
-        .execute();
+    await db.schema.createIndex("timesheets_id").on("timesheets").column("id").execute();
+    await db.schema.createIndex("timesheets_employee_id").on("timesheets").column("employee_id").execute();
 
     await sql`
 		CREATE TRIGGER IF NOT EXISTS update_timesheets_modifiedAt BEFORE
@@ -160,9 +112,7 @@ export async function down(db: Kysely<any>): Promise<void> {
     await db.schema.dropTable("employees").execute();
 
     await sql`DROP TRIGGER IF EXISTS update_users_modifiedAt;`.execute(db);
-    await sql`DROP TRIGGER IF EXISTS after_user_insert_add_employee;`.execute(
-        db
-    );
+    await sql`DROP TRIGGER IF EXISTS after_user_insert_add_employee;`.execute(db);
 
     await db.schema.dropIndex("user_id").execute();
     await db.schema.dropIndex("user_email").execute();

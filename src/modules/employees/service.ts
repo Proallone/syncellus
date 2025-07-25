@@ -1,12 +1,6 @@
 import type { EmployeeUpdate, NewEmployee } from "../../types/database.js";
 import { GetEmployeeQuery } from "../../types/index.js";
-import {
-    insertNewEmployeeToDb,
-    selectAllEmployeesFromDb,
-    selectOneEmployeeByIdFromDb,
-    updateEmployeeByIdInDb,
-    deleteEmployeeByIdInDb
-} from "./repository.js";
+import { insertNewEmployeeToDb, selectAllEmployeesFromDb, selectOneEmployeeByIdFromDb, updateEmployeeByIdInDb, deleteEmployeeByIdInDb } from "./repository.js";
 
 const insertNewEmployee = async (employee: NewEmployee) => {
     return await insertNewEmployeeToDb(employee);
@@ -28,10 +22,4 @@ const deleteEmployeeById = async (id: number) => {
     return await deleteEmployeeByIdInDb(id);
 };
 
-export {
-    insertNewEmployee,
-    selectAllEmployees,
-    selectOneEmployeeById,
-    updateEmployeeById,
-    deleteEmployeeById
-};
+export { insertNewEmployee, selectAllEmployees, selectOneEmployeeById, updateEmployeeById, deleteEmployeeById };

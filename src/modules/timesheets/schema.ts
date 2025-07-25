@@ -20,9 +20,4 @@ const timesheetUpdateSchema = z.object({
     body: timesheetUpdatePayload
 });
 
-export {
-    timesheetPostPayload,
-    timesheetPostSchema,
-    timesheetUpdatePayload,
-    timesheetUpdateSchema
-};
+export { timesheetPostPayload, timesheetPostSchema, timesheetUpdatePayload, timesheetUpdateSchema };

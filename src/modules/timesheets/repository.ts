@@ -12,11 +12,7 @@ export interface Timesheet {
 }
 
 const insertTimesheetInDb = async (timesheet: NewTimesheet) => {
-    return db
-        .insertInto("timesheets")
-        .values(timesheet)
-        .returningAll()
-        .executeTakeFirst();
+    return db.insertInto("timesheets").values(timesheet).returningAll().executeTakeFirst();
 };
 
 const selectAllTimesheetsFromDb = async () => {
@@ -24,42 +20,19 @@ const selectAllTimesheetsFromDb = async () => {
 };
 
 const selectTimesheetByIdFromDb = async (id: number) => {
-    return await db
-        .selectFrom("timesheets")
-        .selectAll()
-        .where("id", "=", id)
-        .executeTakeFirst();
+    return await db.selectFrom("timesheets").selectAll().where("id", "=", id).executeTakeFirst();
 };
 
 const selectTimesheetsByEmployeeIdFromDb = async (employeeId: number) => {
-    return await db
-        .selectFrom("timesheets")
-        .selectAll()
-        .where("employee_id", "=", employeeId)
-        .execute();
+    return await db.selectFrom("timesheets").selectAll().where("employee_id", "=", employeeId).execute();
 };
 
 const updateTimesheetByIdInDb = async (timesheet: TimesheetUpdate) => {
-    return await db
-        .updateTable("timesheets")
-        .set(timesheet)
-        .where("id", "=", Number(timesheet.id))
-        .returningAll()
-        .executeTakeFirst();
+    return await db.updateTable("timesheets").set(timesheet).where("id", "=", Number(timesheet.id)).returningAll().executeTakeFirst();
 };
 
 const deleteTimesheetFromDb = async (id: number) => {
-    return await db
-        .deleteFrom("timesheets")
-        .where("id", "=", id)
-        .executeTakeFirstOrThrow();
+    return await db.deleteFrom("timesheets").where("id", "=", id).executeTakeFirstOrThrow();
 };
 
-export {
-    insertTimesheetInDb,
-    selectAllTimesheetsFromDb,
-    selectTimesheetByIdFromDb,
-    selectTimesheetsByEmployeeIdFromDb,
-    updateTimesheetByIdInDb,
-    deleteTimesheetFromDb
-};
+export { insertTimesheetInDb, selectAllTimesheetsFromDb, selectTimesheetByIdFromDb, selectTimesheetsByEmployeeIdFromDb, updateTimesheetByIdInDb, deleteTimesheetFromDb };
