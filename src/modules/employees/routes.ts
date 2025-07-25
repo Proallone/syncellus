@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { validate } from "../../middlewares/validator.middleware.js";
 import {
     createEmployee,
     createTimesheetForEmployee,
@@ -8,7 +9,6 @@ import {
     getTimesheetsByEmployeeId,
     patchEmployee
 } from "./controller.js";
-import { validateInput } from "../../middlewares/validator.middleware.js";
 import {
     employeePostSchema,
     employeePatchSchema,
@@ -18,16 +18,16 @@ import { timesheetPostSchema } from "../timesheets/schema.js";
 
 const router = Router();
 
-router.post("/", validateInput(employeePostSchema), createEmployee);
-router.get("/", validateInput(employeesGetSchema), getEmployees);
+router.post("/", validate(employeePostSchema), createEmployee);
+router.get("/", validate(employeesGetSchema), getEmployees);
 router.get("/:id", getEmployee);
-router.patch("/:id", validateInput(employeePatchSchema), patchEmployee);
+router.patch("/:id", validate(employeePatchSchema), patchEmployee);
 router.delete("/:id", deleteEmployee);
 
 router.get("/:employeeId/timesheets", getTimesheetsByEmployeeId);
 router.post(
     "/:employeeId/timesheets",
-    validateInput(timesheetPostSchema),
+    validate(timesheetPostSchema),
     createTimesheetForEmployee
 );
 

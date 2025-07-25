@@ -7,7 +7,7 @@ type MiddlewareFunction = (
     next: NextFunction
 ) => void;
 
-type ValidateInput = (
+type validate = (
     schema: z.ZodObject<{
         body?: z.ZodTypeAny;
         query?: z.ZodTypeAny;
@@ -15,7 +15,7 @@ type ValidateInput = (
     }>
 ) => MiddlewareFunction;
 
-const validateInput: ValidateInput =
+const validate: validate =
     (schema): MiddlewareFunction =>
     (req, res, next) => {
         const result = schema.safeParse({
@@ -39,4 +39,4 @@ const validateInput: ValidateInput =
         next();
     };
 
-export { validateInput };
+export { validate };
