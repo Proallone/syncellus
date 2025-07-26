@@ -1,23 +1,20 @@
 import { z } from "zod";
 
-const timesheetPostPayload = z.object({
+const TimesheetBasePayload = z.object({
     date: z.iso.date(),
     start_hour: z.iso.time(),
     end_hour: z.iso.time()
 });
 
-const timesheetPostSchema = z.object({
-    body: timesheetPostPayload
+const TimesheetPostPayload = TimesheetBasePayload.required();
+const TimesheetUpdatePayload = TimesheetBasePayload.partial();
+
+const TimesheetPostSchema = z.object({
+    body: TimesheetPostPayload
 });
 
-const timesheetUpdatePayload = z.object({
-    date: z.iso.date().optional(),
-    start_hour: z.iso.time().optional(),
-    end_hour: z.iso.time().optional()
+const TimesheetUpdateSchema = z.object({
+    body: TimesheetUpdatePayload
 });
 
-const timesheetUpdateSchema = z.object({
-    body: timesheetUpdatePayload
-});
-
-export { timesheetPostPayload, timesheetPostSchema, timesheetUpdatePayload, timesheetUpdateSchema };
+export { TimesheetPostPayload, TimesheetPostSchema, TimesheetUpdatePayload, TimesheetUpdateSchema };
