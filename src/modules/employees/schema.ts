@@ -21,7 +21,6 @@ const EmployeePostSchema = z.object({
     body: EmployeePostPayload
 });
 
-
 const EmployeePatchSchema = z.object({
     body: EmployeeUpdatePalyoad
 });

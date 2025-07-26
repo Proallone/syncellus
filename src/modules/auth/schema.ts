@@ -5,7 +5,6 @@ const AuthBasePayload = z.object({
     password: z.string().min(8).max(40)
 });
 
-
 const AuthSchema = z.object({
     body: AuthBasePayload
 });
