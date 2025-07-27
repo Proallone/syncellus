@@ -13,7 +13,6 @@ import { limiter } from "./core/limiter.js";
 
 import "./modules/employees/events.js";
 
-
 const app = express();
 
 app.use(limiter);

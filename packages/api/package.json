@@ -11,10 +11,7 @@
         "start:dist": "node dist/server.js",
         "watch": "NODE_ENV=dev DEBUG=* tsx watch --env-file=.env src/server.ts | pino-pretty",
         "test": "vitest --reporter=verbose",
-        "test:coverage": "vitest run --coverage",
-        "lint": "eslint 'src/**/*.ts'",
-        "format": "NODE_OPTIONS='--experimental-strip-types' prettier ./src --write",
-        "ci": "yarn install --frozen-lockfile"
+        "test:coverage": "vitest run --coverage"
     },
     "dependencies": {
         "bcrypt": "^6.0.0",
