@@ -11,7 +11,10 @@
         "start:dist": "node dist/server.js",
         "watch": "NODE_ENV=dev DEBUG=* tsx watch --env-file=.env src/server.ts | pino-pretty",
         "test": "vitest --reporter=verbose",
-        "test:coverage": "vitest run --coverage"
+        "test:coverage": "vitest run --coverage",
+        "up": "kysely migrate:up",
+        "postup": "kysely seed run",
+        "down": "kysely migrate:down"
     },
     "dependencies": {
         "bcrypt": "^6.0.0",

@@ -1,5 +1,5 @@
 import type { Kysely } from "kysely";
-import type { Database, NewTimesheet, NewUser } from "../../types/database.js";
+import type { Database, NewEmployee, NewTimesheet, NewUser } from "../../types/database.js";
 
 const users: NewUser[] = [
     {
@@ -16,6 +16,24 @@ const users: NewUser[] = [
         email: "bartek@manager.com",
         password: "$2a$12$VTsLufkVlFbUtCSuE31ku.D1uLlSNpC4/uZAMKm0QWF/j5SmPBXcC",
         role: "manager"
+    }
+];
+
+const employees: NewEmployee[] = [
+    {
+        user_id: 1,
+        name: "Bartosz",
+        surname: "Testowy"
+    },
+    {
+        user_id: 2,
+        name: "Erik",
+        surname: "Turing"
+    },
+    {
+        user_id: 3,
+        name: "Elisabeth",
+        surname: "Turner"
     }
 ];
 
@@ -320,5 +338,6 @@ const timesheets: NewTimesheet[] = [
 
 export async function seed(db: Kysely<Database>): Promise<void> {
     await db.insertInto("users").values(users).execute();
+    await db.insertInto("employees").values(employees).execute();
     await db.insertInto("timesheets").values(timesheets).execute();
 }
