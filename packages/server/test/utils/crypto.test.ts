@@ -1,11 +1,10 @@
-import { describe, it, expect } from 'vitest';
-import { hashPassword, compareHash } from '../../src/utils/crypto';
+import { describe, it, expect } from "vitest";
+import { hashPassword, compareHash } from "../../src/utils/crypto.js";
 
-describe('Crypto utils', () => {
-
+describe("Crypto utils", () => {
     it("should hash a password with a valid bcrypt format", async () => {
         // Arrange
-        const password = 'testpassword';
+        const password = "testpassword";
 
         // Act
         const hash = await hashPassword(password);
@@ -18,7 +17,7 @@ describe('Crypto utils', () => {
 
     it("should produce a different hash for the same password on consecutive calls", async () => {
         // Arrange
-        const password = 'testpassword';
+        const password = "testpassword";
 
         // Act
         const hash1 = await hashPassword(password);
@@ -30,10 +29,10 @@ describe('Crypto utils', () => {
 
     describe("compareHash", () => {
         let passwordHash: string;
-        const password = 'testpassword';
-        const wrongPassword = 'wrongpassword';
+        const password = "testpassword";
+        const wrongPassword = "wrongpassword";
 
-        it('should create a hash to be used in comparison tests', async () => {
+        it("should create a hash to be used in comparison tests", async () => {
             passwordHash = await hashPassword(password);
             expect(passwordHash.length).toBeGreaterThan(0);
         });
