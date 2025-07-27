@@ -4,7 +4,6 @@ import type { AuthCredentials } from "../../types/index.js";
 
 import { insertNewUser, verifyUserCredentials } from "./service.js";
 import { logger } from "../../core/logger.js";
-import { eventBus } from "../../core/eventEmitter.js";
 
 const signUp = async (req: Request, res: Response, next: NextFunction) => {
     const user: NewUser = {
@@ -14,7 +13,6 @@ const signUp = async (req: Request, res: Response, next: NextFunction) => {
     logger.debug(`User ${user.email} signs up`);
 
     const newUser = await insertNewUser(user);
-    eventBus.emit('user.created', newUser);
 
     return res.status(201).json(newUser);
 };
