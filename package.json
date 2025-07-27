@@ -1,5 +1,5 @@
 {
-  "name": "syncellus",
+  "name": "@syncellus/root",
   "version": "1.0.0",
   "description": "Small timesheets app",
   "repository": "https://github.com/Proallone/timesheets.git",
@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "watch": "yarn workspaces run watch",
-    "lint": "eslint 'packages/**/*.ts'",
+    "lint": "eslint 'packages/**/*.{ts,tsx}'",
     "format": "NODE_OPTIONS='--experimental-strip-types' prettier packages/ --write",
     "ci": "yarn install --frozen-lockfile"
   },

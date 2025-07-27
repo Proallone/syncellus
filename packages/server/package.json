@@ -1,7 +1,7 @@
 {
-    "name": "timesheets",
+    "name": "@syncellus/server",
     "version": "1.0.0",
-    "description": "Simple timesheet application",
+    "description": "Simple timesheet application server",
     "license": "ISC",
     "author": "Proallone",
     "type": "module",
