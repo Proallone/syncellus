@@ -11,7 +11,7 @@ import cors from "cors";
 import corsConfig from "./configs/cors.js";
 import { limiter } from "./core/limiter.js";
 
-import "./modules/employees/events";
+import "./modules/employees/events.js";
 
 
 const app = express();
