@@ -53,13 +53,13 @@ export async function up(db: Kysely<any>): Promise<void> {
 			id = OLD.id;
 		END;`.execute(db);
 
-    await sql`CREATE TRIGGER after_user_insert_add_employee
-            AFTER INSERT ON users
-            FOR EACH ROW
-            BEGIN
-                INSERT INTO employees (user_id)
-                VALUES (NEW.id);
-            END;`.execute(db);
+    // await sql`CREATE TRIGGER after_user_insert_add_employee
+    //         AFTER INSERT ON users
+    //         FOR EACH ROW
+    //         BEGIN
+    //             INSERT INTO employees (user_id)
+    //             VALUES (NEW.id);
+    //         END;`.execute(db);
 
     await db.schema
         .createTable("timesheets")
@@ -112,7 +112,7 @@ export async function down(db: Kysely<any>): Promise<void> {
     await db.schema.dropTable("employees").execute();
 
     await sql`DROP TRIGGER IF EXISTS update_users_modifiedAt;`.execute(db);
-    await sql`DROP TRIGGER IF EXISTS after_user_insert_add_employee;`.execute(db);
+    // await sql`DROP TRIGGER IF EXISTS after_user_insert_add_employee;`.execute(db);
 
     await db.schema.dropIndex("user_id").execute();
     await db.schema.dropIndex("user_email").execute();

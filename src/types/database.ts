@@ -23,8 +23,8 @@ export type UserUpdate = Updateable<UsersTable>;
 export interface EmployeeTable {
     id: Generated<number>;
     user_id: number;
-    name: string;
-    surname: string;
+    name: string | undefined;
+    surname: string | undefined;
     createdAt: ColumnType<Date, string | undefined, never>;
     modifiedAt: ColumnType<Date, string | undefined, never>;
 }
