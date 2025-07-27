@@ -6,7 +6,6 @@ const config: Config = {
     printWidth: 200,
     semi: true,
     singleQuote: false,
-    
 };
 
 export default config;

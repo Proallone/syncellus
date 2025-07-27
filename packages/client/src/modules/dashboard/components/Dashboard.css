@@ -1,0 +1,27 @@
+.dashboard-container {
+    padding: 2rem;
+    text-align: center;
+}
+
+.tile-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.tile {
+    background: #f3f4f6;
+    padding: 2rem;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #111827;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s;
+}
+
+.tile:hover {
+    transform: scale(1.03);
+    background: #e5e7eb;
+}
