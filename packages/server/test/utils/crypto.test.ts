@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { hashPassword, compareHash } from "../../src/utils/crypto";
+import { hashPassword, compareHash } from "../../src/utils/crypto.js";
 
 describe("Crypto utils", () => {
     it("should hash a password with a valid bcrypt format", async () => {

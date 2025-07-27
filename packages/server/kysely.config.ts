@@ -1,4 +1,4 @@
-import { db as kysely } from "./src/database/database";
+import { db as kysely } from "./src/database/database.js";
 import { defineConfig } from "kysely-ctl";
 
 export default defineConfig({

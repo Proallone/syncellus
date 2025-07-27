@@ -7,10 +7,10 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-        "watch": "yarn workspaces run watch",
-        "lint": "eslint 'packages/**/*.ts'",
-        "format": "NODE_OPTIONS='--experimental-strip-types' prettier packages/ --write",
-        "ci": "yarn install --frozen-lockfile"
+    "watch": "yarn workspaces run watch",
+    "lint": "eslint 'packages/**/*.ts'",
+    "format": "NODE_OPTIONS='--experimental-strip-types' prettier packages/ --write",
+    "ci": "yarn install --frozen-lockfile"
   },
   "workspaces": [
     "packages/*"
