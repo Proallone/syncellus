@@ -79,6 +79,13 @@ export async function up(db: Kysely<any>): Promise<void> {
                 .stored()
         )
         .addColumn("status", "text", (col) => col.check(sql`status in ('draft', 'submitted', 'approved', 'rejected')`).defaultTo("draft"))
+        .addForeignKeyConstraint(
+            'timesheets_employee_id_fk',
+            ['employee_id'],
+            'employees',
+            ['id'],
+            (cb) => cb.onDelete('cascade')
+        )
         .execute();
 
     await db.schema.createIndex("timesheets_id").on("timesheets").column("id").execute();

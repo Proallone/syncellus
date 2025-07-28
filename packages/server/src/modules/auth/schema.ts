@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const AuthBasePayload = z.object({
+const AuthBasePayload = z.strictObject({
     email: z.email(),
     password: z.string().min(8).max(40)
 });

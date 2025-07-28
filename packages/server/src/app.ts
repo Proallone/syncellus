@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Router } from "express";
 import { errorHandler } from "./middlewares/error.middleware.js";
 import healthRoutes from "./modules/health/routes.js";
 import userRoutes from "./modules/employees/routes.js";
@@ -21,10 +21,14 @@ app.use(helmet());
 app.use(pinoHttp(logger));
 app.use(express.json());
 
-app.use("/health", healthRoutes);
-app.use("/auth", authRoutes);
-app.use("/employees", userRoutes);
-app.use("/timesheets", timesheetsRoutes);
+const apiRouter = Router(); 
+
+apiRouter.use("/health", healthRoutes);
+apiRouter.use("/auth", authRoutes);
+apiRouter.use("/employees", userRoutes);
+apiRouter.use("/timesheets", timesheetsRoutes);
+
+app.use("/api/v1", apiRouter);
 
 app.use(errorHandler);
 

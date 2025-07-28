@@ -52,7 +52,7 @@ const deleteEmployee = async (req: Request, res: Response, next: NextFunction) =
     const { id } = req.params;
     try {
         const deletion = await deleteEmployeeById(Number(id));
-        if (!deletion)
+        if (!deletion.numDeletedRows)
             return res.status(404).send({
                 message: `Employee with ID ${id} not found!`
             });

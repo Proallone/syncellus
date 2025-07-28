@@ -13,6 +13,7 @@ const signUp = async (req: Request, res: Response, next: NextFunction) => {
     logger.debug(`User ${user.email} signs up`);
 
     const newUser = await insertNewUser(user);
+    if(!newUser) return res.status(409).send({message: `User with email ${user.email} already exists!`});
 
     return res.status(201).json(newUser);
 };

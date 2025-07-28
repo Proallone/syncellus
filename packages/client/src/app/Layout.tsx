@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 export const Layout = () => {
     return (
         <div>
-            <header>✅ Header / Nav</header>
+            <header>Syncellus</header>
             <main>
                 <Outlet />
             </main>

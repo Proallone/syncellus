@@ -1,6 +1,7 @@
 import { z } from "zod";
 
-const EmployeeBasePayload = z.object({
+const EmployeeBasePayload = z.strictObject({
+    user_id: z.int().gt(0),
     name: z.string().min(3).max(255),
     surname: z.string().min(3).max(255)
 });

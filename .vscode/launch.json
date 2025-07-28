@@ -8,17 +8,18 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/src/server.ts",
+            "program": "${workspaceFolder}/packages/server/src/server.ts",
             "runtimeExecutable": "tsx",
             "console": "internalConsole",
             "runtimeArgs": [
-                "--env-file=.env"
+                "--env-file=${workspaceFolder}/packages/server/.env"
             ],
             "restart": true,
             "outputCapture": "std",
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
-            ]
+            ],
+            "cwd": "${workspaceFolder}/packages/server" 
         },
         {
             "type": "node",
@@ -27,7 +28,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/dist/server.js",
+            "program": "${workspaceFolder}/packages/server/dist/server.js",
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",
             "sourceMaps": true,

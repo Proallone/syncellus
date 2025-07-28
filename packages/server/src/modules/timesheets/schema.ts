@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const TimesheetBasePayload = z.object({
+const TimesheetBasePayload = z.strictObject({
     date: z.iso.date(),
     start_hour: z.iso.time(),
     end_hour: z.iso.time()
