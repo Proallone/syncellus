@@ -8,7 +8,7 @@ interface Module {
 
 const modules: Module[] = [
     { name: "Employees", path: "/employees" },
-    { name: "Timesheets", path: "/timesheets" }
+    { name: "Timesheets", path: "/timesheets" },
 ];
 
 export const Dashboard = () => {
