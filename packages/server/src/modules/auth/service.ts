@@ -4,7 +4,6 @@ import { compareHash, hashPassword } from "../../utils/crypto.js";
 import { insertNewUserToDb, selectUserByEmailFromDb } from "./repository.js";
 
 const insertNewUser = async (user: NewUser) => {
-
     const exists = await selectUserByEmailFromDb(user.email);
 
     if (exists) return undefined;

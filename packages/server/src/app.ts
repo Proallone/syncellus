@@ -21,7 +21,7 @@ app.use(helmet());
 app.use(pinoHttp(logger));
 app.use(express.json());
 
-const apiRouter = Router(); 
+const apiRouter = Router();
 
 apiRouter.use("/health", healthRoutes);
 apiRouter.use("/auth", authRoutes);

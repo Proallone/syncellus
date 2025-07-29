@@ -7,7 +7,10 @@ const insertNewEmployeeToDb = async (employee: NewEmployee) => {
 };
 
 const selectAllEmployeesFromDb = async (query: GetEmployeeQuery) => {
-    let q = db.selectFrom("employees").leftJoin("users", "employees.user_id", "users.id").select(["employees.id","name", "surname", "email", "is_active", "role", "users.createdAt", "users.modifiedAt"]);
+    let q = db
+        .selectFrom("employees")
+        .leftJoin("users", "employees.user_id", "users.id")
+        .select(["employees.id", "name", "surname", "email", "is_active", "role", "users.createdAt", "users.modifiedAt"]);
 
     if (!!query.is_active) q = q.where("is_active", "=", query.is_active === "true" ? 1 : 0); //? no boolean in sqlite...
 
