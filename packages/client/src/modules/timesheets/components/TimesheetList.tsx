@@ -21,7 +21,7 @@ export const TimesheetList = () => {
             <ul>
                 {timesheets.map((tms) => (
                     <li key={tms.id}>
-                       {tms.date.toDateString()}, {tms.start_hour} — {tms.end_hour} <strong>{tms.hours_worked}H</strong>
+                        {tms.date.toDateString()}, {tms.start_hour} — {tms.end_hour} <strong>{tms.hours_worked}H</strong>
                     </li>
                 ))}
             </ul>

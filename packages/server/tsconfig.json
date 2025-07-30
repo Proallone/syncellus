@@ -1,3 +1,14 @@
 {
-    "extends": "../../tsconfig.json"
+    "compilerOptions": {
+        "outDir": "./dist" /* Output directory for backend compiled files */,
+        "rootDir": "./src" /* Root directory of the source files */,
+        "lib": ["DOM", "DOM.Iterable", "ESNext"],
+        "module": "nodenext" /* Or "CommonJS" if you prefer, but Node16/NodeNext is modern ESM */,
+        "moduleResolution": "nodenext" /* Or "Node" for CommonJS */,
+        "noEmit": false /* Make sure it's false for compilation */,
+        "composite": true
+    },
+    "include": ["src/**/*.ts" /* Include all TypeScript files in src */, "src/**/*.d.ts" /* Include declaration files */],
+    "exclude": ["node_modules", "dist"],
+    "references": []
 }
