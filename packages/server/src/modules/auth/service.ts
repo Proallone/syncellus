@@ -1,5 +1,8 @@
+import Jwt from "jsonwebtoken";
 import { eventBus } from "../../core/eventEmitter.js";
+import { HttpError } from "../../errors/HttpError.js";
 import type { NewUser } from "../../types/database.js";
+import type { Credentials, User } from "../../types/index.js";
 import { compareHash, hashPassword } from "../../utils/crypto.js";
 import { insertNewUserToDb, selectUserByEmailFromDb } from "./repository.js";
 
@@ -18,16 +21,20 @@ const insertNewUser = async (user: NewUser) => {
     return newUser;
 };
 
-interface Credentials {
-    email: string;
-    password: string;
-}
-
 const verifyUserCredentials = async (credentials: Credentials) => {
     const { email, password } = credentials;
     const userFromDb = await selectUserByEmailFromDb(email);
 
-    return await compareHash(password, userFromDb?.password!);
+    if (!userFromDb) throw new HttpError(401, "Invalid credentials");
+
+    const match = await compareHash(password, userFromDb.password);
+
+    if(!match) throw new HttpError(401, "Invalid credentials");
+
+    const user: User = { id: userFromDb.id, role: userFromDb.role}
+    const accessToken = Jwt.sign(user, process.env.JWT_TOKEN_SECRET, { expiresIn: '30m'});
+
+    return { user, accessToken};
 };
 
 export { insertNewUser, verifyUserCredentials };

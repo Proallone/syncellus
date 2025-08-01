@@ -25,18 +25,12 @@ const signUp = async (req: Request, res: Response, next: NextFunction) => {
 const signIn = async (req: Request, res: Response, next: NextFunction) => {
     const credentials: AuthCredentials = req.body;
     try {
-        const match = await verifyUserCredentials(credentials);
-        if (match) {
-            return res.status(200).send({
-                message: "Sign in successfull!"
-            });
-        }
+        const { user, accessToken} = await verifyUserCredentials(credentials);
 
-        //todo issue a token or send session here...
-        logger.debug(`Unsuccessfull login attempt by the user ${credentials.email}`);
-
-        return res.status(401).send({
-            message: "Incorrect email/password!"
+        return res.status(200).json({
+            message: "Successfull sign in!",
+            user,
+            accessToken
         });
     } catch (error) {
         next(error);

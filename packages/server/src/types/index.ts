@@ -18,3 +18,13 @@ export interface User {
 export interface AuthRequest extends Request {
     user?: User;
 }
+
+export interface AppError extends Error {
+    status?: number;
+}
+
+
+export interface Credentials {
+    email: string;
+    password: string;
+}

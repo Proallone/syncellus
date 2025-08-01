@@ -6,7 +6,7 @@ const insertNewUserToDb = async (user: NewUser) => {
 };
 
 const selectUserByEmailFromDb = async (email: string) => {
-    return await db.selectFrom("users").select("password").where("email", "=", email).executeTakeFirst();
+    return await db.selectFrom("users").select(["id", "role", "password"]).where("email", "=", email).executeTakeFirst();
 };
 
 export { insertNewUserToDb, selectUserByEmailFromDb };

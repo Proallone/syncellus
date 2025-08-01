@@ -3,11 +3,16 @@ import type { Response, NextFunction } from "express";
 import type { AuthRequest, User } from "../types/index.js";
 
 const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => {
-    const token = req.cookies["access_token"];
-    if (!token) return res.status(401).send({ message: `Unauthorized!` });
+    const authHeader: string = req.headers.authorization;
+
+    if (!authHeader?.startsWith("Bearer ")) {
+        return res.status(401).send({ message: `Missing token!` });
+    }
+
+    const token = authHeader.split(" ")[1];
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET) as User;
+        const decoded = jwt.verify(token, process.env.JWT_TOKEN_SECRET) as User;
         req.user = decoded;
         next();
     } catch (error) {
