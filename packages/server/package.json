@@ -1,7 +1,7 @@
 {
     "name": "@syncellus/server",
     "version": "1.0.0",
-    "description": "Simple timesheet application server",
+    "description": "Syncellus application server",
     "license": "ISC",
     "author": "Proallone",
     "type": "module",
@@ -14,7 +14,8 @@
         "test:coverage": "vitest run --coverage",
         "up": "kysely migrate:up",
         "postup": "kysely seed run",
-        "down": "kysely migrate:down"
+        "down": "kysely migrate:down",
+        "build": "tsc --build"
     },
     "dependencies": {
         "bcrypt": "^6.0.0",
@@ -23,6 +24,7 @@
         "express": "^5.1.0",
         "express-rate-limit": "^8.0.1",
         "helmet": "^8.1.0",
+        "jsonwebtoken": "^9.0.2",
         "kysely": "^0.28.3",
         "pino": "^9.7.0",
         "pino-http": "^10.5.0",
