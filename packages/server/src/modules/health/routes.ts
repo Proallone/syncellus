@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getApplicationHealth, getDatabaseHealth } from "./controller.js";
+import { getApplicationHealth, getDatabaseHealth } from "@syncellus/modules/health/controller.js";
 
 const router = Router();
 

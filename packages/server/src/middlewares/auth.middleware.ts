@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import type { Response, NextFunction } from "express";
-import type { AuthRequest, User } from "../types/index.js";
-import config from "../configs/config.js";
+import type { AuthRequest, User } from "@syncellus/types/index.js";
+import config from "@syncellus/configs/config.js";
 
 const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => {
     const authHeader: string = req.headers.authorization;

@@ -1,5 +1,5 @@
 import rateLimit from "express-rate-limit";
-import config from "../configs/limiter.js";
+import config from "@syncellus/configs/limiter.js";
 
 const limiter = rateLimit(config);
 

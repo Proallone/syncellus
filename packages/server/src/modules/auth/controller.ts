@@ -1,9 +1,8 @@
 import type { Request, Response, NextFunction } from "express";
-import type { NewUser } from "../../types/database.js";
-import type { AuthCredentials } from "../../types/index.js";
-
-import { insertNewUser, verifyUserCredentials } from "./service.js";
-import { logger } from "../../core/logger.js";
+import type { NewUser } from "@syncellus/types/database.js";
+import type { AuthCredentials } from "@syncellus/types/index.js";
+import { insertNewUser, verifyUserCredentials } from "@syncellus/modules/auth/service.js";
+import { logger } from "@syncellus/core/logger.js";
 
 const signUp = async (req: Request, res: Response, next: NextFunction) => {
     const user: NewUser = {

@@ -1,5 +1,5 @@
-import type { NewTimesheet, TimesheetUpdate } from "../../types/database.js";
-import { insertTimesheetInDb, selectAllTimesheetsFromDb, selectTimesheetByIdFromDb, updateTimesheetByIdInDb, deleteTimesheetFromDb, selectTimesheetsByEmployeeIdFromDb } from "./repository.js";
+import type { NewTimesheet, TimesheetUpdate } from "@syncellus/types/database.js";
+import { insertTimesheetInDb, selectAllTimesheetsFromDb, selectTimesheetByIdFromDb, updateTimesheetByIdInDb, deleteTimesheetFromDb, selectTimesheetsByEmployeeIdFromDb } from "@syncellus/modules/timesheets/repository.js";
 
 const insertNewTimesheet = async (timesheet: NewTimesheet) => {
     return await insertTimesheetInDb(timesheet);

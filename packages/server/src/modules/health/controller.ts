@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import { getApplicationStatus, getDatabaseVersion } from "./service.js";
+import { getApplicationStatus, getDatabaseVersion } from "@syncellus/modules/health/service.js";
 
 const getApplicationHealth = (_req: Request, res: Response, _next: NextFunction) => {
     const appStatus = getApplicationStatus();

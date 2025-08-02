@@ -1,5 +1,5 @@
 import type { Response, NextFunction } from "express";
-import type { AuthRequest } from "../types/index.js";
+import type { AuthRequest } from "@syncellus/types/index.js";
 
 const requireRole = (role: string) => {
     return (req: AuthRequest, res: Response, next: NextFunction) => {

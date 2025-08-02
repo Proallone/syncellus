@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { validate } from "../../middlewares/validator.middleware.js";
-import { AuthSchema } from "./schema.js";
-import { signUp, signIn } from "./controller.js";
+import { validate } from "@syncellus/middlewares/validator.middleware.js";
+import { AuthSchema } from "@syncellus/modules/auth/schema.js";
+import { signUp, signIn } from "@syncellus/modules/auth/controller.js";
 
 const router = Router();
 

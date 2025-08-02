@@ -1,5 +1,5 @@
 import type { Kysely } from "kysely";
-import type { Database, NewEmployee, NewTimesheet, NewUser } from "../../types/database.js";
+import type { Database, NewEmployee, NewTimesheet, NewUser } from "@syncellus/types/database.js";
 
 const users: NewUser[] = [
     {

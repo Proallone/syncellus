@@ -121,4 +121,6 @@ export async function down(db: Kysely<any>): Promise<void> {
     await db.schema.dropIndex("user_id").execute();
     await db.schema.dropIndex("user_email").execute();
     await db.schema.dropTable("users").execute();
+
+    await sql`PRAGMA journal_mode=DELETE;`.execute(db);
 }

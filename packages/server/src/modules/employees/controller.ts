@@ -1,8 +1,8 @@
 import type { Request, Response, NextFunction } from "express";
 
-import { insertNewEmployee, selectAllEmployees, selectOneEmployeeById, updateEmployeeById, deleteEmployeeById } from "./service.js";
-import type { EmployeeUpdate, NewEmployee, NewTimesheet } from "../../types/database.js";
-import { insertNewTimesheet, selectAllTimesheetsByEmployeeId } from "../timesheets/service.js";
+import { insertNewEmployee, selectAllEmployees, selectOneEmployeeById, updateEmployeeById, deleteEmployeeById } from "@syncellus/modules/employees/service.js";
+import type { EmployeeUpdate, NewEmployee, NewTimesheet } from "@syncellus/types/database.js";
+import { insertNewTimesheet, selectAllTimesheetsByEmployeeId } from "@syncellus/modules/timesheets/service.js";
 
 const createEmployee = async (req: Request, res: Response, next: NextFunction) => {
     const { body } = req;

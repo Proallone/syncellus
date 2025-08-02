@@ -1,4 +1,4 @@
-import { getDatabaseVersionFromDb } from "./repository.js";
+import { getDatabaseVersionFromDb } from "@syncellus/modules/health/repository.js";
 
 const getApplicationStatus = () => {
     return `Healthy!`;

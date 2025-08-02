@@ -1,7 +1,7 @@
-import app from "./app.js";
-import config from "./configs/config.js";
-import { db } from "./database/database.js";
-import { logger } from "./core/logger.js";
+import app from "@syncellus/app.js";
+import config from "@syncellus/configs/config.js";
+import { db } from "@syncellus/database/database.js";
+import { logger } from "@syncellus/core/logger.js";
 
 const server = app.listen(config.port, () => {
     logger.info(`Server running on port ${config.port} in ${config.nodeEnv} environment`);

@@ -1,6 +1,6 @@
-import type { EmployeeUpdate, NewEmployee } from "../../types/database.js";
-import { GetEmployeeQuery } from "../../types/index.js";
-import { insertNewEmployeeToDb, selectAllEmployeesFromDb, selectOneEmployeeByIdFromDb, updateEmployeeByIdInDb, deleteEmployeeByIdInDb } from "./repository.js";
+import type { EmployeeUpdate, NewEmployee } from "@syncellus/types/database.js";
+import { GetEmployeeQuery } from "@syncellus/types/index.js";
+import { insertNewEmployeeToDb, selectAllEmployeesFromDb, selectOneEmployeeByIdFromDb, updateEmployeeByIdInDb, deleteEmployeeByIdInDb } from "@syncellus/modules/employees/repository.js";
 
 const insertNewEmployee = async (employee: NewEmployee) => {
     return await insertNewEmployeeToDb(employee);

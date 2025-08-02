@@ -1,11 +1,12 @@
 import Jwt from "jsonwebtoken";
-import { eventBus } from "../../core/eventEmitter.js";
-import { HttpError } from "../../errors/HttpError.js";
-import type { NewUser } from "../../types/database.js";
-import type { Credentials, User } from "../../types/index.js";
-import { compareHash, hashPassword } from "../../utils/crypto.js";
-import { insertNewUserToDb, selectUserByEmailFromDb } from "./repository.js";
-import config from "../../configs/config.js";
+import { eventBus } from "@syncellus/core/eventEmitter.js";
+import { HttpError } from "@syncellus/errors/HttpError.js";
+import type { NewUser } from "@syncellus/types/database.js";
+import type { Credentials, User } from "@syncellus/types/index.js";
+import { compareHash, hashPassword } from "@syncellus/utils/crypto.js";
+import { insertNewUserToDb, selectUserByEmailFromDb } from "@syncellus/modules/auth/repository.js";
+import config from "@syncellus/configs/config.js";
+
 const insertNewUser = async (user: NewUser) => {
     const exists = await selectUserByEmailFromDb(user.email);
 

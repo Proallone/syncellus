@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { createTimesheet, deleteTimesheet, getTimesheetById, getTimesheets, patchTimesheet } from "./controller.js";
-import { validate } from "../../middlewares/validator.middleware.js";
-import { TimesheetPostSchema, TimesheetUpdateSchema } from "./schema.js";
+import { createTimesheet, deleteTimesheet, getTimesheetById, getTimesheets, patchTimesheet } from "@syncellus/modules/timesheets/controller.js";
+import { validate } from "@syncellus/middlewares/validator.middleware.js";
+import { TimesheetPostSchema, TimesheetUpdateSchema } from "@syncellus/modules/timesheets/schema.js";
 
 const router = Router();
 

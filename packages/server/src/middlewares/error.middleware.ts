@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
-import type { AppError } from "../types/index.js";
-import { logger } from "../core/logger.js";
+import type { AppError } from "@syncellus/types/index.js";
+import { logger } from "@syncellus/core/logger.js";
 
 const errorHandler = (err: AppError, req: Request, res: Response, next: NextFunction) => {
     logger.error(err);

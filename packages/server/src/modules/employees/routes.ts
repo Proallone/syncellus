@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { validate } from "../../middlewares/validator.middleware.js";
-import { createEmployee, createTimesheetForEmployee, deleteEmployee, getEmployee, getEmployees, getTimesheetsByEmployeeId, patchEmployee } from "./controller.js";
-import { EmployeePostSchema, EmployeePatchSchema, EmployeesGetSchema } from "./schema.js";
-import { TimesheetPostSchema } from "../timesheets/schema.js";
-import { authMiddleware } from "../../middlewares/auth.middleware.js";
+import { validate } from "@syncellus/middlewares/validator.middleware.js";
+import { createEmployee, createTimesheetForEmployee, deleteEmployee, getEmployee, getEmployees, getTimesheetsByEmployeeId, patchEmployee } from "@syncellus/modules/employees/controller.js";
+import { EmployeePostSchema, EmployeePatchSchema, EmployeesGetSchema } from "@syncellus/modules/employees/schema.js";
+import { TimesheetPostSchema } from "@syncellus/modules/timesheets/schema.js";
+import { authMiddleware } from "@syncellus/middlewares/auth.middleware.js";
 
 const router = Router();
 

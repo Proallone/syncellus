@@ -1,5 +1,5 @@
-import { db } from "../../database/database.js";
-import type { NewTimesheet, TimesheetUpdate } from "../../types/database.js";
+import { db } from "@syncellus/database/database.js";
+import type { NewTimesheet, TimesheetUpdate } from "@syncellus/types/database.js";
 
 export interface Timesheet {
     id?: number;

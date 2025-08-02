@@ -1,22 +1,21 @@
 import express, { Router } from "express";
-import { errorHandler } from "./middlewares/error.middleware.js";
-import healthRoutes from "./modules/health/routes.js";
-import userRoutes from "./modules/employees/routes.js";
-import authRoutes from "./modules/auth/routes.js";
-import timesheetsRoutes from "./modules/timesheets/routes.js";
-import { logger } from "./core/logger.js";
+import { errorHandler } from "@syncellus/middlewares/error.middleware.js";
+import healthRoutes from "@syncellus/modules/health/routes.js";
+import userRoutes from "@syncellus/modules/employees/routes.js";
+import authRoutes from "@syncellus/modules/auth/routes.js";
+import timesheetsRoutes from "@syncellus/modules/timesheets/routes.js";
+import { logger } from "@syncellus/core/logger.js";
 import { pinoHttp } from "pino-http";
 import helmet from "helmet";
 import cors from "cors";
-import corsConfig from "./configs/cors.js";
-import { limiter } from "./core/limiter.js";
+import corsConfig from "@syncellus/configs/cors.js";
+import { limiter } from "@syncellus/core/limiter.js";
 
 import "./modules/employees/events.js";
-import config from "./configs/config.js";
 
 const app = express();
 
-if (config.nodeEnv !== "development") app.use(limiter);
+app.use(limiter);
 app.use(cors(corsConfig));
 app.use(helmet());
 app.use(pinoHttp(logger));

@@ -1,6 +1,6 @@
-import { db } from "../../database/database.js";
-import type { EmployeeUpdate, NewEmployee } from "../../types/database.js";
-import type { GetEmployeeQuery } from "../../types/index.js";
+import { db } from "@syncellus/database/database.js";
+import type { EmployeeUpdate, NewEmployee } from "@syncellus/types/database.js";
+import type { GetEmployeeQuery } from "@syncellus/types/index.js";
 
 const insertNewEmployeeToDb = async (employee: NewEmployee) => {
     return await db.insertInto("employees").values(employee).returningAll().executeTakeFirstOrThrow();

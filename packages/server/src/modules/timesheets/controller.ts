@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
-import type { NewTimesheet, TimesheetUpdate } from "../../types/database.js";
-import { deleteTimesheetById, insertNewTimesheet, selectAllTimesheets, selectOneTimesheetById, updateTimesheetById } from "./service.js";
+import type { NewTimesheet, TimesheetUpdate } from "@syncellus/types/database.js";
+import { deleteTimesheetById, insertNewTimesheet, selectAllTimesheets, selectOneTimesheetById, updateTimesheetById } from "@syncellus/modules/timesheets/service.js";
 
 const createTimesheet = async (req: Request, res: Response, next: NextFunction) => {
     const { body } = req;
