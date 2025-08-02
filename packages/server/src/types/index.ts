@@ -23,7 +23,6 @@ export interface AppError extends Error {
     status?: number;
 }
 
-
 export interface Credentials {
     email: string;
     password: string;

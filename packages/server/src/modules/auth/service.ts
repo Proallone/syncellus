@@ -5,7 +5,7 @@ import type { NewUser } from "../../types/database.js";
 import type { Credentials, User } from "../../types/index.js";
 import { compareHash, hashPassword } from "../../utils/crypto.js";
 import { insertNewUserToDb, selectUserByEmailFromDb } from "./repository.js";
-
+import config from "../../configs/config.js";
 const insertNewUser = async (user: NewUser) => {
     const exists = await selectUserByEmailFromDb(user.email);
 
@@ -29,12 +29,12 @@ const verifyUserCredentials = async (credentials: Credentials) => {
 
     const match = await compareHash(password, userFromDb.password);
 
-    if(!match) throw new HttpError(401, "Invalid credentials");
+    if (!match) throw new HttpError(401, "Invalid credentials");
 
-    const user: User = { id: userFromDb.id, role: userFromDb.role}
-    const accessToken = Jwt.sign(user, process.env.JWT_TOKEN_SECRET, { expiresIn: '30m'});
+    const user: User = { id: userFromDb.id, role: userFromDb.role };
+    const accessToken = Jwt.sign(user, config.jwt_secret, { expiresIn: "30m" });
 
-    return { user, accessToken};
+    return { user, accessToken };
 };
 
 export { insertNewUser, verifyUserCredentials };

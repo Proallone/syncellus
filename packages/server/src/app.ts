@@ -12,10 +12,11 @@ import corsConfig from "./configs/cors.js";
 import { limiter } from "./core/limiter.js";
 
 import "./modules/employees/events.js";
+import config from "./configs/config.js";
 
 const app = express();
 
-app.use(limiter);
+if (config.nodeEnv !== "development") app.use(limiter);
 app.use(cors(corsConfig));
 app.use(helmet());
 app.use(pinoHttp(logger));

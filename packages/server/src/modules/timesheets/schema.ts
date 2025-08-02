@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 const TimesheetBasePayload = z.strictObject({
+    employee_id: z.number(), //todo move this to be server provisioned based on jwt
     date: z.iso.date(),
     start_hour: z.iso.time(),
     end_hour: z.iso.time()

@@ -6,6 +6,8 @@ export async function up(db: Kysely<any>): Promise<void> {
     // note: up migrations are mandatory. you must implement this function.
     // For more info, see: https://kysely.dev/docs/migrations
 
+    await sql`PRAGMA journal_mode=WAL;`.execute(db);
+
     await db.schema
         .createTable("users")
         .addColumn("id", "integer", (col) => col.primaryKey())
