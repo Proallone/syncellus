@@ -7,8 +7,8 @@ import { logger } from "@syncellus/core/logger.js";
 const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => {
     const authHeader: string = req.headers.authorization;
 
-    //todo this is not a good idea but for the time beeing...
-    if (config.nodeEnv === "dev") return next();
+    const isDevMode = ["dev", "development", "test"].includes(config.nodeEnv); //todo this is not a good idea but for the time beeing...
+    if (isDevMode) return next();
 
     if (!authHeader?.startsWith("Bearer ")) {
         return res.status(401).send({ message: `Missing token!` });

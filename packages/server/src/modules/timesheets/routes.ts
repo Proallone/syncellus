@@ -6,10 +6,12 @@ import { authMiddleware } from "@syncellus/middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.get("/", authMiddleware, getTimesheets);
-router.get("/:id", authMiddleware, getTimesheetById);
-router.post("/", authMiddleware, validate(TimesheetPostSchema), createTimesheet);
-router.patch("/:id", authMiddleware, validate(TimesheetUpdateSchema), patchTimesheet);
-router.delete("/:id", authMiddleware, deleteTimesheet);
+router.use(authMiddleware);
+
+router.get("/", getTimesheets);
+router.get("/:id", getTimesheetById);
+router.post("/", validate(TimesheetPostSchema), createTimesheet);
+router.patch("/:id", validate(TimesheetUpdateSchema), patchTimesheet);
+router.delete("/:id", deleteTimesheet);
 
 export default router;
