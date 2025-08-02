@@ -2,9 +2,13 @@ import jwt from "jsonwebtoken";
 import type { Response, NextFunction } from "express";
 import type { AuthRequest, User } from "@syncellus/types/index.js";
 import config from "@syncellus/configs/config.js";
+import { logger } from "@syncellus/core/logger.js";
 
 const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => {
     const authHeader: string = req.headers.authorization;
+
+    //todo this is not a good idea but for the time beeing...
+    if (config.nodeEnv === "dev") return next();
 
     if (!authHeader?.startsWith("Bearer ")) {
         return res.status(401).send({ message: `Missing token!` });
@@ -17,6 +21,7 @@ const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => 
         req.user = decoded;
         next();
     } catch (error) {
+        logger.warn(`Unsuccessful auth from ${req.ip}`);
         return res.status(401).send({ message: `Invalid token!` });
     }
 };

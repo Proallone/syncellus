@@ -3,28 +3,16 @@
         "outDir": "./dist" /* Output directory for backend compiled files */,
         "rootDir": "./src" /* Root directory of the source files */,
         "baseUrl": "./",
-        "lib": [
-            "DOM",
-            "DOM.Iterable",
-            "ESNext"
-        ],
+        "lib": ["DOM", "DOM.Iterable", "ESNext"],
         "module": "nodenext" /* Or "CommonJS" if you prefer, but Node16/NodeNext is modern ESM */,
         "moduleResolution": "nodenext" /* Or "Node" for CommonJS */,
         "noEmit": false /* Make sure it's false for compilation */,
         "composite": true,
         "paths": {
-            "@syncellus/*": [
-                "src/*"
-            ], /* Alias for all packages */
+            "@syncellus/*": ["src/*"] /* Alias for all packages */
         }
     },
-    "include": [
-        "src/**/*.ts" /* Include all TypeScript files in src */,
-        "src/**/*.d.ts" /* Include declaration files */
-    ],
-    "exclude": [
-        "node_modules",
-        "dist"
-    ],
-    "references": [],
+    "include": ["src/**/*.ts" /* Include all TypeScript files in src */, "src/**/*.d.ts" /* Include declaration files */],
+    "exclude": ["node_modules", "dist"],
+    "references": []
 }

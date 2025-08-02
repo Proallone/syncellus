@@ -7,11 +7,11 @@ import { authMiddleware } from "@syncellus/middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.post("/", validate(EmployeePostSchema), createEmployee);
+router.post("/", authMiddleware, validate(EmployeePostSchema), createEmployee);
 router.get("/", authMiddleware, validate(EmployeesGetSchema), getEmployees);
-router.get("/:id", getEmployee);
-router.patch("/:id", validate(EmployeePatchSchema), patchEmployee);
-router.delete("/:id", deleteEmployee);
+router.get("/:id", authMiddleware, getEmployee);
+router.patch("/:id", authMiddleware, validate(EmployeePatchSchema), patchEmployee);
+router.delete("/:id", authMiddleware, deleteEmployee);
 
 router.get("/:employeeId/timesheets", getTimesheetsByEmployeeId);
 router.post("/:employeeId/timesheets", validate(TimesheetPostSchema), createTimesheetForEmployee);

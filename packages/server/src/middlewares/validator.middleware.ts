@@ -1,3 +1,4 @@
+import { logger } from "@syncellus/core/logger.js";
 import { Request, Response, NextFunction } from "express";
 import { z } from "zod";
 
@@ -21,6 +22,7 @@ const validate: validate =
         });
 
         if (!result.success) {
+            logger.warn(`Invalid body payload for endpoint ${req.originalUrl} by ${req.ip}. Invalid body: ${JSON.stringify(req.body)}`);
             return res.status(400).json({
                 status: "error",
                 message: "Validation failed",
