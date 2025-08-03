@@ -24,11 +24,10 @@ const signUp = async (req: Request, res: Response, next: NextFunction) => {
 const signIn = async (req: Request, res: Response, next: NextFunction) => {
     const credentials: AuthCredentials = req.body;
     try {
-        const { user, accessToken } = await verifyUserCredentials(credentials);
+        const { accessToken } = await verifyUserCredentials(credentials);
 
         return res.status(200).json({
             message: "Successfull sign in!",
-            user,
             accessToken
         });
     } catch (error) {

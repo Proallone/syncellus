@@ -34,8 +34,9 @@ const verifyUserCredentials = async (credentials: Credentials) => {
 
     const user: User = { id: userFromDb.id, role: userFromDb.role };
     const accessToken = Jwt.sign(user, config.jwt_secret, { expiresIn: "30m" });
+    // TODO issue a refresh token?
 
-    return { user, accessToken };
+    return { accessToken };
 };
 
 export { insertNewUser, verifyUserCredentials };

@@ -9,7 +9,7 @@ const requireRole = (roles: string[]) => {
         if (isDevMode) return next();
 
         const { user } = req;
-        
+
         if (!user || !roles.includes(user.role)) {
             logger.warn(`Unsuccessful RBAC attempt for ${req.ip}. Role ${user.role}, required roles ${roles}`);
             return res.status(403).send({ message: `Forbidden!` });
