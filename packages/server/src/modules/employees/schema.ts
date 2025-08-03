@@ -11,7 +11,7 @@ const EmployeeUpdatePalyoad = EmployeeBasePayload.partial();
 
 const employeeGetQuery = z.object({
     is_active: z.enum(["true", "false"]).optional(),
-    role: z.enum(["employee", "manager", "admin"]).optional() //todo fix later so multiple roles are available to query
+    role: z.enum(["employee", "manager", "admin"]).optional() //TODO fix later so multiple roles are available to query
 });
 
 const EmployeesGetSchema = z.object({

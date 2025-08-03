@@ -7,5 +7,5 @@ class HttpError extends Error {
         Object.setPrototypeOf(this, HttpError.prototype);
     }
 }
-//todo maybe create a set of different predefined http errors?
+//TODO maybe create a set of different predefined http errors?
 export { HttpError };

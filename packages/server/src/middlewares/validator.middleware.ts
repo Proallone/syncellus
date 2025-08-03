@@ -1,5 +1,5 @@
 import { logger } from "@syncellus/core/logger.js";
-import { Request, Response, NextFunction } from "express";
+import type { Request, Response, NextFunction } from "express";
 import { z } from "zod";
 
 type MiddlewareFunction = (req: Request, res: Response, next: NextFunction) => void;

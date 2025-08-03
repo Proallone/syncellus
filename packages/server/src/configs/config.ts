@@ -1,8 +1,4 @@
-interface Config {
-    port: number;
-    nodeEnv: string;
-    jwt_secret: string;
-}
+import { Config } from "@syncellus/types/index.js";
 
 const config: Config = {
     port: Number(process.env.PORT) || 3000,

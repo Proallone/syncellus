@@ -4,16 +4,17 @@ import { createEmployee, createTimesheetForEmployee, deleteEmployee, getEmployee
 import { EmployeePostSchema, EmployeePatchSchema, EmployeesGetSchema } from "@syncellus/modules/employees/schema.js";
 import { TimesheetPostSchema } from "@syncellus/modules/timesheets/schema.js";
 import { authMiddleware } from "@syncellus/middlewares/auth.middleware.js";
+import { requireRole } from "@syncellus/middlewares/role.middleware.js";
 
 const router = Router();
 
 router.use(authMiddleware);
 
-router.post("/", validate(EmployeePostSchema), createEmployee);
+router.post("/", requireRole(["admin"]), validate(EmployeePostSchema), createEmployee);
 router.get("/", validate(EmployeesGetSchema), getEmployees);
 router.get("/:id", getEmployee);
 router.patch("/:id", validate(EmployeePatchSchema), patchEmployee);
-router.delete("/:id", deleteEmployee);
+router.delete("/:id", requireRole(["admin"]), deleteEmployee);
 
 router.get("/:employeeId/timesheets", getTimesheetsByEmployeeId);
 router.post("/:employeeId/timesheets", validate(TimesheetPostSchema), createTimesheetForEmployee);

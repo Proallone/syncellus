@@ -7,7 +7,7 @@ import { logger } from "@syncellus/core/logger.js";
 const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => {
     const authHeader: string = req.headers.authorization;
 
-    const isDevMode = ["dev", "development", "test"].includes(config.nodeEnv); //todo this is not a good idea but for the time beeing...
+    const isDevMode = ["dev", "development", "test"].includes(config.nodeEnv); //TODO this is not a good idea but for the time beeing...
     if (isDevMode) return next();
 
     if (!authHeader?.startsWith("Bearer ")) {
@@ -19,7 +19,7 @@ const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => 
     try {
         const decoded = jwt.verify(token, config.jwt_secret) as User;
         req.user = decoded;
-        next();
+        return next();
     } catch (error) {
         logger.warn(`Unsuccessful auth from ${req.ip}`);
         return res.status(401).send({ message: `Invalid token!` });

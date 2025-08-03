@@ -1,7 +1,13 @@
 import z from "zod";
-import { AuthBasePayload } from "@syncellus/modules/auth/schema.js";
-import { employeeGetQuery } from "@syncellus/modules/employees/schema.js";
+import type { AuthBasePayload } from "@syncellus/modules/auth/schema.js";
+import type { employeeGetQuery } from "@syncellus/modules/employees/schema.js";
 import type { Request } from "express";
+
+export interface Config {
+    port: number;
+    nodeEnv: string;
+    jwt_secret: string;
+}
 
 export type AuthCredentials = z.infer<typeof AuthBasePayload>;
 export type GetEmployeeQuery = z.infer<typeof employeeGetQuery>;

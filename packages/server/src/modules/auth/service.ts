@@ -17,7 +17,7 @@ const insertNewUser = async (user: NewUser) => {
         password: await hashPassword(user.password)
     });
 
-    eventBus.emit("user.created", newUser); //todo this might not be the best idea to use event for this in case of failure it would not insert employee for a user...
+    eventBus.emit("user.created", newUser); //TODO this might not be the best idea to use event for this in case of failure it would not insert employee for a user...
 
     return newUser;
 };
