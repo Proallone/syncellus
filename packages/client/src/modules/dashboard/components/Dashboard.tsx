@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import "./Dashboard.css"; // optional styles
 import { Button } from "@/components/ui/button";
-
+import * as React from "react";
+import { Calendar } from "@/components/ui/calendar";
 interface Module {
     name: string;
     path: string;
@@ -22,9 +23,6 @@ export const Dashboard = () => {
                         {mod.name}
                     </Link>
                 ))}
-            </div>
-            <div className="flex min-h-svh flex-col items-center justify-center">
-                <Button>Click me</Button>
             </div>
         </div>
     );
