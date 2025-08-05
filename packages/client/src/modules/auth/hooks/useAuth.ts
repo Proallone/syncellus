@@ -1,12 +1,12 @@
 import { useState } from "react";
 
-let mockUser: { email: string } | null = null;
+let loggedUser: { email: string } | null = null;
 
 export function useAuth() {
-    const [user, setUser] = useState(mockUser);
+    const [user, setUser] = useState(loggedUser);
 
     const login = async (email: string, password: string) => {
-        const response = await fetch("http://localhost:3000/api/v1/auth/signin", {
+        const response = await fetch("/api/v1/auth/signin", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -15,15 +15,15 @@ export function useAuth() {
         });
 
         if (response.ok) {
-            mockUser = { email };
-            setUser(mockUser);
+            loggedUser = { email };
+            setUser(loggedUser);
             return true;
         }
         return false;
     };
 
     const logout = () => {
-        mockUser = null;
+        loggedUser = null;
         setUser(null);
     };
 

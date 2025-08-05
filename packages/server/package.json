@@ -16,7 +16,8 @@
         "up": "kysely migrate:up",
         "postup": "kysely seed run",
         "down": "kysely migrate:down",
-        "build": "tsc --build"
+        "build": "tsc --build",
+        "format": "NODE_OPTIONS='--experimental-strip-types' prettier . --config ../../prettier.config.ts --write"
     },
     "dependencies": {
         "bcrypt": "^6.0.0",

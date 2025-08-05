@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import "./Dashboard.css"; // optional styles
-
 interface Module {
     name: string;
     path: string;
