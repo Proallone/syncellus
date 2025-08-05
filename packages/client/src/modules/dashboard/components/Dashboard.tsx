@@ -1,8 +1,5 @@
 import { Link } from "react-router-dom";
 import "./Dashboard.css"; // optional styles
-import { Button } from "@/components/ui/button";
-import * as React from "react";
-import { Calendar } from "@/components/ui/calendar";
 interface Module {
     name: string;
     path: string;
