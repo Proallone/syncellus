@@ -19,11 +19,9 @@ export default defineConfig(({ mode }) => {
         },
         server: {
             proxy: {
-                "/syncellus/api/v1": {
-                    target: env.SYNCELLUS_API_URL,
-                    changeOrigin: true,
-                    secure: false,
-                    rewrite: (path) => path.replace("/syncellus/api/v1", "")
+                "/api": {
+                    target: "http://localhost:3000",
+                    changeOrigin: true
                 }
             }
         }
