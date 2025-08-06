@@ -21,7 +21,7 @@ const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => 
         req.user = decoded;
         return next();
     } catch (error) {
-        logger.warn(`Unsuccessful auth from ${req.ip}`);
+        logger.warn(`Unsuccessful auth from ${req.ip}. \nError: ${error}.`);
         return res.status(401).send({ message: `Invalid token!` });
     }
 };

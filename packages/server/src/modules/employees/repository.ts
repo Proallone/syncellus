@@ -12,9 +12,9 @@ const selectAllEmployeesFromDb = async (query: GetEmployeeQuery) => {
         .leftJoin("users", "employees.user_id", "users.id")
         .select(["employees.id", "name", "surname", "email", "is_active", "role", "users.createdAt", "users.modifiedAt"]);
 
-    if (!!query.is_active) q = q.where("is_active", "=", query.is_active === "true" ? 1 : 0); //? no boolean in sqlite...
+    if (query.is_active) q = q.where("is_active", "=", query.is_active === "true" ? 1 : 0); //? no boolean in sqlite...
 
-    if (!!query.role) q = q.where("role", "in", query.role.split(","));
+    if (query.role) q = q.where("role", "in", query.role.split(","));
 
     return await q.execute();
 };
