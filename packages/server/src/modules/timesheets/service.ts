@@ -1,6 +1,6 @@
 import type { NewTimesheet, TimesheetUpdate } from "@syncellus/types/database.js";
 import {
-    insertTimesheetInDb,
+    insertTimesheetsInDb,
     selectAllTimesheetsFromDb,
     selectTimesheetByIdFromDb,
     updateTimesheetByIdInDb,
@@ -8,8 +8,8 @@ import {
     selectTimesheetsByEmployeeIdFromDb
 } from "@syncellus/modules/timesheets/repository.js";
 
-const insertNewTimesheet = async (timesheet: NewTimesheet) => {
-    return await insertTimesheetInDb(timesheet);
+const insertNewTimesheets = async (timesheets: NewTimesheet[]) => {
+    return await insertTimesheetsInDb(timesheets);
 };
 
 const selectAllTimesheets = async () => {
@@ -32,4 +32,4 @@ const selectAllTimesheetsByEmployeeId = async (id: number) => {
     return await selectTimesheetsByEmployeeIdFromDb(id);
 };
 
-export { insertNewTimesheet, selectAllTimesheets, selectOneTimesheetById, updateTimesheetById, deleteTimesheetById, selectAllTimesheetsByEmployeeId };
+export { insertNewTimesheets, selectAllTimesheets, selectOneTimesheetById, updateTimesheetById, deleteTimesheetById, selectAllTimesheetsByEmployeeId };

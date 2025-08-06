@@ -7,15 +7,17 @@ const TimesheetBasePayload = z.strictObject({
     end_hour: z.iso.time()
 });
 
-const TimesheetPostPayload = TimesheetBasePayload.required();
+const SingleTimesheetPostPayload = TimesheetBasePayload.required();
 const TimesheetUpdatePayload = TimesheetBasePayload.partial();
+
+const TimesheetPostPayload = z.union([SingleTimesheetPostPayload, z.array(SingleTimesheetPostPayload)]);
 
 const TimesheetPostSchema = z.object({
     body: TimesheetPostPayload
 });
 
 const TimesheetUpdateSchema = z.object({
-    body: TimesheetUpdatePayload
+    body: SingleTimesheetPostPayload
 });
 
 export { TimesheetPostPayload, TimesheetPostSchema, TimesheetUpdatePayload, TimesheetUpdateSchema };

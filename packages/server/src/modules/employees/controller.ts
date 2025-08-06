@@ -2,7 +2,7 @@ import type { Request, Response, NextFunction } from "express";
 
 import { insertNewEmployee, selectAllEmployees, selectOneEmployeeById, updateEmployeeById, deleteEmployeeById } from "@syncellus/modules/employees/service.js";
 import type { EmployeeUpdate, NewEmployee, NewTimesheet } from "@syncellus/types/database.js";
-import { insertNewTimesheet, selectAllTimesheetsByEmployeeId } from "@syncellus/modules/timesheets/service.js";
+import { insertNewTimesheets, selectAllTimesheetsByEmployeeId } from "@syncellus/modules/timesheets/service.js";
 
 const createEmployee = async (req: Request, res: Response, next: NextFunction) => {
     const { body } = req;
@@ -99,13 +99,12 @@ const getTimesheetsByEmployeeId = async (req: Request, res: Response, next: Next
 
 const createTimesheetForEmployee = async (req: Request, res: Response, next: NextFunction) => {
     const { employeeId } = req.params;
-    const { body } = req;
-    const timesheet: NewTimesheet = {
-        employee_id: employeeId,
-        ...body
-    };
+    const body = Array.isArray(req.body) ? req.body : [req.body];
+
+    const timesheets: NewTimesheet[] = body.map((timesheet) => ({ employee_id: employeeId, ...timesheet }));
+
     try {
-        const newTimesheet = await insertNewTimesheet(timesheet);
+        const newTimesheet = await insertNewTimesheets(timesheets);
         return res.status(201).json(newTimesheet);
     } catch (error) {
         next(error);

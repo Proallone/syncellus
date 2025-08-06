@@ -11,8 +11,8 @@ export interface Timesheet {
     approved: boolean;
 }
 
-const insertTimesheetInDb = async (timesheet: NewTimesheet) => {
-    return db.insertInto("timesheets").values(timesheet).returningAll().executeTakeFirst();
+const insertTimesheetsInDb = async (timesheets: NewTimesheet[]) => {
+    return db.insertInto("timesheets").values(timesheets).returningAll().execute();
 };
 
 const selectAllTimesheetsFromDb = async () => {
@@ -35,4 +35,4 @@ const deleteTimesheetFromDb = async (id: number) => {
     return await db.deleteFrom("timesheets").where("id", "=", id).executeTakeFirstOrThrow();
 };
 
-export { insertTimesheetInDb, selectAllTimesheetsFromDb, selectTimesheetByIdFromDb, selectTimesheetsByEmployeeIdFromDb, updateTimesheetByIdInDb, deleteTimesheetFromDb };
+export { insertTimesheetsInDb, selectAllTimesheetsFromDb, selectTimesheetByIdFromDb, selectTimesheetsByEmployeeIdFromDb, updateTimesheetByIdInDb, deleteTimesheetFromDb };

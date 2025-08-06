@@ -1,14 +1,13 @@
 import type { Request, Response, NextFunction } from "express";
 import type { NewTimesheet, TimesheetUpdate } from "@syncellus/types/database.js";
-import { deleteTimesheetById, insertNewTimesheet, selectAllTimesheets, selectOneTimesheetById, updateTimesheetById } from "@syncellus/modules/timesheets/service.js";
+import { deleteTimesheetById, insertNewTimesheets, selectAllTimesheets, selectOneTimesheetById, updateTimesheetById } from "@syncellus/modules/timesheets/service.js";
 
-const createTimesheet = async (req: Request, res: Response, next: NextFunction) => {
-    const { body } = req;
-    const timesheet: NewTimesheet = {
-        ...body
-    };
+const createTimesheets = async (req: Request, res: Response, next: NextFunction) => {
+    const body = Array.isArray(req.body) ? req.body : [req.body];
+
+    const timesheets: NewTimesheet[] = body.map((timesheet) => ({ ...timesheet }));
     try {
-        const newTimesheet = await insertNewTimesheet(timesheet);
+        const newTimesheet = await insertNewTimesheets(timesheets);
         return res.status(201).json(newTimesheet);
     } catch (error) {
         next(error);
@@ -76,4 +75,4 @@ const deleteTimesheet = async (req: Request, res: Response, next: NextFunction) 
     }
 };
 
-export { createTimesheet, getTimesheets, getTimesheetById, patchTimesheet, deleteTimesheet };
+export { createTimesheets, getTimesheets, getTimesheetById, patchTimesheet, deleteTimesheet };
