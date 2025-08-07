@@ -1,6 +1,7 @@
 import { Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Layout } from "./Layout";
+import { Skeleton } from "@/shared/components/ui/skeleton";
 
 const AuthRoutes = lazy(() => import("../modules/auth/routes"));
 const DashboardRoutes = lazy(() => import("../modules/dashboard/routes"));
@@ -15,7 +16,19 @@ export const AppRouter = () => {
                     <Route
                         path="/auth/*"
                         element={
-                            <Suspense fallback={<div>Loading Auth Module...</div>}>
+                            <Suspense
+                                fallback={
+                                    <div className="flex items-center justify-center h-full w-full">
+                                        <div className="flex flex-col space-y-3 ">
+                                            <Skeleton className="h-[225px] w-[400px] rounded-xl" />
+                                            <div className="space-y-2">
+                                                <Skeleton className="h-10 w-[400px]" />
+                                                <Skeleton className="h-10 w-[250px]" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            >
                                 <AuthRoutes />
                             </Suspense>
                         }
@@ -23,7 +36,19 @@ export const AppRouter = () => {
                     <Route
                         path="/dashboard/*"
                         element={
-                            <Suspense fallback={<div>Loading Dashboard Module...</div>}>
+                            <Suspense
+                                fallback={
+                                    <div className="flex items-center justify-center h-full w-full">
+                                        <div className="flex flex-col space-y-3 ">
+                                            <Skeleton className="h-[225px] w-[400px] rounded-xl" />
+                                            <div className="space-y-2">
+                                                <Skeleton className="h-10 w-[400px]" />
+                                                <Skeleton className="h-10 w-[250px]" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            >
                                 <DashboardRoutes />
                             </Suspense>
                         }
@@ -31,7 +56,19 @@ export const AppRouter = () => {
                     <Route
                         path="employees/*"
                         element={
-                            <Suspense fallback={<div>Loading Employees Module...</div>}>
+                            <Suspense
+                                fallback={
+                                    <div className="flex items-center justify-center h-full w-full">
+                                        <div className="flex flex-col space-y-3 ">
+                                            <Skeleton className="h-[225px] w-[400px] rounded-xl" />
+                                            <div className="space-y-2">
+                                                <Skeleton className="h-10 w-[400px]" />
+                                                <Skeleton className="h-10 w-[250px]" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            >
                                 <EmployeeRoutes />
                             </Suspense>
                         }
@@ -39,7 +76,19 @@ export const AppRouter = () => {
                     <Route
                         path="timesheets/*"
                         element={
-                            <Suspense fallback={<div>Loading Timesheets Module...</div>}>
+                            <Suspense
+                                fallback={
+                                    <div className="flex items-center justify-center h-full w-full">
+                                        <div className="flex flex-col space-y-3 ">
+                                            <Skeleton className="h-[225px] w-[400px] rounded-xl" />
+                                            <div className="space-y-2">
+                                                <Skeleton className="h-10 w-[400px]" />
+                                                <Skeleton className="h-10 w-[250px]" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            >
                                 <TimesheetRoutes />
                             </Suspense>
                         }
