@@ -1,6 +1,6 @@
-import { ModeToggle } from "@/components/mode-toggle";
+import { ModeToggle } from "@/shared/components/mode-toggle";
 import { Outlet } from "react-router-dom";
-import { Separator } from "@/components/ui/separator";
+import { Separator } from "@/shared/components/ui/separator";
 
 export const Layout = () => {
     return (
