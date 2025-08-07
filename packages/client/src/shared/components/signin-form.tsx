@@ -22,7 +22,7 @@ export function SigninForm({ className, ...props }: React.ComponentProps<"div">)
         if (!success) {
             setError("Invalid credentials");
         } else {
-            navigate("/");
+            navigate("/dashboard");
         }
     };
 

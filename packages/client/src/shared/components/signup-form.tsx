@@ -21,7 +21,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
         const success = await login(email, password);
 
         if (!success) {
-            setError("Invalid credentials");
+            setError("Something went wrong!");
         } else {
             navigate("/");
         }
