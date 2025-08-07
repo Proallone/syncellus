@@ -14,7 +14,7 @@ const createTimesheets = async (req: Request, res: Response, next: NextFunction)
     }
 };
 
-const getTimesheets = async (req: Request, res: Response, next: NextFunction) => {
+const getTimesheets = async (_req: Request, res: Response, next: NextFunction) => {
     try {
         const timeshets = await selectAllTimesheets();
         return res.status(200).send(timeshets);
