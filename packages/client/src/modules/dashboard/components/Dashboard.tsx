@@ -1,24 +1,29 @@
-import { Link } from "react-router-dom";
+import { ClipboardClock, PersonStanding } from "lucide-react";
 import "./Dashboard.css"; // optional styles
+import { ModuleTile } from "./ModuleTile";
+import { useNavigate } from "react-router-dom";
+import type React from "react";
 interface Module {
     name: string;
+    description: string;
     path: string;
+    icon: React.ElementType;
 }
 
 const modules: Module[] = [
-    { name: "Employees", path: "/employees" },
-    { name: "Timesheets", path: "/timesheets" }
+    { name: "Employees", description: "Manage your employees!", path: "/employees", icon: PersonStanding },
+    { name: "Timesheets", description: "Manage your timesheets!", path: "/timesheets", icon: ClipboardClock }
 ];
 
 export const Dashboard = () => {
+    const navigate = useNavigate();
+
     return (
         <div className="dashboard-container">
             <h1>Main Dashboard</h1>
             <div className="tile-grid">
                 {modules.map((mod) => (
-                    <Link to={mod.path} key={mod.path} className="tile">
-                        {mod.name}
-                    </Link>
+                    <ModuleTile title={mod.name} description={mod.description} onClick={() => navigate(mod.path)} Icon={mod.icon} />
                 ))}
             </div>
         </div>
