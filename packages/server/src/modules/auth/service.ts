@@ -4,39 +4,41 @@ import { HttpError } from "@syncellus/errors/HttpError.js";
 import type { NewUser } from "@syncellus/types/database.js";
 import type { Credentials, User } from "@syncellus/types/index.js";
 import { compareHash, hashPassword } from "@syncellus/utils/crypto.js";
-import { insertNewUserToDb, selectUserByEmailFromDb } from "@syncellus/modules/auth/repository.js";
+import type { AuthRepository } from "@syncellus/modules/auth/repository.js";
 import config from "@syncellus/configs/config.js";
 
-const insertNewUser = async (user: NewUser) => {
-    const exists = await selectUserByEmailFromDb(user.email);
+export class AuthService {
+    constructor(private readonly repo: AuthRepository) {}
 
-    if (exists) return undefined;
+    public insertNewUser = async (user: NewUser) => {
+        const exists = await this.repo.selectUserByEmailFromDb(user.email);
 
-    const newUser = await insertNewUserToDb({
-        ...user,
-        password: await hashPassword(user.password)
-    });
+        if (exists) return undefined;
 
-    eventBus.emit("user.created", newUser); //TODO this might not be the best idea to use event for this in case of failure it would not insert employee for a user...
+        const newUser = await this.repo.insertNewUserToDb({
+            ...user,
+            password: await hashPassword(user.password)
+        });
 
-    return newUser;
-};
+        eventBus.emit("user.created", newUser); //TODO this might not be the best idea to use event for this in case of failure it would not insert employee for a user...
 
-const verifyUserCredentials = async (credentials: Credentials) => {
-    const { email, password } = credentials;
-    const userFromDb = await selectUserByEmailFromDb(email);
+        return newUser;
+    };
 
-    if (!userFromDb) throw new HttpError(401, "Invalid credentials");
+    public verifyUserCredentials = async (credentials: Credentials) => {
+        const { email, password } = credentials;
+        const userFromDb = await this.repo.selectUserByEmailFromDb(email);
 
-    const match = await compareHash(password, userFromDb.password);
+        if (!userFromDb) throw new HttpError(401, "Invalid credentials");
 
-    if (!match) throw new HttpError(401, "Invalid credentials");
+        const match = await compareHash(password, userFromDb.password);
 
-    const user: User = { id: userFromDb.id, role: userFromDb.role };
-    const accessToken = Jwt.sign(user, config.jwt_secret, { expiresIn: "30m" });
-    // TODO issue a refresh token?
+        if (!match) throw new HttpError(401, "Invalid credentials");
 
-    return { accessToken };
-};
+        const user: User = { id: userFromDb.id, role: userFromDb.role };
+        const accessToken = Jwt.sign(user, config.jwt_secret, { expiresIn: "30m" });
+        // TODO issue a refresh token?
 
-export { insertNewUser, verifyUserCredentials };
+        return { accessToken };
+    };
+}

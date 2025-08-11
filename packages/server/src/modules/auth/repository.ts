@@ -1,12 +1,15 @@
 import { db } from "@syncellus/database/database.js";
-import type { NewUser } from "@syncellus/types/database.js";
+import type { Database, NewUser } from "@syncellus/types/database.js";
+import { Kysely } from "kysely";
 
-const insertNewUserToDb = async (user: NewUser) => {
-    return await db.insertInto("users").values(user).returning(["id", "email", "createdAt", "modifiedAt", "is_active", "role"]).executeTakeFirst();
-};
+export class AuthRepository {
+    constructor(private readonly db: Kysely<Database>) {}
 
-const selectUserByEmailFromDb = async (email: string) => {
-    return await db.selectFrom("users").select(["id", "role", "password"]).where("email", "=", email).executeTakeFirst();
-};
+    public insertNewUserToDb = async (user: NewUser) => {
+        return await db.insertInto("users").values(user).returning(["id", "email", "createdAt", "modifiedAt", "is_active", "role"]).executeTakeFirst();
+    };
 
-export { insertNewUserToDb, selectUserByEmailFromDb };
+    public selectUserByEmailFromDb = async (email: string) => {
+        return await db.selectFrom("users").select(["id", "role", "password"]).where("email", "=", email).executeTakeFirst();
+    };
+}
