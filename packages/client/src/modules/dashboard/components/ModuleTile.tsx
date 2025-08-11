@@ -12,7 +12,7 @@ export function ModuleTile({ title, description, onClick, Icon }: ModuleTileProp
         <Card onClick={onClick} className="hover:bg-primary/5 hover:text-primary transition-all duration-300 cursor-pointer">
             <CardHeader>
                 <CardTitle>
-                    {title} <Icon className="h-10 w-10" />{" "}
+                    {title} <Icon size={48} />
                 </CardTitle>
                 <CardDescription>{description}</CardDescription>
             </CardHeader>

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { fetchEmployees } from "../service/employees";
 import type { Employee } from "../service/employees";
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/shared/components/ui/table";
+import { Skeleton } from "@/shared/components/ui/skeleton";
 
 export const EmployeeList = () => {
     const [employees, setEmployees] = useState<Employee[]>([]);
@@ -13,18 +15,42 @@ export const EmployeeList = () => {
         });
     }, []);
 
-    if (loading) return <p>Loading employees...</p>;
+    if (loading)
+        return (
+            <div className="flex items-center justify-center h-full w-full">
+                <div className="flex flex-col space-y-3 ">
+                    <Skeleton className="h-[235px] w-[1400px] rounded-xl" />
+                    <div className="space-y-2">
+                        <Skeleton className="h-20 w-[1400px]" />
+                        <Skeleton className="h-20 w-[1400px]" />
+                        <Skeleton className="h-20 w-[1400px]" />
+                        <Skeleton className="h-20 w-[1400px]" />
+                        <Skeleton className="h-20 w-[1400px]" />
+                        <Skeleton className="h-20 w-[1400px]" />
+                        <Skeleton className="h-20 w-[1400px]" />
+                        <Skeleton className="h-20 w-[1400px]" />
+                    </div>
+                </div>
+            </div>
+        );
 
     return (
-        <div style={{ padding: "2rem" }}>
-            <h2>Employees</h2>
-            <ul>
-                {employees.map((emp) => (
-                    <li key={emp.id}>
-                        {emp.name} — <strong>{emp.surname}</strong>
-                    </li>
+        <Table>
+            <TableCaption>A list of your employees.</TableCaption>
+            <TableHeader>
+                <TableRow>
+                    <TableHead className="w-[100px]">Employee</TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                {employees.map((employee) => (
+                    <TableRow key={employee.id}>
+                        <TableCell className="font-medium hover:bg-primary/5">
+                            {employee.name} {employee.surname}{" "}
+                        </TableCell>
+                    </TableRow>
                 ))}
-            </ul>
-        </div>
+            </TableBody>
+        </Table>
     );
 };
