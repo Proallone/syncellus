@@ -1,6 +1,8 @@
 import type { Request, Response } from "express";
 import type { AppError } from "@syncellus/types/index.js";
-import { logger } from "@syncellus/core/logger.js";
+import { LoggerService } from "@syncellus/core/logger.js";
+
+const logger = LoggerService.getInstance();
 
 const errorHandler = (err: AppError, _req: Request, res: Response) => {
     logger.warn(err);

@@ -2,17 +2,20 @@ import type { Request, Response, NextFunction } from "express";
 import type { NewUser } from "@syncellus/types/database.js";
 import type { AuthCredentials } from "@syncellus/types/index.js";
 import type { AuthService } from "@syncellus/modules/auth/service.js";
-import { logger } from "@syncellus/core/logger.js";
+import type { Logger } from "pino";
 
 export class AuthController {
-    constructor(private readonly service: AuthService) {}
+    constructor(
+        private readonly service: AuthService,
+        private readonly logger: Logger
+    ) {}
 
     public signUp = async (req: Request, res: Response, next: NextFunction) => {
         const user: NewUser = {
             ...req.body
         };
 
-        logger.debug(`User ${user.email} signs up`);
+        this.logger.debug(`User ${user.email} signs up`);
         try {
             const newUser = await this.service.insertNewUser(user);
             if (!newUser) {

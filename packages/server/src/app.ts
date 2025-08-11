@@ -4,7 +4,7 @@ import healthRoutes from "@syncellus/modules/health/routes.js";
 import userRoutes from "@syncellus/modules/employees/routes.js";
 import authRoutes from "@syncellus/modules/auth/routes.js";
 import timesheetsRoutes from "@syncellus/modules/timesheets/routes.js";
-import { logger } from "@syncellus/core/logger.js";
+import { LoggerService } from "@syncellus/core/logger.js";
 import { pinoHttp } from "pino-http";
 import helmet from "helmet";
 import cors from "cors";
@@ -16,6 +16,7 @@ const app = express();
 app.use(limiter);
 app.use(cors(corsConfig));
 app.use(helmet());
+const logger = LoggerService.getInstance();
 app.use(pinoHttp(logger));
 app.use(express.json());
 

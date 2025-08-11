@@ -2,7 +2,8 @@ import jwt from "jsonwebtoken";
 import type { Response, NextFunction } from "express";
 import type { AuthRequest, User } from "@syncellus/types/index.js";
 import config from "@syncellus/configs/config.js";
-import { logger } from "@syncellus/core/logger.js";
+import { LoggerService } from "@syncellus/core/logger.js";
+const logger = LoggerService.getInstance();
 
 const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => {
     const authHeader: string = req.headers.authorization;

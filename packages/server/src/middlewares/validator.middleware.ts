@@ -1,6 +1,8 @@
-import { logger } from "@syncellus/core/logger.js";
 import type { Request, Response, NextFunction } from "express";
+import { LoggerService } from "@syncellus/core/logger.js";
 import { z } from "zod";
+
+const logger = LoggerService.getInstance();
 
 type MiddlewareFunction = (req: Request, res: Response, next: NextFunction) => void;
 

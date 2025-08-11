@@ -1,13 +1,21 @@
-import { pino } from "pino";
+import pino, { Logger } from "pino";
 
-const logger = pino({
-    level: "info",
-    transport: {
-        target: "pino-pretty",
-        options: {
-            colorize: true
+export class LoggerService {
+    private static instance: Logger | null = null;
+    private constructor() {} //? prevent `new LoggerService()`
+
+    public static getInstance(): Logger {
+        if (!LoggerService.instance) {
+            LoggerService.instance = pino({
+                level: "info",
+                transport: {
+                    target: "pino-pretty",
+                    options: {
+                        colorize: true
+                    }
+                }
+            });
         }
+        return LoggerService.instance;
     }
-});
-
-export { logger };
+}

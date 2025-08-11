@@ -12,6 +12,7 @@ import { eventBus } from "@syncellus/core/eventBus.js";
 import { UserCreatedHandler } from "./events.js";
 import { TimesheetService } from "../timesheets/service.js";
 import { TimesheetRepository } from "../timesheets/repository.js";
+import { LoggerService } from "@syncellus/core/logger.js";
 
 const router = Router();
 const db = DatabaseService.getInstance();
@@ -23,7 +24,8 @@ const timesheetRepo = new TimesheetRepository(db);
 const timesheetService = new TimesheetService(timesheetRepo);
 
 const controller = new EmployeeController(service, timesheetService);
-new UserCreatedHandler(eventBus, repo).register();
+const logger = LoggerService.getInstance();
+new UserCreatedHandler(eventBus, repo, logger).register();
 
 router.use(authMiddleware);
 
