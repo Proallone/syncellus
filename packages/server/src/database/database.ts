@@ -1,11 +1,19 @@
-import { Database } from "@syncellus/types/database.js";
+import type { Database } from "@syncellus/types/database.js";
 import SQLite from "better-sqlite3";
 import { Kysely, SqliteDialect } from "kysely";
 
-const dialect = new SqliteDialect({
-    database: new SQLite("syncellus.sqlite")
-});
+export class DatabaseService {
+    private static instance: Kysely<Database> | null = null;
+    private constructor() {} //? prevent `new DatabaseService()`
 
-export const db = new Kysely<Database>({
-    dialect
-});
+    public static getInstance(): Kysely<Database> {
+        if (!DatabaseService.instance) {
+            const dialect = new SqliteDialect({
+                database: new SQLite("syncellus.sqlite")
+            });
+
+            DatabaseService.instance = new Kysely<Database>({ dialect });
+        }
+        return DatabaseService.instance;
+    }
+}

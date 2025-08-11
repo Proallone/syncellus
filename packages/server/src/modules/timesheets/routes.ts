@@ -4,10 +4,11 @@ import { validate } from "@syncellus/middlewares/validator.middleware.js";
 import { TimesheetPostSchema, TimesheetUpdateSchema } from "@syncellus/modules/timesheets/schema.js";
 import { authMiddleware } from "@syncellus/middlewares/auth.middleware.js";
 import { TimesheetRepository } from "./repository.js";
-import { db } from "@syncellus/database/database.js";
+import { DatabaseService } from "@syncellus/database/database.js";
 import { TimesheetService } from "./service.js";
 
 const router = Router();
+const db = DatabaseService.getInstance();
 
 const repo = new TimesheetRepository(db);
 const service = new TimesheetService(repo);

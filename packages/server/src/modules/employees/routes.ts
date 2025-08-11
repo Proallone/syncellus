@@ -6,7 +6,7 @@ import { TimesheetPostSchema } from "@syncellus/modules/timesheets/schema.js";
 import { authMiddleware } from "@syncellus/middlewares/auth.middleware.js";
 import { requireRole } from "@syncellus/middlewares/role.middleware.js";
 import { EmployeeRepository } from "@syncellus/modules/employees/repository.js";
-import { db } from "@syncellus/database/database.js";
+import { DatabaseService } from "@syncellus/database/database.js";
 import { EmployeeService } from "@syncellus/modules/employees/service.js";
 import { eventBus } from "@syncellus/core/eventBus.js";
 import { UserCreatedHandler } from "./events.js";
@@ -14,6 +14,8 @@ import { TimesheetService } from "../timesheets/service.js";
 import { TimesheetRepository } from "../timesheets/repository.js";
 
 const router = Router();
+const db = DatabaseService.getInstance();
+
 const repo = new EmployeeRepository(db);
 const service = new EmployeeService(repo);
 

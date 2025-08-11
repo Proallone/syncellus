@@ -4,9 +4,10 @@ import { AuthSchema } from "@syncellus/modules/auth/schema.js";
 import { AuthRepository } from "./repository.js";
 import { AuthService } from "./service.js";
 import { AuthController } from "./controller.js";
-import { db } from "@syncellus/database/database.js";
+import { DatabaseService } from "@syncellus/database/database.js";
 
 const router = Router();
+const db = DatabaseService.getInstance();
 
 const repo = new AuthRepository(db);
 const service = new AuthService(repo);
