@@ -1,15 +1,18 @@
-import { getDatabaseVersionFromDb } from "@syncellus/modules/health/repository.js";
+import { HealthRepository } from "@syncellus/modules/health/repository.js";
+import { DatabaseHealth, ServiceHealth } from "./types.js";
 
-const getApplicationStatus = () => {
-    return `Healthy!`;
-};
+export class HealthService {
+    constructor(private readonly repo: HealthRepository) {}
 
-const getDatabaseVersion = async () => {
-    const version = await getDatabaseVersionFromDb();
-    return {
-        status: "Healthy",
-        ...version
+    public getApplicationStatus = (): ServiceHealth => {
+        return { status: "Healthy" };
     };
-};
 
-export { getApplicationStatus, getDatabaseVersion };
+    public getDatabaseStatus = async (): Promise<DatabaseHealth> => {
+        const version = await this.repo.getDatabaseVersionFromDb();
+        return {
+            status: "Healthy",
+            sqlite_version: version.sqlite_version
+        };
+    };
+}

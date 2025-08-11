@@ -1,20 +1,22 @@
 import type { Request, Response, NextFunction } from "express";
-import { getApplicationStatus, getDatabaseVersion } from "@syncellus/modules/health/service.js";
+import { HealthService } from "@syncellus/modules/health/service.js";
 
-const getApplicationHealth = (_req: Request, res: Response) => {
-    const appStatus = getApplicationStatus();
-    return res.status(200).send({
-        message: appStatus
-    });
-};
+export class HealthController {
+    constructor(private readonly service: HealthService) {}
 
-const getDatabaseHealth = async (_req: Request, res: Response, next: NextFunction) => {
-    try {
-        const version = await getDatabaseVersion();
-        return res.status(200).json(version);
-    } catch (error) {
-        next(error);
-    }
-};
+    public getApplicationHealth = (_req: Request, res: Response) => {
+        const status = this.service.getApplicationStatus();
+        return res.status(200).send({
+            ...status
+        });
+    };
 
-export { getApplicationHealth, getDatabaseHealth };
+    public getDatabaseHealth = async (_req: Request, res: Response, next: NextFunction) => {
+        try {
+            const version = await this.service.getDatabaseStatus();
+            return res.status(200).json(version);
+        } catch (error) {
+            next(error);
+        }
+    };
+}
