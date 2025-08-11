@@ -11,8 +11,6 @@ import cors from "cors";
 import corsConfig from "@syncellus/configs/cors.js";
 import { limiter } from "@syncellus/core/limiter.js";
 
-import "./modules/employees/events.js";
-
 const app = express();
 
 app.use(limiter);

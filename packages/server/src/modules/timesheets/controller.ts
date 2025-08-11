@@ -1,78 +1,79 @@
 import type { Request, Response, NextFunction } from "express";
 import type { NewTimesheet, TimesheetUpdate } from "@syncellus/types/database.js";
-import { deleteTimesheetById, insertNewTimesheets, selectAllTimesheets, selectOneTimesheetById, updateTimesheetById } from "@syncellus/modules/timesheets/service.js";
+import type { TimesheetService } from "@syncellus/modules/timesheets/service.js";
 
-const createTimesheets = async (req: Request, res: Response, next: NextFunction) => {
-    const body = Array.isArray(req.body) ? req.body : [req.body];
+export class TimesheetController {
+    constructor(private readonly service: TimesheetService) {}
+    public createTimesheets = async (req: Request, res: Response, next: NextFunction) => {
+        const body = Array.isArray(req.body) ? req.body : [req.body];
 
-    const timesheets: NewTimesheet[] = body.map((timesheet) => ({ ...timesheet }));
-    try {
-        const newTimesheet = await insertNewTimesheets(timesheets);
-        return res.status(201).json(newTimesheet);
-    } catch (error) {
-        next(error);
-    }
-};
-
-const getTimesheets = async (_req: Request, res: Response, next: NextFunction) => {
-    try {
-        const timeshets = await selectAllTimesheets();
-        return res.status(200).send(timeshets);
-    } catch (error) {
-        next(error);
-    }
-};
-
-const getTimesheetById = async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params;
-    try {
-        const timesheet = await selectOneTimesheetById(Number(id));
-        if (!timesheet) {
-            return res.status(404).send({
-                message: `Timesheet with ID ${id} not found!`
-            });
+        const timesheets: NewTimesheet[] = body.map((timesheet) => ({ ...timesheet }));
+        try {
+            const newTimesheet = await this.service.insertNewTimesheets(timesheets);
+            return res.status(201).json(newTimesheet);
+        } catch (error) {
+            next(error);
         }
-        return res.status(200).send(timesheet);
-    } catch (error) {
-        next(error);
-    }
-};
-
-const patchTimesheet = async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params;
-    const { body } = req;
-    const data: TimesheetUpdate = {
-        id,
-        ...body
     };
-    try {
-        const patched = await updateTimesheetById(data);
-        if (!patched) {
-            return res.status(404).send({
-                message: `Timesheet with ID ${id} not found!`
-            });
-        }
-        return res.status(200).send(patched);
-    } catch (error) {
-        next(error);
-    }
-};
 
-const deleteTimesheet = async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params;
-    try {
-        const deletion = await deleteTimesheetById(Number(id));
-        if (!deletion) {
-            return res.status(404).send({
-                message: `Timesheet with ID ${id} not found!`
-            });
+    public getTimesheets = async (_req: Request, res: Response, next: NextFunction) => {
+        try {
+            const timeshets = await this.service.selectAllTimesheets();
+            return res.status(200).send(timeshets);
+        } catch (error) {
+            next(error);
         }
-        return res.status(200).send({
-            message: `Timesheet with ID ${id} deleted!`
-        });
-    } catch (error) {
-        next(error);
-    }
-};
+    };
 
-export { createTimesheets, getTimesheets, getTimesheetById, patchTimesheet, deleteTimesheet };
+    public getTimesheetById = async (req: Request, res: Response, next: NextFunction) => {
+        const { id } = req.params;
+        try {
+            const timesheet = await this.service.selectOneTimesheetById(Number(id));
+            if (!timesheet) {
+                return res.status(404).send({
+                    message: `Timesheet with ID ${id} not found!`
+                });
+            }
+            return res.status(200).send(timesheet);
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    public patchTimesheet = async (req: Request, res: Response, next: NextFunction) => {
+        const { id } = req.params;
+        const { body } = req;
+        const data: TimesheetUpdate = {
+            id,
+            ...body
+        };
+        try {
+            const patched = await this.service.updateTimesheetById(data);
+            if (!patched) {
+                return res.status(404).send({
+                    message: `Timesheet with ID ${id} not found!`
+                });
+            }
+            return res.status(200).send(patched);
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    public deleteTimesheet = async (req: Request, res: Response, next: NextFunction) => {
+        const { id } = req.params;
+        try {
+            const deletion = await this.service.deleteTimesheetById(Number(id));
+            if (!deletion) {
+                return res.status(404).send({
+                    message: `Timesheet with ID ${id} not found!`
+                });
+            }
+            return res.status(200).send({
+                message: `Timesheet with ID ${id} deleted!`
+            });
+        } catch (error) {
+            next(error);
+        }
+    };
+}

@@ -1,5 +1,5 @@
 import Jwt from "jsonwebtoken";
-import { eventBus } from "@syncellus/core/eventEmitter.js";
+import { eventBus } from "@syncellus/core/eventBus.js";
 import { HttpError } from "@syncellus/errors/HttpError.js";
 import type { NewUser } from "@syncellus/types/database.js";
 import type { Credentials, User } from "@syncellus/types/index.js";

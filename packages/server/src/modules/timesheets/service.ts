@@ -1,35 +1,30 @@
 import type { NewTimesheet, TimesheetUpdate } from "@syncellus/types/database.js";
-import {
-    insertTimesheetsInDb,
-    selectAllTimesheetsFromDb,
-    selectTimesheetByIdFromDb,
-    updateTimesheetByIdInDb,
-    deleteTimesheetFromDb,
-    selectTimesheetsByEmployeeIdFromDb
-} from "@syncellus/modules/timesheets/repository.js";
+import type { TimesheetRepository } from "@syncellus/modules/timesheets/repository.js";
 
-const insertNewTimesheets = async (timesheets: NewTimesheet[]) => {
-    return await insertTimesheetsInDb(timesheets);
-};
+export class TimesheetService {
+    constructor(private readonly repo: TimesheetRepository) {}
 
-const selectAllTimesheets = async () => {
-    return await selectAllTimesheetsFromDb();
-};
+    public insertNewTimesheets = async (timesheets: NewTimesheet[]) => {
+        return await this.repo.insertTimesheetsInDb(timesheets);
+    };
 
-const selectOneTimesheetById = async (id: number) => {
-    return await selectTimesheetByIdFromDb(id);
-};
+    public selectAllTimesheets = async () => {
+        return await this.repo.selectAllTimesheetsFromDb();
+    };
 
-const updateTimesheetById = async (timeshet: TimesheetUpdate) => {
-    return await updateTimesheetByIdInDb(timeshet);
-};
+    public selectOneTimesheetById = async (id: number) => {
+        return await this.repo.selectTimesheetByIdFromDb(id);
+    };
 
-const deleteTimesheetById = async (id: number) => {
-    return await deleteTimesheetFromDb(id);
-};
+    public updateTimesheetById = async (timeshet: TimesheetUpdate) => {
+        return await this.repo.updateTimesheetByIdInDb(timeshet);
+    };
 
-const selectAllTimesheetsByEmployeeId = async (id: number) => {
-    return await selectTimesheetsByEmployeeIdFromDb(id);
-};
+    public deleteTimesheetById = async (id: number) => {
+        return await this.repo.deleteTimesheetFromDb(id);
+    };
 
-export { insertNewTimesheets, selectAllTimesheets, selectOneTimesheetById, updateTimesheetById, deleteTimesheetById, selectAllTimesheetsByEmployeeId };
+    public selectAllTimesheetsByEmployeeId = async (id: number) => {
+        return await this.repo.selectTimesheetsByEmployeeIdFromDb(id);
+    };
+}

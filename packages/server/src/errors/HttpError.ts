@@ -1,4 +1,5 @@
-class HttpError extends Error {
+export class HttpError extends Error {
+    //TODO maybe create a set of different predefined http errors?
     status: number;
 
     constructor(status: number, message: string) {
@@ -7,5 +8,3 @@ class HttpError extends Error {
         Object.setPrototypeOf(this, HttpError.prototype);
     }
 }
-//TODO maybe create a set of different predefined http errors?
-export { HttpError };

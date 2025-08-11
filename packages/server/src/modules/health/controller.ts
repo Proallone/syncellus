@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import { HealthService } from "@syncellus/modules/health/service.js";
+import type { HealthService } from "@syncellus/modules/health/service.js";
 
 export class HealthController {
     constructor(private readonly service: HealthService) {}

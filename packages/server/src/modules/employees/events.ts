@@ -1,14 +1,23 @@
-import { eventBus } from "@syncellus/core/eventEmitter.js";
+import { EventHandler } from "@syncellus/core/eventHandler.js";
+import { AppEvents } from "@syncellus/core/eventBus.js";
 import { logger } from "@syncellus/core/logger.js";
-import { NewEmployee, User } from "@syncellus/types/database.js";
-import { insertNewEmployeeToDb } from "@syncellus/modules/employees/repository.js";
+import { EmployeeRepository } from "@syncellus/modules/employees/repository.js";
+import { EventBus } from "@syncellus/core/eventBus.js";
 
-eventBus.on("user.created", async (user: User) => {
-    logger.info(`event user.created called with body: ${JSON.stringify(user)}`);
+export class UserCreatedHandler extends EventHandler<"user.created"> {
+    constructor(
+        eventBus: EventBus,
+        private readonly repo: EmployeeRepository
+    ) {
+        super(eventBus);
+    }
 
-    const employee: NewEmployee = {
-        user_id: user.id
-    };
+    eventName(): "user.created" {
+        return "user.created";
+    }
 
-    await insertNewEmployeeToDb(employee);
-});
+    async handle(user: AppEvents["user.created"]): Promise<void> {
+        logger.info(`event user.created called with body: ${JSON.stringify(user)}`);
+        await this.repo.insertNewEmployeeToDb({ user_id: user.id });
+    }
+}

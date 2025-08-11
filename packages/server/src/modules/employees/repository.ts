@@ -1,39 +1,41 @@
-import { db } from "@syncellus/database/database.js";
-import type { EmployeeUpdate, NewEmployee } from "@syncellus/types/database.js";
+import type { Database, EmployeeUpdate, NewEmployee } from "@syncellus/types/database.js";
 import type { GetEmployeeQuery } from "@syncellus/types/index.js";
+import type { Kysely } from "kysely";
 
-const insertNewEmployeeToDb = async (employee: NewEmployee) => {
-    return await db.insertInto("employees").values(employee).returningAll().executeTakeFirstOrThrow();
-};
+export class EmployeeRepository {
+    constructor(private readonly db: Kysely<Database>) {}
 
-const selectAllEmployeesFromDb = async (query: GetEmployeeQuery) => {
-    let q = db
-        .selectFrom("employees")
-        .leftJoin("users", "employees.user_id", "users.id")
-        .select(["employees.id", "name", "surname", "email", "is_active", "role", "users.createdAt", "users.modifiedAt"]);
+    public insertNewEmployeeToDb = async (employee: NewEmployee) => {
+        return await this.db.insertInto("employees").values(employee).returningAll().executeTakeFirstOrThrow();
+    };
 
-    if (query.is_active) q = q.where("is_active", "=", query.is_active === "true" ? 1 : 0); //? no boolean in sqlite...
+    public selectAllEmployeesFromDb = async (query: GetEmployeeQuery) => {
+        let q = this.db
+            .selectFrom("employees")
+            .leftJoin("users", "employees.user_id", "users.id")
+            .select(["employees.id", "name", "surname", "email", "is_active", "role", "users.createdAt", "users.modifiedAt"]);
 
-    if (query.role) q = q.where("role", "in", query.role.split(","));
+        if (query.is_active) q = q.where("is_active", "=", query.is_active === "true" ? 1 : 0); //? no boolean in sqlite...
 
-    return await q.execute();
-};
+        if (query.role) q = q.where("role", "in", query.role.split(","));
 
-const selectOneEmployeeByIdFromDb = async (id: number) => {
-    return await db
-        .selectFrom("employees")
-        .leftJoin("users", "employees.user_id", "users.id")
-        .select(["employees.id", "name", "surname", "email", "is_active", "role", "users.createdAt", "users.modifiedAt"])
-        .where("users.id", "=", id)
-        .executeTakeFirst();
-};
+        return await q.execute();
+    };
 
-const updateEmployeeByIdInDb = async (employee: EmployeeUpdate) => {
-    return await db.updateTable("employees").set(employee).where("id", "=", Number(employee.id)).returningAll().executeTakeFirst();
-};
+    public selectOneEmployeeByIdFromDb = async (id: number) => {
+        return await this.db
+            .selectFrom("employees")
+            .leftJoin("users", "employees.user_id", "users.id")
+            .select(["employees.id", "name", "surname", "email", "is_active", "role", "users.createdAt", "users.modifiedAt"])
+            .where("users.id", "=", id)
+            .executeTakeFirst();
+    };
 
-const deleteEmployeeByIdInDb = async (id: number) => {
-    return await db.deleteFrom("employees").where("id", "=", id).executeTakeFirst();
-};
+    public updateEmployeeByIdInDb = async (employee: EmployeeUpdate) => {
+        return await this.db.updateTable("employees").set(employee).where("id", "=", Number(employee.id)).returningAll().executeTakeFirst();
+    };
 
-export { insertNewEmployeeToDb, selectAllEmployeesFromDb, selectOneEmployeeByIdFromDb, updateEmployeeByIdInDb, deleteEmployeeByIdInDb };
+    public deleteEmployeeByIdInDb = async (id: number) => {
+        return await this.db.deleteFrom("employees").where("id", "=", id).executeTakeFirst();
+    };
+}

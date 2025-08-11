@@ -1,17 +1,24 @@
 import { Router } from "express";
-import { createTimesheets, deleteTimesheet, getTimesheetById, getTimesheets, patchTimesheet } from "@syncellus/modules/timesheets/controller.js";
+import { TimesheetController } from "@syncellus/modules/timesheets/controller.js";
 import { validate } from "@syncellus/middlewares/validator.middleware.js";
 import { TimesheetPostSchema, TimesheetUpdateSchema } from "@syncellus/modules/timesheets/schema.js";
 import { authMiddleware } from "@syncellus/middlewares/auth.middleware.js";
+import { TimesheetRepository } from "./repository.js";
+import { db } from "@syncellus/database/database.js";
+import { TimesheetService } from "./service.js";
 
 const router = Router();
 
+const repo = new TimesheetRepository(db);
+const service = new TimesheetService(repo);
+const controller = new TimesheetController(service);
+
 router.use(authMiddleware);
 
-router.get("/", getTimesheets);
-router.get("/:id", getTimesheetById);
-router.post("/", validate(TimesheetPostSchema), createTimesheets);
-router.patch("/:id", validate(TimesheetUpdateSchema), patchTimesheet);
-router.delete("/:id", deleteTimesheet);
+router.get("/", controller.getTimesheets);
+router.get("/:id", controller.getTimesheetById);
+router.post("/", validate(TimesheetPostSchema), controller.createTimesheets);
+router.patch("/:id", validate(TimesheetUpdateSchema), controller.patchTimesheet);
+router.delete("/:id", controller.deleteTimesheet);
 
 export default router;

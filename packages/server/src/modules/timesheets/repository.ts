@@ -1,38 +1,30 @@
-import { db } from "@syncellus/database/database.js";
-import type { NewTimesheet, TimesheetUpdate } from "@syncellus/types/database.js";
+import type { Database, NewTimesheet, TimesheetUpdate } from "@syncellus/types/database.js";
+import type { Kysely } from "kysely";
 
-export interface Timesheet {
-    id?: number;
-    employee_id: number;
-    date: string;
-    start_hour: string;
-    end_hour: string;
-    hours_worked: string;
-    approved: boolean;
+export class TimesheetRepository {
+    constructor(private readonly db: Kysely<Database>) {}
+
+    public insertTimesheetsInDb = async (timesheets: NewTimesheet[]) => {
+        return this.db.insertInto("timesheets").values(timesheets).returningAll().execute();
+    };
+
+    public selectAllTimesheetsFromDb = async () => {
+        return await this.db.selectFrom("timesheets").selectAll().execute();
+    };
+
+    public selectTimesheetByIdFromDb = async (id: number) => {
+        return await this.db.selectFrom("timesheets").selectAll().where("id", "=", id).executeTakeFirst();
+    };
+
+    public selectTimesheetsByEmployeeIdFromDb = async (employeeId: number) => {
+        return await this.db.selectFrom("timesheets").selectAll().where("employee_id", "=", employeeId).execute();
+    };
+
+    public updateTimesheetByIdInDb = async (timesheet: TimesheetUpdate) => {
+        return await this.db.updateTable("timesheets").set(timesheet).where("id", "=", Number(timesheet.id)).returningAll().executeTakeFirst();
+    };
+
+    public deleteTimesheetFromDb = async (id: number) => {
+        return await this.db.deleteFrom("timesheets").where("id", "=", id).executeTakeFirstOrThrow();
+    };
 }
-
-const insertTimesheetsInDb = async (timesheets: NewTimesheet[]) => {
-    return db.insertInto("timesheets").values(timesheets).returningAll().execute();
-};
-
-const selectAllTimesheetsFromDb = async () => {
-    return await db.selectFrom("timesheets").selectAll().execute();
-};
-
-const selectTimesheetByIdFromDb = async (id: number) => {
-    return await db.selectFrom("timesheets").selectAll().where("id", "=", id).executeTakeFirst();
-};
-
-const selectTimesheetsByEmployeeIdFromDb = async (employeeId: number) => {
-    return await db.selectFrom("timesheets").selectAll().where("employee_id", "=", employeeId).execute();
-};
-
-const updateTimesheetByIdInDb = async (timesheet: TimesheetUpdate) => {
-    return await db.updateTable("timesheets").set(timesheet).where("id", "=", Number(timesheet.id)).returningAll().executeTakeFirst();
-};
-
-const deleteTimesheetFromDb = async (id: number) => {
-    return await db.deleteFrom("timesheets").where("id", "=", id).executeTakeFirstOrThrow();
-};
-
-export { insertTimesheetsInDb, selectAllTimesheetsFromDb, selectTimesheetByIdFromDb, selectTimesheetsByEmployeeIdFromDb, updateTimesheetByIdInDb, deleteTimesheetFromDb };

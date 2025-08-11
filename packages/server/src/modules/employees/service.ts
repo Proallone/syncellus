@@ -1,25 +1,27 @@
 import type { EmployeeUpdate, NewEmployee } from "@syncellus/types/database.js";
-import { GetEmployeeQuery } from "@syncellus/types/index.js";
-import { insertNewEmployeeToDb, selectAllEmployeesFromDb, selectOneEmployeeByIdFromDb, updateEmployeeByIdInDb, deleteEmployeeByIdInDb } from "@syncellus/modules/employees/repository.js";
+import type { GetEmployeeQuery } from "@syncellus/types/index.js";
+import type { EmployeeRepository } from "@syncellus/modules/employees/repository.js";
 
-const insertNewEmployee = async (employee: NewEmployee) => {
-    return await insertNewEmployeeToDb(employee);
-};
+export class EmployeeService {
+    constructor(private readonly repo: EmployeeRepository) {}
 
-const selectAllEmployees = async (query: GetEmployeeQuery) => {
-    return await selectAllEmployeesFromDb(query);
-};
+    public insertNewEmployee = async (employee: NewEmployee) => {
+        return await this.repo.insertNewEmployeeToDb(employee);
+    };
 
-const selectOneEmployeeById = async (id: number) => {
-    return await selectOneEmployeeByIdFromDb(id);
-};
+    public selectAllEmployees = async (query: GetEmployeeQuery) => {
+        return await this.repo.selectAllEmployeesFromDb(query);
+    };
 
-const updateEmployeeById = async (employee: EmployeeUpdate) => {
-    return await updateEmployeeByIdInDb(employee);
-};
+    public selectOneEmployeeById = async (id: number) => {
+        return await this.repo.selectOneEmployeeByIdFromDb(id);
+    };
 
-const deleteEmployeeById = async (id: number) => {
-    return await deleteEmployeeByIdInDb(id);
-};
+    public updateEmployeeById = async (employee: EmployeeUpdate) => {
+        return await this.repo.updateEmployeeByIdInDb(employee);
+    };
 
-export { insertNewEmployee, selectAllEmployees, selectOneEmployeeById, updateEmployeeById, deleteEmployeeById };
+    public deleteEmployeeById = async (id: number) => {
+        return await this.repo.deleteEmployeeByIdInDb(id);
+    };
+}
