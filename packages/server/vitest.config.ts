@@ -16,6 +16,7 @@ export default defineConfig({
 
         // Specify coverage options
         coverage: {
+            include: ["src/modules/"],
             provider: "v8", // or 'istanbul'
             reporter: ["text", "json", "html"],
             reportsDirectory: "test/coverage/"

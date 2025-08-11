@@ -10,7 +10,7 @@ export const Layout = () => {
         <div className="flex flex-col h-screen w-screen overflow-hidden">
             <header className="flex items-center justify-between px-6 py-4">
                 <div
-                    className="flex items-center gap-2 hover:text-primary/90"
+                    className="flex items-center gap-2 hover:cursor-pointer hover:text-primary/90"
                     onClick={() => {
                         navigate("/dashboard");
                     }}

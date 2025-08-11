@@ -2,7 +2,7 @@ import { Router } from "express";
 import { HealthController } from "@syncellus/modules/health/controller.js";
 import { HealthRepository } from "@syncellus/modules/health/repository.js";
 import { DatabaseService } from "@syncellus/database/database.js";
-import { HealthService } from "./service.js";
+import { HealthService } from "@syncellus/modules/health/service.js";
 
 const router = Router();
 const db = DatabaseService.getInstance();

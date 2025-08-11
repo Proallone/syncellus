@@ -1,60 +1,97 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import request from "supertest";
-import app from "../../../src/app.js";
-import { getApplicationStatus, getDatabaseVersion } from "../../../src/modules/health/service.js";
+import { HealthController } from "../../../src/modules/health/controller.js";
+import { HealthService } from "../../../src/modules/health/service.js";
+import type { Request, Response, NextFunction } from "express";
+import { HealthRepository } from "../../../src/modules/health/repository.js";
+import { Database } from "better-sqlite3";
+import { Kysely } from "kysely";
 
-vi.mock("../../../src/modules/health/service.js");
+// Mock the HealthService dependency using the same class-based factory pattern.
+vi.mock("../../../src/modules/health/service.js", () => {
+    class MockHealthService {
+        getApplicationStatus = vi.fn();
+        getDatabaseStatus = vi.fn();
+    }
+    return { HealthService: MockHealthService };
+});
 
 describe("Health Controller", () => {
+    // Declare the controller instance and mock dependencies.
+    let controller: HealthController;
+    let mockService: HealthService;
+    let mockReq: Partial<Request>;
+    let mockRes: Partial<Response>;
+    let mockNext: NextFunction;
+
     beforeEach(() => {
+        // Clear all mocks before each test.
         vi.clearAllMocks();
+
+        const mockRepo = new HealthRepository({} as Kysely<Database>);
+        mockService = new HealthService(mockRepo);
+
+        // Instantiate the controller, injecting the mocked service.
+        controller = new HealthController(mockService);
+
+        // Create mock Express request and response objects.
+        // The mock 'res' object needs to handle chaining, so 'status' returns 'this'.
+        mockReq = {};
+        mockRes = {
+            status: vi.fn(() => mockRes),
+            json: vi.fn(),
+            send: vi.fn()
+        };
+        mockNext = vi.fn();
     });
 
-    describe("GET /health", () => {
-        it("should return a 200 status and the application status message", async () => {
+    describe("getApplicationHealth", () => {
+        it("should return a 200 status with the application health status", () => {
             // Arrange
-            const mockStatus = "Healthy!";
-            vi.mocked(getApplicationStatus).mockReturnValue(mockStatus);
+            const mockStatus = { status: "Healthy" };
+            // Mock the service method to return the expected value.
+            vi.mocked(mockService.getApplicationStatus).mockReturnValue(mockStatus);
 
             // Act
-            const response = await request(app).get("/health");
+            controller.getApplicationHealth(mockReq as Request, mockRes as Response);
 
             // Assert
-            expect(response.status).toBe(200);
-            expect(response.body).toEqual({
-                message: mockStatus
-            });
-            // Verify that the service function was called
-            expect(getApplicationStatus).toHaveBeenCalledTimes(1);
+            expect(mockService.getApplicationStatus).toHaveBeenCalledTimes(1);
+            expect(mockRes.status).toHaveBeenCalledWith(200);
+            expect(mockRes.send).toHaveBeenCalledWith(mockStatus);
         });
     });
 
-    describe("GET /health/database", () => {
-        it("should return a 200 status and the database version", async () => {
+    describe("getDatabaseHealth", () => {
+        it("should return a 200 status with the database version on success", async () => {
             // Arrange
-            const mockDbVersion = { status: "Healthy", sqlite_version: "3.51.0" };
-            vi.mocked(getDatabaseVersion).mockResolvedValue(mockDbVersion);
+            const mockVersion = { status: "Healthy", sqlite_version: "3.42.0" };
+            // Mock the service's async method to resolve with the expected value.
+            vi.mocked(mockService.getDatabaseStatus).mockResolvedValue(mockVersion);
 
             // Act
-            const response = await request(app).get("/health/database");
+            await controller.getDatabaseHealth(mockReq as Request, mockRes as Response, mockNext);
 
             // Assert
-            expect(response.status).toBe(200);
-            expect(response.body).toEqual(mockDbVersion);
-            expect(getDatabaseVersion).toHaveBeenCalledTimes(1);
+            expect(mockService.getDatabaseStatus).toHaveBeenCalledTimes(1);
+            expect(mockRes.status).toHaveBeenCalledWith(200);
+            expect(mockRes.json).toHaveBeenCalledWith(mockVersion);
+            expect(mockNext).not.toHaveBeenCalled();
         });
 
-        it("should handle errors from the service and return a 500 status", async () => {
+        it("should call the next function with the error on failure", async () => {
             // Arrange
-            vi.mocked(getDatabaseVersion).mockRejectedValue(new Error("Database connection failed"));
+            const mockError = new Error("Database connection failed");
+            // Mock the service's async method to reject with an error.
+            vi.mocked(mockService.getDatabaseStatus).mockRejectedValue(mockError);
 
             // Act
-            const response = await request(app).get("/health/database");
+            await controller.getDatabaseHealth(mockReq as Request, mockRes as Response, mockNext);
 
             // Assert
-            expect(response.status).toBe(500);
-            expect(response.body.message).toBe("Internal Server Error");
-            expect(getDatabaseVersion).toHaveBeenCalledTimes(1);
+            expect(mockService.getDatabaseStatus).toHaveBeenCalledTimes(1);
+            expect(mockRes.status).not.toHaveBeenCalled();
+            expect(mockRes.json).not.toHaveBeenCalled();
+            expect(mockNext).toHaveBeenCalledWith(mockError);
         });
     });
 });
