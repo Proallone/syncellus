@@ -19,7 +19,6 @@ describe("Health Service", () => {
     beforeEach(() => {
         vi.clearAllMocks();
 
-        //eslint-disable-next-line @typescript-eslint/no-explicit-any
         mockRepo = new HealthRepository({} as Kysely<Database>);
 
         healthService = new HealthService(mockRepo);
