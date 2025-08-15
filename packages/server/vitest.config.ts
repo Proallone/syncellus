@@ -1,3 +1,4 @@
+import path from "path";
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
@@ -20,6 +21,12 @@ export default defineConfig({
             provider: "v8", // or 'istanbul'
             reporter: ["text", "json", "html"],
             reportsDirectory: "test/coverage/"
+        }
+    },
+    resolve: {
+        alias: {
+            "@syncellus": path.resolve(__dirname, "./src"),
+            "@syncellus/*": path.resolve(__dirname, "./src/*")
         }
     }
 });

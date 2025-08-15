@@ -4,15 +4,15 @@
         "rootDir": "./src" /* Root directory of the source files */,
         "baseUrl": "./",
         "lib": ["DOM", "DOM.Iterable", "ESNext"],
-        "module": "nodenext" /* Or "CommonJS" if you prefer, but Node16/NodeNext is modern ESM */,
-        "moduleResolution": "nodenext" /* Or "Node" for CommonJS */,
-        "noEmit": false /* Make sure it's false for compilation */,
+        "module": "nodenext",
+        "moduleResolution": "nodenext",
+        "noEmit": false,
         "composite": true,
         "paths": {
-            "@syncellus/*": ["src/*"] /* Alias for all packages */
+            "@syncellus/*": ["src/*"]
         }
     },
-    "include": ["src/**/*.ts" /* Include all TypeScript files in src */, "src/**/*.d.ts" /* Include declaration files */],
+    "include": ["src/**/*.ts", "src/**/*.d.ts", "test/**/*.ts", "test/**/*.d.ts"],
     "exclude": ["node_modules", "dist"],
     "references": []
 }

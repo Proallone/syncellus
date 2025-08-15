@@ -1,13 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { HealthController } from "../../../src/modules/health/controller.js";
-import { HealthService } from "../../../src/modules/health/service.js";
+import { HealthController } from "@syncellus/modules/health/controller.js";
+import { HealthService } from "@syncellus/modules/health/service.js";
 import type { Request, Response, NextFunction } from "express";
-import { HealthRepository } from "../../../src/modules/health/repository.js";
+import { HealthRepository } from "@syncellus/modules/health/repository.js";
 import { Database } from "better-sqlite3";
 import { Kysely } from "kysely";
 
 // Mock the HealthService dependency using the same class-based factory pattern.
-vi.mock("../../../src/modules/health/service.js", () => {
+vi.mock("@syncellus/modules/health/service.js", () => {
     class MockHealthService {
         getApplicationStatus = vi.fn();
         getDatabaseStatus = vi.fn();
@@ -37,10 +37,10 @@ describe("Health Controller", () => {
         // The mock 'res' object needs to handle chaining, so 'status' returns 'this'.
         mockReq = {};
         mockRes = {
-            status: vi.fn(() => mockRes),
-            json: vi.fn(),
-            send: vi.fn()
-        };
+            status: vi.fn().mockImplementation(() => mockRes as Response),
+            json: vi.fn().mockImplementation(() => mockRes as Response),
+            send: vi.fn().mockImplementation(() => mockRes as Response)
+        } as unknown as Response;
         mockNext = vi.fn();
     });
 
