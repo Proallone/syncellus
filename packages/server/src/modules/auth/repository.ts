@@ -1,10 +1,11 @@
-import type { Database, NewUser } from "@syncellus/types/database.js";
+import type { Database } from "@syncellus/types/database.js";
+import type { AuthCredentials } from "@syncellus/types/index.js";
 import { Kysely } from "kysely";
 
 export class AuthRepository {
     constructor(private readonly db: Kysely<Database>) {}
 
-    public insertNewUserToDb = async (user: NewUser) => {
+    public insertNewUserToDb = async (user: AuthCredentials) => {
         return await this.db.insertInto("users").values(user).returning(["id", "email", "createdAt", "modifiedAt", "is_active", "role"]).executeTakeFirst();
     };
 

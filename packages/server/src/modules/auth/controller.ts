@@ -1,5 +1,4 @@
 import type { Request, Response, NextFunction } from "express";
-import type { NewUser } from "@syncellus/types/database.js";
 import type { AuthCredentials } from "@syncellus/types/index.js";
 import type { AuthService } from "@syncellus/modules/auth/service.js";
 import type { Logger } from "pino";
@@ -11,7 +10,7 @@ export class AuthController {
     ) {}
 
     public signUp = async (req: Request, res: Response, next: NextFunction) => {
-        const user: NewUser = {
+        const user: AuthCredentials = {
             ...req.body
         };
 

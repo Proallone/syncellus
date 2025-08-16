@@ -1,8 +1,7 @@
 import Jwt from "jsonwebtoken";
 import { eventBus } from "@syncellus/core/eventBus.js";
 import { HttpError } from "@syncellus/errors/HttpError.js";
-import type { NewUser } from "@syncellus/types/database.js";
-import type { Credentials, User } from "@syncellus/types/index.js";
+import type { AuthCredentials, Credentials, User } from "@syncellus/types/index.js";
 import { compareHash, hashPassword } from "@syncellus/utils/crypto.js";
 import type { AuthRepository } from "@syncellus/modules/auth/repository.js";
 import config from "@syncellus/configs/config.js";
@@ -10,7 +9,7 @@ import config from "@syncellus/configs/config.js";
 export class AuthService {
     constructor(private readonly repo: AuthRepository) {}
 
-    public insertNewUser = async (user: NewUser) => {
+    public insertNewUser = async (user: AuthCredentials) => {
         const exists = await this.repo.selectUserByEmailFromDb(user.email);
 
         if (exists) return undefined;

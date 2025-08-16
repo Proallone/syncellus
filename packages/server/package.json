@@ -12,7 +12,7 @@
         "watch": "DEBUG=* tsx watch --env-file=.env src/server.ts | pino-pretty",
         "watch:prod": "NODE_ENV=production DEBUG=* tsx watch --env-file=.env src/server.ts | pino-pretty",
         "test": "vitest --reporter=verbose",
-        "test:coverage": "vitest run --coverage",
+        "test:cov": "vitest run --coverage",
         "up": "kysely migrate:up",
         "postup": "kysely seed run",
         "down": "kysely migrate:down",

@@ -1,0 +1,128 @@
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { AuthController } from "@syncellus/modules/auth/controller.js";
+import { AuthService } from "@syncellus/modules/auth/service.js";
+import type { Request, Response, NextFunction } from "express";
+import { AuthRepository } from "@syncellus/modules/auth/repository.js";
+import type { Database as DB, User } from "@syncellus/types/database.js";
+import { Kysely } from "kysely";
+import { LoggerService } from "@syncellus/core/logger.js";
+
+vi.mock("@syncellus/modules/auth/service.js", () => {
+    class MockAuthService {
+        insertNewUser = vi.fn();
+        verifyUserCredentials = vi.fn();
+    }
+    return { AuthService: MockAuthService };
+});
+
+vi.spyOn(LoggerService, "getInstance").mockReturnValue({
+    info: vi.fn(),
+    error: vi.fn(),
+    warn: vi.fn(),
+    debug: vi.fn()
+} as any);
+
+describe("Auth Controller", () => {
+    let controller: AuthController;
+    let mockService: AuthService;
+    let mockReq: Partial<Request>;
+    let mockRes: Partial<Response>;
+    let mockNext: NextFunction;
+
+    beforeEach(() => {
+        vi.clearAllMocks();
+
+        const mockRepo = new AuthRepository({} as Kysely<DB>);
+        mockService = new AuthService(mockRepo);
+        const logger = LoggerService.getInstance();
+
+        controller = new AuthController(mockService, logger);
+
+        mockReq = {};
+        mockRes = {
+            status: vi.fn().mockImplementation(() => mockRes as Response),
+            json: vi.fn().mockImplementation(() => mockRes as Response),
+            send: vi.fn().mockImplementation(() => mockRes as Response)
+        } as unknown as Response;
+        mockNext = vi.fn();
+    });
+
+    describe("signUp", () => {
+        it("should return a 201 status with the signedup user", async () => {
+            // Arrange
+            const mockedUser: User = { id: 1, email: "test@mail.com", password: "password", createdAt: new Date(), modifiedAt: new Date(), role: "employee", is_active: 1 };
+            vi.mocked(mockService.insertNewUser).mockResolvedValue(mockedUser);
+
+            // Act
+            await controller.signUp(mockReq as Request, mockRes as Response, mockNext);
+
+            // Assert
+            expect(mockService.insertNewUser).toHaveBeenCalledTimes(1);
+            expect(mockRes.status).toHaveBeenCalledWith(201);
+            expect(mockRes.json).toHaveBeenCalledWith(mockedUser);
+        });
+    });
+
+    it("should return 409 if the user already exists", async () => {
+        mockReq.body = { email: "test@mail.com", password: "secret" };
+
+        vi.mocked(mockService.insertNewUser).mockResolvedValue(undefined);
+
+        await controller.signUp(mockReq as Request, mockRes as Response, mockNext);
+
+        expect(mockRes.status).toHaveBeenCalledWith(409);
+        expect(mockRes.send).toHaveBeenCalledWith({
+            message: "User with email test@mail.com already exists!"
+        });
+    });
+
+    it("should call next(error) if insertNewUser throws", async () => {
+        const error = new Error("db error");
+        vi.mocked(mockService.insertNewUser).mockRejectedValue(error);
+
+        await controller.signUp(mockReq as Request, mockRes as Response, mockNext);
+
+        expect(mockNext).toHaveBeenCalledWith(error);
+    });
+
+    describe("signIn", () => {
+        it("should return a 200 status with the signedin user", async () => {
+            // Arrange
+            const mockedServiceResponse = { accessToken: "testJWTToken", message: "Successfull sign in!" };
+            vi.mocked(mockService.verifyUserCredentials).mockResolvedValue(mockedServiceResponse);
+
+            // Act
+            await controller.signIn(mockReq as Request, mockRes as Response, mockNext);
+
+            // Assert
+            expect(mockService.verifyUserCredentials).toHaveBeenCalledTimes(1);
+            expect(mockRes.status).toHaveBeenCalledWith(200);
+            expect(mockRes.json).toHaveBeenCalledWith(mockedServiceResponse);
+        });
+    });
+    it("should return 200 and a token when credentials are valid", async () => {
+        mockReq.body = { email: "test@mail.com", password: "secret" };
+
+        vi.mocked(mockService.verifyUserCredentials).mockResolvedValue({
+            accessToken: "fake-token"
+        });
+
+        await controller.signIn(mockReq as Request, mockRes as Response, mockNext);
+
+        expect(mockService.verifyUserCredentials).toHaveBeenCalledWith(mockReq.body);
+        expect(mockRes.status).toHaveBeenCalledWith(200);
+        expect(mockRes.json).toHaveBeenCalledWith({
+            message: "Successfull sign in!",
+            accessToken: "fake-token"
+        });
+    });
+
+    it("should call next(error) if verifyUserCredentials throws", async () => {
+        const error = new Error("invalid creds");
+        vi.mocked(mockService.verifyUserCredentials).mockRejectedValue(error);
+
+        await controller.signIn(mockReq as Request, mockRes as Response, mockNext);
+
+        expect(mockNext).toHaveBeenCalledWith(error);
+    });
+});
