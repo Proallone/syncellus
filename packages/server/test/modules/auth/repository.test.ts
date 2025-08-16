@@ -1,13 +1,13 @@
 import { describe, it, expect, vi, beforeEach, beforeAll } from "vitest";
 import { FileMigrationProvider, Kysely, Migrator, SqliteDialect } from "kysely";
 import Database from "better-sqlite3";
-import { AuthRepository } from "../../../src/modules/auth/repository.js";
-import { Database as DB } from "../../../src/types/database.js";
-import { DatabaseService } from "../../../src/database/database.js";
+import { AuthRepository } from "@syncellus/modules/auth/repository.js";
+import { Database as DB } from "@syncellus/types/database.js";
+import { DatabaseService } from "@syncellus/database/database.js";
 import * as path from "path";
 import { promises as fs } from "fs";
 
-vi.mock("../../../src/database/database", () => {
+vi.mock("@syncellus/database/database", () => {
     const inMemoryDb = new Database(":memory:");
     const mockKyselyDb = new Kysely<DB>({
         dialect: new SqliteDialect({

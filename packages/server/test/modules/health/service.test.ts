@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { HealthService } from "../../../src/modules/health/service.js";
-import { HealthRepository } from "../../../src/modules/health/repository.js";
+import { HealthService } from "@syncellus/modules/health/service.js";
+import { HealthRepository } from "@syncellus/modules/health/repository.js";
 import { Kysely } from "kysely";
-import { Database } from "better-sqlite3";
+import type { Database as DB } from "@syncellus/types/database.js";
 
-vi.mock("../../../src/modules/health/repository.js", () => {
+vi.mock("@syncellus/modules/health/repository.js", () => {
     class MockHealthRepository {
         getDatabaseVersionFromDb = vi.fn();
     }
@@ -19,7 +19,7 @@ describe("Health Service", () => {
     beforeEach(() => {
         vi.clearAllMocks();
 
-        mockRepo = new HealthRepository({} as Kysely<Database>);
+        mockRepo = new HealthRepository({} as Kysely<DB>);
 
         healthService = new HealthService(mockRepo);
     });

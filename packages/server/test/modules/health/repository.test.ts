@@ -1,11 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { Kysely, SqliteDialect } from "kysely";
 import Database from "better-sqlite3";
-import { HealthRepository } from "../../../src/modules/health/repository.js";
-import { Database as DB } from "../../../src/types/database.js";
-import { DatabaseService } from "../../../src/database/database.js";
+import { HealthRepository } from "@syncellus/modules/health/repository.js";
+import type { Database as DB } from "@syncellus/types/database.js";
+import { DatabaseService } from "@syncellus/database/database.js";
 
-vi.mock("../../../src/database/database", () => {
+vi.mock("@syncellus/database/database", () => {
     const inMemoryDb = new Database(":memory:");
     const mockKyselyDb = new Kysely<DB>({
         dialect: new SqliteDialect({

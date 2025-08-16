@@ -3,8 +3,9 @@ import { HealthController } from "@syncellus/modules/health/controller.js";
 import { HealthService } from "@syncellus/modules/health/service.js";
 import type { Request, Response, NextFunction } from "express";
 import { HealthRepository } from "@syncellus/modules/health/repository.js";
-import { Database } from "better-sqlite3";
+import type { Database as DB } from "@syncellus/types/database.js";
 import { Kysely } from "kysely";
+import type { DatabaseHealth, ServiceHealth } from "@syncellus/modules/health/types.js";
 
 // Mock the HealthService dependency using the same class-based factory pattern.
 vi.mock("@syncellus/modules/health/service.js", () => {
@@ -27,7 +28,7 @@ describe("Health Controller", () => {
         // Clear all mocks before each test.
         vi.clearAllMocks();
 
-        const mockRepo = new HealthRepository({} as Kysely<Database>);
+        const mockRepo = new HealthRepository({} as Kysely<DB>);
         mockService = new HealthService(mockRepo);
 
         // Instantiate the controller, injecting the mocked service.
@@ -47,7 +48,7 @@ describe("Health Controller", () => {
     describe("getApplicationHealth", () => {
         it("should return a 200 status with the application health status", () => {
             // Arrange
-            const mockStatus = { status: "Healthy" };
+            const mockStatus: ServiceHealth = { status: "Healthy" };
             // Mock the service method to return the expected value.
             vi.mocked(mockService.getApplicationStatus).mockReturnValue(mockStatus);
 
@@ -64,7 +65,7 @@ describe("Health Controller", () => {
     describe("getDatabaseHealth", () => {
         it("should return a 200 status with the database version on success", async () => {
             // Arrange
-            const mockVersion = { status: "Healthy", sqlite_version: "3.42.0" };
+            const mockVersion: DatabaseHealth = { status: "Healthy", sqlite_version: "3.42.0" };
             // Mock the service's async method to resolve with the expected value.
             vi.mocked(mockService.getDatabaseStatus).mockResolvedValue(mockVersion);
 

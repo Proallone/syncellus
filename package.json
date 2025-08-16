@@ -2,7 +2,7 @@
     "name": "@syncellus/root",
     "type": "module",
     "version": "1.0.0",
-    "description": "Small timesheets app",
+    "description": "Small and modular timesheets app",
     "repository": "https://github.com/Proallone/timesheets.git",
     "author": "proallone <proallone14@gmail.com>",
     "private": true,

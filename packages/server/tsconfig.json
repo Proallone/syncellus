@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
-        "outDir": "./dist" /* Output directory for backend compiled files */,
-        "rootDir": "./src" /* Root directory of the source files */,
+        "outDir": "./dist",
+        "rootDir": "./src",
         "baseUrl": "./",
         "lib": ["DOM", "DOM.Iterable", "ESNext"],
         "module": "nodenext",
@@ -12,7 +12,8 @@
             "@syncellus/*": ["src/*"]
         }
     },
-    "include": ["src/**/*.ts", "src/**/*.d.ts", "test/**/*.ts", "test/**/*.d.ts"],
-    "exclude": ["node_modules", "dist"],
-    "references": []
+    "include": ["src/**/*.ts", "src/**/*.d.ts"],
+    "exclude": ["node_modules", "dist", "test", "**/*.spec.ts", "**/*.test.ts"],
+    "files": [],
+    "references": [{ "path": "./tsconfig.test.json" }]
 }
