@@ -1,4 +1,4 @@
-import { Config } from "@syncellus/types/index.js";
+import type { Config } from "@syncellus/types/index.js";
 
 const config: Config = {
     port: Number(process.env.PORT) || 3000,

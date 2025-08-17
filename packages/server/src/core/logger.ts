@@ -1,4 +1,4 @@
-import pino, { Logger } from "pino";
+import pino, { type Logger } from "pino";
 
 export class LoggerService {
     private static instance: Logger | null = null;
