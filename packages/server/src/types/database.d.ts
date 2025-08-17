@@ -7,8 +7,8 @@ export interface Database {
 }
 
 export interface UsersTable {
-    id: Generated<number>;
-    publicID: string;
+    id: Generated<string>;
+    public_id: Generated<string>;
     email: string;
     password: string;
     createdAt: ColumnType<Date, string | undefined, never>;
@@ -23,7 +23,7 @@ export type UserUpdate = Updateable<UsersTable>;
 
 export interface EmployeeTable {
     id: Generated<number>;
-    user_id: number;
+    user_id: string;
     name: string | undefined;
     surname: string | undefined;
     createdAt: ColumnType<Date, string | undefined, never>;

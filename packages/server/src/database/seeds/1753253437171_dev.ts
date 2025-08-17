@@ -3,19 +3,22 @@ import type { Database, NewEmployee, NewTimesheet, NewUser } from "@syncellus/ty
 
 const users: NewUser[] = [
     {
-        publicID: "6JV6W12CQDS55",
+        id: "0189f7ea-ae2c-7809-8aeb-b819cf5e9e7f",
+        public_id: "6JV6W12CQDS55",
         email: "bartek@test.com",
         password: "$2a$12$VTsLufkVlFbUtCSuE31ku.D1uLlSNpC4/uZAMKm0QWF/j5SmPBXcC",
         role: "employee"
     },
     {
-        publicID: "W5Q8R2C0D4V1A",
+        id: "0189f7ea-ae2f-72b9-9be8-9c3c5a60214f",
+        public_id: "W5Q8R2C0D4V1A",
         email: "bartek@admin.com",
         password: "$2a$12$VTsLufkVlFbUtCSuE31ku.D1uLlSNpC4/uZAMKm0QWF/j5SmPBXcC",
         role: "admin"
     },
     {
-        publicID: "T9Z3A1F4B0P7G",
+        id: "0189f7ea-ae2f-72b9-9be8-9c3d224082ef",
+        public_id: "T9Z3A1F4B0P7G",
         email: "bartek@manager.com",
         password: "$2a$12$VTsLufkVlFbUtCSuE31ku.D1uLlSNpC4/uZAMKm0QWF/j5SmPBXcC",
         role: "manager"
@@ -24,17 +27,17 @@ const users: NewUser[] = [
 
 const employees: NewEmployee[] = [
     {
-        user_id: 1,
+        user_id: "0189f7ea-ae2c-7809-8aeb-b819cf5e9e7f",
         name: "Bartosz",
         surname: "Testowy"
     },
     {
-        user_id: 2,
+        user_id: "0189f7ea-ae2f-72b9-9be8-9c3c5a60214f",
         name: "Erik",
         surname: "Turing"
     },
     {
-        user_id: 3,
+        user_id: "0189f7ea-ae2f-72b9-9be8-9c3d224082ef",
         name: "Elisabeth",
         surname: "Turner"
     }

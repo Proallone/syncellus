@@ -10,9 +10,24 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     await db.schema
         .createTable("users")
-        .addColumn("id", "integer", (col) => col.primaryKey())
-        .addColumn("publicID", "text", (col) => col.notNull())
-        .addColumn("email", "text", (col) => col.notNull().unique())
+        .addColumn("id", "text", (col) =>
+            col
+                .unique()
+                .notNull()
+                .check(sql`LENGTH(id) = 36`)
+        )
+        .addColumn("public_id", "text", (col) =>
+            col
+                .unique()
+                .notNull()
+                .check(sql`LENGTH(id) = 36`)
+        )
+        .addColumn("email", "text", (col) =>
+            col
+                .unique()
+                .notNull()
+                .check(sql`LENGTH(email) >= 3 AND LENGTH(email) <= 255`)
+        )
         .addColumn("password", "text", (col) => col.notNull().check(sql`LENGTH(password) >= 3 AND LENGTH(password) <= 255`))
         .addColumn("createdAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .addColumn("modifiedAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
@@ -20,8 +35,6 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("role", "text", (col) => col.check(sql`role in ('admin', 'manager', 'employee')`).defaultTo("employee"))
         .execute();
 
-    await db.schema.createIndex("user_id").on("users").column("id").execute();
-    await db.schema.createIndex("user_publicID").on("users").column("publicID").execute();
     await db.schema.createIndex("user_email").on("users").column("email").execute();
 
     await sql`
@@ -37,7 +50,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     await db.schema
         .createTable("employees")
         .addColumn("id", "integer", (col) => col.primaryKey())
-        .addColumn("user_id", "integer", (col) => col.unique().notNull().references("users.id"))
+        .addColumn("user_id", "text", (col) => col.unique().notNull().references("users.id"))
         .addColumn("name", "text")
         .addColumn("surname", "text")
         .addColumn("createdAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
@@ -56,14 +69,6 @@ export async function up(db: Kysely<any>): Promise<void> {
 			WHERE
 			id = OLD.id;
 		END;`.execute(db);
-
-    // await sql`CREATE TRIGGER after_user_insert_add_employee
-    //         AFTER INSERT ON users
-    //         FOR EACH ROW
-    //         BEGIN
-    //             INSERT INTO employees (user_id)
-    //             VALUES (NEW.id);
-    //         END;`.execute(db);
 
     await db.schema
         .createTable("timesheets")
@@ -118,11 +123,7 @@ export async function down(db: Kysely<any>): Promise<void> {
     await db.schema.dropTable("employees").execute();
 
     await sql`DROP TRIGGER IF EXISTS update_users_modifiedAt;`.execute(db);
-    // await sql`DROP TRIGGER IF EXISTS after_user_insert_add_employee;`.execute(db);
 
-    await db.schema.dropIndex("user_id").execute();
-    await db.schema.dropIndex("user_publicID").execute();
-    await db.schema.dropIndex("user_email").execute();
     await db.schema.dropTable("users").execute();
 
     await sql`PRAGMA journal_mode=DELETE;`.execute(db);

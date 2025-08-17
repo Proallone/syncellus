@@ -17,7 +17,7 @@ export interface DbHealthResponse {
 }
 
 export interface User {
-    id: number;
+    id: string;
     role: string;
 }
 
