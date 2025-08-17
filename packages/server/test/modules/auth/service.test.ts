@@ -53,7 +53,7 @@ describe("AuthService", () => {
     it("should insert a new user if email does not exist", async () => {
         const newUser = { email: "test@example.com", password: "secret" };
         mockRepo.selectUserByEmailFromDb.mockResolvedValue(null);
-        mockRepo.insertNewUserToDb.mockResolvedValue({ id: 1, ...newUser, password: "hashed-secret" });
+        mockRepo.insertNewUserToDb.mockResolvedValue({ id: "0198b9dc-7515-71fc-bf31-23fa1057ffd1", public_id: "84ghpuj191", ...newUser, password: "hashed-secret" });
 
         const result = await service.insertNewUser(newUser);
 
@@ -63,8 +63,8 @@ describe("AuthService", () => {
             ...newUser,
             password: "hashed-secret"
         });
-        expect(eventBus.emit).toHaveBeenCalledWith("user.created", { id: 1, ...newUser, password: "hashed-secret" });
-        expect(result).toEqual({ id: 1, ...newUser, password: "hashed-secret" });
+        expect(eventBus.emit).toHaveBeenCalledWith("user.created", { id: "0198b9dc-7515-71fc-bf31-23fa1057ffd1", public_id: "84ghpuj191", ...newUser, password: "hashed-secret" });
+        expect(result).toEqual({ id: "0198b9dc-7515-71fc-bf31-23fa1057ffd1", public_id: "84ghpuj191", ...newUser, password: "hashed-secret" });
     });
 
     it("should return an accessToken for valid credentials", async () => {

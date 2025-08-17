@@ -39,6 +39,7 @@ describe("Auth Repository", () => {
 
         const { error } = await migrator.migrateToLatest();
         if (error) {
+            console.error(error);
             throw new Error("Migration failed!");
         }
     });
