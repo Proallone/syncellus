@@ -3,16 +3,19 @@ import type { Database, NewEmployee, NewTimesheet, NewUser } from "@syncellus/ty
 
 const users: NewUser[] = [
     {
+        publicID: "6JV6W12CQDS55",
         email: "bartek@test.com",
         password: "$2a$12$VTsLufkVlFbUtCSuE31ku.D1uLlSNpC4/uZAMKm0QWF/j5SmPBXcC",
         role: "employee"
     },
     {
+        publicID: "W5Q8R2C0D4V1A",
         email: "bartek@admin.com",
         password: "$2a$12$VTsLufkVlFbUtCSuE31ku.D1uLlSNpC4/uZAMKm0QWF/j5SmPBXcC",
         role: "admin"
     },
     {
+        publicID: "T9Z3A1F4B0P7G",
         email: "bartek@manager.com",
         password: "$2a$12$VTsLufkVlFbUtCSuE31ku.D1uLlSNpC4/uZAMKm0QWF/j5SmPBXcC",
         role: "manager"

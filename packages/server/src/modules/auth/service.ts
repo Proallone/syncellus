@@ -5,7 +5,7 @@ import type { AuthCredentials, Credentials, User } from "@syncellus/types/index.
 import { compareHash, hashPassword } from "@syncellus/utils/crypto.js";
 import type { AuthRepository } from "@syncellus/modules/auth/repository.js";
 import config from "@syncellus/configs/config.js";
-
+import { customAlphabet } from "nanoid";
 export class AuthService {
     constructor(private readonly repo: AuthRepository) {}
 
@@ -13,9 +13,11 @@ export class AuthService {
         const exists = await this.repo.selectUserByEmailFromDb(user.email);
 
         if (exists) return undefined;
+        const nanoid = customAlphabet("1234567890abcdef", 10); //TODO move to helper class?
 
         const newUser = await this.repo.insertNewUserToDb({
             ...user,
+            publicID: nanoid(),
             password: await hashPassword(user.password)
         });
 

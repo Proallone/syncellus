@@ -1,9 +1,11 @@
-import { db as kysely } from "./src/database/database.js";
+import { DatabaseService } from "./src/database/database.js";
 import { defineConfig } from "kysely-ctl";
+
+const db = DatabaseService.getInstance();
 
 export default defineConfig({
     // replace me with a real dialect instance OR a dialect name + `dialectConfig` prop.
-    kysely,
+    kysely: db,
     migrations: {
         migrationFolder: "./src/database/migrations"
     },

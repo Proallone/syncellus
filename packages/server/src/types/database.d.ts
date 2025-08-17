@@ -8,6 +8,7 @@ export interface Database {
 
 export interface UsersTable {
     id: Generated<number>;
+    publicID: string;
     email: string;
     password: string;
     createdAt: ColumnType<Date, string | undefined, never>;
