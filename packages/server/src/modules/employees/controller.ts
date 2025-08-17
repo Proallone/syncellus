@@ -2,6 +2,7 @@ import type { Request, Response, NextFunction } from "express";
 import type { EmployeeService } from "@syncellus/modules/employees/service.js";
 import type { EmployeeUpdate, NewEmployee, NewTimesheet } from "@syncellus/types/database.js";
 import type { TimesheetService } from "@syncellus/modules/timesheets/service.js";
+import { uuidv7 } from "uuidv7";
 
 export class EmployeeController {
     constructor(
@@ -35,7 +36,7 @@ export class EmployeeController {
     public getEmployee = async (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
         try {
-            const employee = await this.service.selectOneEmployeeById(Number(id));
+            const employee = await this.service.selectOneEmployeeById(id);
             if (!employee) {
                 return res.status(404).send({
                     message: `Employee with ID ${id} not found!`
@@ -70,7 +71,7 @@ export class EmployeeController {
     public deleteEmployee = async (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
         try {
-            const deletion = await this.service.deleteEmployeeById(Number(id));
+            const deletion = await this.service.deleteEmployeeById(id);
             if (!deletion.numDeletedRows) {
                 return res.status(404).send({
                     message: `Employee with ID ${id} not found!`
@@ -88,7 +89,7 @@ export class EmployeeController {
         const { employeeId } = req.params;
 
         try {
-            const timesheets = await this.timesheetService.selectAllTimesheetsByEmployeeId(Number(employeeId));
+            const timesheets = await this.timesheetService.selectAllTimesheetsByEmployeeId(employeeId);
 
             if (!timesheets || timesheets.length === 0) {
                 return res.status(404).json({
@@ -106,7 +107,7 @@ export class EmployeeController {
         const { employeeId } = req.params;
         const body = Array.isArray(req.body) ? req.body : [req.body];
 
-        const timesheets: NewTimesheet[] = body.map((timesheet) => ({ employee_id: employeeId, ...timesheet }));
+        const timesheets: NewTimesheet[] = body.map((timesheet) => ({ id: uuidv7(), employee_id: employeeId, ...timesheet }));
 
         try {
             const newTimesheet = await this.timesheetService.insertNewTimesheets(timesheets);

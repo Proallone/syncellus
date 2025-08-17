@@ -7,7 +7,8 @@ export interface Database {
 }
 
 export interface UsersTable {
-    id: Generated<number>;
+    id: Generated<string>;
+    public_id: Generated<string>;
     email: string;
     password: string;
     createdAt: ColumnType<Date, string | undefined, never>;
@@ -21,8 +22,8 @@ export type NewUser = Insertable<UsersTable>;
 export type UserUpdate = Updateable<UsersTable>;
 
 export interface EmployeeTable {
-    id: Generated<number>;
-    user_id: number;
+    id: Generated<string>;
+    user_id: string;
     name: string | undefined;
     surname: string | undefined;
     createdAt: ColumnType<Date, string | undefined, never>;
@@ -34,8 +35,8 @@ export type NewEmployee = Insertable<EmployeeTable>;
 export type EmployeeUpdate = Updateable<EmployeeTable>;
 
 export interface TimesheetTable {
-    id: Generated<number>;
-    employee_id: number;
+    id: Generated<string>;
+    employee_id: string;
     createdAt: ColumnType<Date, string | undefined, never>;
     modifiedAt: ColumnType<Date, string | undefined, never>;
     date: ColumnType<Date, string>;

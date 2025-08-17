@@ -10,16 +10,25 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     await db.schema
         .createTable("users")
-        .addColumn("id", "integer", (col) => col.primaryKey())
-        .addColumn("email", "text", (col) => col.notNull().unique())
+        .addColumn("id", "text", (col) => col.primaryKey().check(sql`LENGTH(id) = 36`))
+        .addColumn("public_id", "text", (col) =>
+            col
+                .unique()
+                .notNull()
+                .check(sql`LENGTH(public_id) = 10`)
+        )
+        .addColumn("email", "text", (col) =>
+            col
+                .unique()
+                .notNull()
+                .check(sql`LENGTH(email) >= 3 AND LENGTH(email) <= 255`)
+        )
         .addColumn("password", "text", (col) => col.notNull().check(sql`LENGTH(password) >= 3 AND LENGTH(password) <= 255`))
         .addColumn("createdAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .addColumn("modifiedAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .addColumn("is_active", "boolean", (col) => col.defaultTo(true))
         .addColumn("role", "text", (col) => col.check(sql`role in ('admin', 'manager', 'employee')`).defaultTo("employee"))
         .execute();
-
-    await db.schema.createIndex("user_id").on("users").column("id").execute();
 
     await db.schema.createIndex("user_email").on("users").column("email").execute();
 
@@ -35,16 +44,14 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     await db.schema
         .createTable("employees")
-        .addColumn("id", "integer", (col) => col.primaryKey())
-        .addColumn("user_id", "integer", (col) => col.unique().notNull().references("users.id"))
-        .addColumn("name", "text")
-        .addColumn("surname", "text")
+        .addColumn("id", "text", (col) => col.primaryKey().check(sql`LENGTH(id) = 36`))
+        .addColumn("user_id", "text", (col) => col.unique().notNull().references("users.id"))
+        .addColumn("name", "text", (col) => col.check(sql`LENGTH(name) >= 3 AND LENGTH(name) <= 255`))
+        .addColumn("surname", "text", (col) => col.check(sql`LENGTH(surname) >= 3 AND LENGTH(surname) <= 255`))
         .addColumn("createdAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .addColumn("modifiedAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .addForeignKeyConstraint("employees_users_id_fk", ["user_id"], "users", ["id"], (cb) => cb.onDelete("cascade"))
         .execute();
-
-    await db.schema.createIndex("employee_id").on("employees").column("id").execute();
 
     await sql`
 		CREATE TRIGGER IF NOT EXISTS update_employees_modifiedAt BEFORE
@@ -56,18 +63,15 @@ export async function up(db: Kysely<any>): Promise<void> {
 			id = OLD.id;
 		END;`.execute(db);
 
-    // await sql`CREATE TRIGGER after_user_insert_add_employee
-    //         AFTER INSERT ON users
-    //         FOR EACH ROW
-    //         BEGIN
-    //             INSERT INTO employees (user_id)
-    //             VALUES (NEW.id);
-    //         END;`.execute(db);
-
     await db.schema
         .createTable("timesheets")
-        .addColumn("id", "integer", (col) => col.primaryKey())
-        .addColumn("employee_id", "integer", (col) => col.references("employees.id"))
+        .addColumn("id", "text", (col) => col.primaryKey().check(sql`LENGTH(id) = 36`))
+        .addColumn("employee_id", "text", (col) =>
+            col
+                .references("employees.id")
+                .notNull()
+                .check(sql`LENGTH(employee_id) = 36`)
+        )
         .addColumn("createdAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .addColumn("modifiedAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .addColumn("date", "text", (col) => col.notNull())
@@ -85,7 +89,6 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addForeignKeyConstraint("timesheets_employee_id_fk", ["employee_id"], "employees", ["id"], (cb) => cb.onDelete("cascade"))
         .execute();
 
-    await db.schema.createIndex("timesheets_id").on("timesheets").column("id").execute();
     await db.schema.createIndex("timesheets_employee_id").on("timesheets").column("employee_id").execute();
 
     await sql`
@@ -106,21 +109,16 @@ export async function down(db: Kysely<any>): Promise<void> {
     // note: down migrations are optional. you can safely delete this function.
     // For more info, see: https://kysely.dev/docs/migrations
     await sql`DROP TRIGGER IF EXISTS update_timesheets_modifiedAt;`.execute(db);
-    await db.schema.dropIndex("timesheets_id").execute();
     await db.schema.dropIndex("timesheets_employee_id").execute();
 
     await db.schema.dropTable("timesheets").execute();
 
     await sql`DROP TRIGGER IF EXISTS update_employees_modifiedAt;`.execute(db);
-    await db.schema.dropIndex("employee_id").execute();
 
     await db.schema.dropTable("employees").execute();
 
     await sql`DROP TRIGGER IF EXISTS update_users_modifiedAt;`.execute(db);
-    // await sql`DROP TRIGGER IF EXISTS after_user_insert_add_employee;`.execute(db);
 
-    await db.schema.dropIndex("user_id").execute();
-    await db.schema.dropIndex("user_email").execute();
     await db.schema.dropTable("users").execute();
 
     await sql`PRAGMA journal_mode=DELETE;`.execute(db);

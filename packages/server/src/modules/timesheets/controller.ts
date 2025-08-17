@@ -5,7 +5,7 @@ import type { TimesheetService } from "@syncellus/modules/timesheets/service.js"
 export class TimesheetController {
     constructor(private readonly service: TimesheetService) {}
     public createTimesheets = async (req: Request, res: Response, next: NextFunction) => {
-        const body = Array.isArray(req.body) ? req.body : [req.body];
+        const body = Array.isArray(req.body) ? req.body : [req.body]; //TODO move this out of the controller
         const timesheets: NewTimesheet[] = body.map((timesheet) => ({ ...timesheet }));
         try {
             const newTimesheet = await this.service.insertNewTimesheets(timesheets);
