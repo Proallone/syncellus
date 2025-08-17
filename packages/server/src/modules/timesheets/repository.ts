@@ -16,7 +16,7 @@ export class TimesheetRepository {
         return await this.db.selectFrom("timesheets").selectAll().where("id", "=", id).executeTakeFirst();
     };
 
-    public selectTimesheetsByEmployeeIdFromDb = async (employeeId: number) => {
+    public selectTimesheetsByEmployeeIdFromDb = async (employeeId: string) => {
         return await this.db.selectFrom("timesheets").selectAll().where("employee_id", "=", employeeId).execute();
     };
 

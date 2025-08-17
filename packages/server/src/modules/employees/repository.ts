@@ -22,7 +22,7 @@ export class EmployeeRepository {
         return await q.execute();
     };
 
-    public selectOneEmployeeByIdFromDb = async (id: number) => {
+    public selectOneEmployeeByIdFromDb = async (id: string) => {
         return await this.db
             .selectFrom("employees")
             .leftJoin("users", "employees.user_id", "users.id")
@@ -32,10 +32,10 @@ export class EmployeeRepository {
     };
 
     public updateEmployeeByIdInDb = async (employee: EmployeeUpdate) => {
-        return await this.db.updateTable("employees").set(employee).where("id", "=", Number(employee.id)).returningAll().executeTakeFirst();
+        return await this.db.updateTable("employees").set(employee).where("id", "=", employee.id).returningAll().executeTakeFirst();
     };
 
-    public deleteEmployeeByIdInDb = async (id: number) => {
+    public deleteEmployeeByIdInDb = async (id: string) => {
         return await this.db.deleteFrom("employees").where("id", "=", id).executeTakeFirst();
     };
 }
