@@ -10,15 +10,28 @@ import helmet from "helmet";
 import cors from "cors";
 import corsConfig from "@syncellus/configs/cors.js";
 import { limiter } from "@syncellus/core/limiter.js";
+import { configurePassport } from "@syncellus/modules/auth/passport.js";
+import passport from "passport";
+import { AuthRepository } from "@syncellus/modules/auth/repository.js";
+import { DatabaseService } from "@syncellus/database/database.js";
+import { AuthService } from "@syncellus/modules/auth/service.js";
 
 const app = express();
+app.use(express.json());
+app.use(passport.initialize());
+
+//TODO refactor
+const db = DatabaseService.getInstance();
+const authRepo = new AuthRepository(db);
+
+const authService = new AuthService(authRepo);
+configurePassport(authService);
 
 app.use(limiter);
 app.use(cors(corsConfig));
 app.use(helmet());
 const logger = LoggerService.getInstance();
 app.use(pinoHttp(logger));
-app.use(express.json());
 
 const apiRouter = Router();
 

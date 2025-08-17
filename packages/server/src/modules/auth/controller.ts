@@ -2,7 +2,9 @@ import type { Request, Response, NextFunction } from "express";
 import type { AuthCredentials } from "@syncellus/types/index.js";
 import type { AuthService } from "@syncellus/modules/auth/service.js";
 import type { Logger } from "pino";
-
+import passport from "passport";
+import Jwt from "jsonwebtoken";
+import config from "@syncellus/configs/config.js";
 export class AuthController {
     constructor(
         private readonly service: AuthService,
@@ -26,17 +28,16 @@ export class AuthController {
         }
     };
 
-    public signIn = async (req: Request, res: Response, next: NextFunction) => {
-        const credentials: AuthCredentials = req.body;
-        try {
-            const { accessToken } = await this.service.verifyUserCredentials(credentials);
+    public signIn = [
+        passport.authenticate("local", { session: false }),
+        (req: Request, res: Response) => {
+            const user = req.user as { id: string; role: string };
+            const accessToken = Jwt.sign(user, config.jwt_secret, { expiresIn: "30m" });
 
             return res.status(200).json({
-                message: "Successfull sign in!",
+                message: "Successful sign in!",
                 accessToken
             });
-        } catch (error) {
-            next(error);
         }
-    };
+    ];
 }

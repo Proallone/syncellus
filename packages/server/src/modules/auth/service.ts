@@ -1,10 +1,8 @@
-import Jwt from "jsonwebtoken";
 import { eventBus } from "@syncellus/core/eventBus.js";
 import { HttpError } from "@syncellus/errors/HttpError.js";
 import type { AuthCredentials, Credentials, User } from "@syncellus/types/index.js";
 import { compareHash, hashPassword } from "@syncellus/utils/crypto.js";
 import type { AuthRepository } from "@syncellus/modules/auth/repository.js";
-import config from "@syncellus/configs/config.js";
 
 export class AuthService {
     constructor(private readonly repo: AuthRepository) {}
@@ -35,9 +33,7 @@ export class AuthService {
         if (!match) throw new HttpError(401, "Invalid credentials");
 
         const user: User = { id: userFromDb.id, role: userFromDb.role };
-        const accessToken = Jwt.sign(user, config.jwt_secret, { expiresIn: "30m" });
-        // TODO issue a refresh token?
 
-        return { accessToken };
+        return { user };
     };
 }
