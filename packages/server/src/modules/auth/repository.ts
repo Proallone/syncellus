@@ -12,4 +12,8 @@ export class AuthRepository {
     public selectUserByEmailFromDb = async (email: string) => {
         return await this.db.selectFrom("users").select(["id", "email", "role", "password"]).where("email", "=", email).executeTakeFirst();
     };
+
+    public selectUserByIdFromDb = async (id: number) => {
+        return await this.db.selectFrom("users").select(["id", "role"]).where("id", "=", id).executeTakeFirst();
+    };
 }

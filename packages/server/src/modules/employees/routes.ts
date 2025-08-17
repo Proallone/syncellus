@@ -3,7 +3,7 @@ import { validate } from "@syncellus/middlewares/validator.middleware.js";
 import { EmployeeController } from "@syncellus/modules/employees/controller.js";
 import { EmployeePostSchema, EmployeePatchSchema, EmployeesGetSchema } from "@syncellus/modules/employees/schema.js";
 import { TimesheetPostSchema } from "@syncellus/modules/timesheets/schema.js";
-import { authMiddleware } from "@syncellus/middlewares/auth.middleware.js";
+// import { authMiddleware } from "@syncellus/middlewares/auth.middleware.js";
 import { requireRole } from "@syncellus/middlewares/role.middleware.js";
 import { EmployeeRepository } from "@syncellus/modules/employees/repository.js";
 import { DatabaseService } from "@syncellus/database/database.js";
@@ -13,6 +13,7 @@ import { UserCreatedHandler } from "./events.js";
 import { TimesheetService } from "../timesheets/service.js";
 import { TimesheetRepository } from "../timesheets/repository.js";
 import { LoggerService } from "@syncellus/core/logger.js";
+import passport from "passport";
 
 const router = Router();
 const db = DatabaseService.getInstance();
@@ -27,7 +28,8 @@ const controller = new EmployeeController(service, timesheetService);
 const logger = LoggerService.getInstance();
 new UserCreatedHandler(eventBus, repo, logger).register();
 
-router.use(authMiddleware);
+// router.use(authMiddleware);
+router.use(passport.authenticate("jwt", { session: false }));
 
 router.post("/", requireRole(["admin"]), validate(EmployeePostSchema), controller.createEmployee);
 router.get("/", validate(EmployeesGetSchema), controller.getEmployees);

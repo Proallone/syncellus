@@ -28,6 +28,7 @@ export class AuthController {
         }
     };
 
+    //TODO cleanup
     public signIn = [
         passport.authenticate("local", { session: false }),
         (req: Request, res: Response) => {

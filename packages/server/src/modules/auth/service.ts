@@ -36,4 +36,10 @@ export class AuthService {
 
         return { user };
     };
+
+    public findUserById = async (id: number) => {
+        const user = await this.repo.selectUserByIdFromDb(id);
+        if (!user) throw new HttpError(401, `User with id ${id} not found`);
+        return { user };
+    };
 }
