@@ -35,7 +35,7 @@ export type NewEmployee = Insertable<EmployeeTable>;
 export type EmployeeUpdate = Updateable<EmployeeTable>;
 
 export interface TimesheetTable {
-    id: Generated<number>;
+    id: Generated<string>;
     employee_id: string;
     createdAt: ColumnType<Date, string | undefined, never>;
     modifiedAt: ColumnType<Date, string | undefined, never>;

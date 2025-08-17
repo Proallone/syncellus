@@ -65,8 +65,13 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     await db.schema
         .createTable("timesheets")
-        .addColumn("id", "integer", (col) => col.primaryKey())
-        .addColumn("employee_id", "text", (col) => col.references("employees.id").notNull())
+        .addColumn("id", "text", (col) => col.primaryKey().check(sql`LENGTH(id) = 36`))
+        .addColumn("employee_id", "text", (col) =>
+            col
+                .references("employees.id")
+                .notNull()
+                .check(sql`LENGTH(employee_id) = 36`)
+        )
         .addColumn("createdAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .addColumn("modifiedAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .addColumn("date", "text", (col) => col.notNull())
