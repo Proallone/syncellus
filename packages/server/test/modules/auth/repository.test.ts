@@ -153,9 +153,10 @@ describe("Auth Repository", () => {
         expect(foundUser).toBeInstanceOf(Object);
         expect(foundUser).toEqual(
             expect.objectContaining({
-                id: insertedUser?.id,
+                public_id: insertedUser.public_id,
                 email: userCredentials.email,
-                role: "employee" //default value
+                role: "employee",
+                password: userCredentials.password
             })
         );
     });

@@ -104,7 +104,7 @@ describe("AuthService", () => {
 
     it("should return an accessToken for valid credentials", async () => {
         const credentials = { email: "user@example.com", password: "password123" };
-        const userFromDb = { id: "user-123", email: "user@example.com", password: "hashed-password", role: "user" };
+        const userFromDb = { public_id: "user-123", email: "user@example.com", password: "hashed-password", role: "user" };
 
         mockRepo.selectUserByEmailFromDb.mockResolvedValue(userFromDb);
         (compareHash as ReturnType<typeof vi.fn>).mockResolvedValue(true);
@@ -114,7 +114,7 @@ describe("AuthService", () => {
 
         expect(mockRepo.selectUserByEmailFromDb).toHaveBeenCalledWith("user@example.com");
         expect(compareHash).toHaveBeenCalledWith("password123", "hashed-password");
-        expect(Jwt.sign).toHaveBeenCalledWith({ id: userFromDb.id, role: userFromDb.role }, "test-secret", { expiresIn: "30m" });
+        expect(Jwt.sign).toHaveBeenCalledWith({ puiblic_id: userFromDb.public_id, role: userFromDb.role }, "test-secret", { expiresIn: "30m" });
         expect(result).toEqual({ accessToken: "mocked_access_token" });
     });
 

@@ -50,7 +50,16 @@ describe("Auth Controller", () => {
     describe("signUp", () => {
         it("should return a 201 status with the signedup user", async () => {
             // Arrange
-            const mockedUser: User = { id: 1, email: "test@mail.com", password: "password", createdAt: new Date(), modifiedAt: new Date(), role: "employee", is_active: 1 };
+            const mockedUser: User = {
+                id: "0198bd9b-b260-7096-a1fd-743dfd7a3b71",
+                public_id: "nixdm4t01d",
+                email: "test@mail.com",
+                password: "password",
+                createdAt: new Date(),
+                modifiedAt: new Date(),
+                role: "employee",
+                is_active: 1
+            };
             vi.mocked(mockService.insertNewUser).mockResolvedValue(mockedUser);
 
             // Act
@@ -88,11 +97,11 @@ describe("Auth Controller", () => {
     describe("signIn", () => {
         it("should return a 200 status with the signedin user", async () => {
             // Arrange
-            const mockedServiceResponse = { accessToken: "testJWTToken", message: "Successfull sign in!" };
+            const mockedServiceResponse = { user: { id: "testid1", role: "employee" } };
             vi.mocked(mockService.verifyUserCredentials).mockResolvedValue(mockedServiceResponse);
 
             // Act
-            await controller.signIn(mockReq as Request, mockRes as Response, mockNext);
+            controller.signIn(mockReq as Request, mockRes as Response);
 
             // Assert
             expect(mockService.verifyUserCredentials).toHaveBeenCalledTimes(1);
@@ -104,10 +113,13 @@ describe("Auth Controller", () => {
         mockReq.body = { email: "test@mail.com", password: "secret" };
 
         vi.mocked(mockService.verifyUserCredentials).mockResolvedValue({
-            accessToken: "fake-token"
+            user: {
+                id: "userid1",
+                role: "employee"
+            }
         });
 
-        await controller.signIn(mockReq as Request, mockRes as Response, mockNext);
+        controller.signIn(mockReq as Request, mockRes as Response);
 
         expect(mockService.verifyUserCredentials).toHaveBeenCalledWith(mockReq.body);
         expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -121,7 +133,7 @@ describe("Auth Controller", () => {
         const error = new Error("invalid creds");
         vi.mocked(mockService.verifyUserCredentials).mockRejectedValue(error);
 
-        await controller.signIn(mockReq as Request, mockRes as Response, mockNext);
+        controller.signIn(mockReq as Request, mockRes as Response);
 
         expect(mockNext).toHaveBeenCalledWith(error);
     });

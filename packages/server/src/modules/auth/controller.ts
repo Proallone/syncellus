@@ -2,7 +2,6 @@ import type { Request, Response, NextFunction } from "express";
 import type { AuthCredentials } from "@syncellus/types/index.js";
 import type { AuthService } from "@syncellus/modules/auth/service.js";
 import type { Logger } from "pino";
-import passport from "passport";
 import Jwt from "jsonwebtoken";
 import config from "@syncellus/configs/config.js";
 export class AuthController {
@@ -29,16 +28,13 @@ export class AuthController {
     };
 
     //TODO cleanup
-    public signIn = [
-        passport.authenticate("local", { session: false }),
-        (req: Request, res: Response) => {
-            const user = req.user as { id: string; role: string };
-            const accessToken = Jwt.sign(user, config.jwt_secret, { expiresIn: "30m" });
+    public signIn = (req: Request, res: Response) => {
+        const user = req.user as { public_id: string; role: string };
+        const accessToken = Jwt.sign(user, config.jwt_secret, { expiresIn: "30m" });
 
-            return res.status(200).json({
-                message: "Successful sign in!",
-                accessToken
-            });
-        }
-    ];
+        return res.status(200).json({
+            message: "Successful sign in!",
+            accessToken
+        });
+    };
 }

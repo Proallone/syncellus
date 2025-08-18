@@ -1,6 +1,6 @@
 import { eventBus } from "@syncellus/core/eventBus.js";
 import { HttpError } from "@syncellus/errors/HttpError.js";
-import type { AuthCredentials, Credentials, User } from "@syncellus/types/index.js";
+import type { AuthCredentials, Credentials, UserJWTPayload } from "@syncellus/types/index.js";
 import { compareHash, hashPassword } from "@syncellus/utils/crypto.js";
 import type { AuthRepository } from "@syncellus/modules/auth/repository.js";
 import { customAlphabet } from "nanoid";
@@ -38,7 +38,7 @@ export class AuthService {
 
         if (!match) throw new HttpError(401, "Invalid credentials");
 
-        const user: User = { id: userFromDb.public_id, role: userFromDb.role };
+        const user: UserJWTPayload = { public_id: userFromDb.public_id, role: userFromDb.role };
 
         return { user };
     };
@@ -51,7 +51,7 @@ export class AuthService {
 
     public findUserByPublicID = async (public_id: string) => {
         const user = await this.repo.selectUserByPublicIDfromDb(public_id);
-        if (!user) throw new HttpError(401, `User with id ${public_id} not found`);
+        if (!user) throw new HttpError(401, `User with public_id ${public_id} not found`);
         return { user };
     };
 }

@@ -16,13 +16,13 @@ export interface DbHealthResponse {
     sqlite_version: string;
 }
 
-export interface User {
-    id: string;
+export interface UserJWTPayload {
+    public_id: string;
     role: string;
 }
 
 export interface AuthRequest extends Request {
-    user?: User;
+    user?: UserJWTPayload;
 }
 
 export interface AppError extends Error {

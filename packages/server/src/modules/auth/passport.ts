@@ -37,7 +37,7 @@ export const configurePassport = (authService: AuthService, passportInstance = p
             },
             async (jwtPayload, done) => {
                 try {
-                    const { user } = await authService.findUserById(jwtPayload.id);
+                    const { user } = await authService.findUserByPublicID(jwtPayload.public_id);
                     logger.info(user);
                     done(null, user);
                 } catch (error) {

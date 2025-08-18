@@ -1,8 +1,8 @@
-import type { User } from "@syncellus/types/index.js";
+import type { UserJWTPayload } from "@syncellus/types/index.js";
 import { EventEmitter } from "events";
 
 export interface AppEvents {
-    "user.created": User;
+    "user.created": UserJWTPayload;
     "user.deleted": { id: string };
 }
 
