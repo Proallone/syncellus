@@ -20,7 +20,7 @@
         "format": "NODE_OPTIONS='--experimental-strip-types' prettier . --config ../../prettier.config.ts --write"
     },
     "dependencies": {
-        "bcrypt": "^6.0.0",
+        "argon2": "^0.44.0",
         "better-sqlite3": "^12.2.0",
         "cors": "^2.8.5",
         "express": "^5.1.0",
@@ -31,8 +31,10 @@
         "passport": "^0.7.0",
         "passport-jwt": "^4.0.1",
         "passport-local": "^1.0.0",
+        "nanoid": "^5.1.5",
         "pino": "^9.7.0",
         "pino-http": "^10.5.0",
+        "uuidv7": "^1.0.2",
         "zod": "^4.0.5"
     },
     "devDependencies": {

@@ -39,6 +39,7 @@ describe("Auth Repository", () => {
 
         const { error } = await migrator.migrateToLatest();
         if (error) {
+            console.error(error);
             throw new Error("Migration failed!");
         }
     });
@@ -52,6 +53,8 @@ describe("Auth Repository", () => {
         const db = DatabaseService.getInstance();
         const repo = new AuthRepository(db);
         const user = {
+            id: "0198bbd8-6935-7da6-b4a7-f9642482c3c7",
+            public_id: "0123456789",
             email: "test@mail.com",
             password: "testpasswd"
         };
@@ -71,11 +74,25 @@ describe("Auth Repository", () => {
         const db = DatabaseService.getInstance();
         const repo = new AuthRepository(db);
         const user = {
+            public_id: "0123456789",
             password: "passwd"
         };
 
         // Act & Assert
         await expect(repo.insertNewUserToDb(user)).rejects.toThrow(/NOT NULL constraint failed: users.email/);
+    });
+
+    it("should throw for user payload with missing public_id", async () => {
+        // Arrange
+        const db = DatabaseService.getInstance();
+        const repo = new AuthRepository(db);
+        const user = {
+            email: "test@mail.com",
+            password: "passwd"
+        };
+
+        // Act & Assert
+        await expect(repo.insertNewUserToDb(user)).rejects.toThrow(/NOT NULL constraint failed: users.public_id/);
     });
 
     it("should throw for user payload with incorrect password property", async () => {
@@ -109,6 +126,7 @@ describe("Auth Repository", () => {
         const db = DatabaseService.getInstance();
         const repo = new AuthRepository(db);
         const user = {
+            public_id: "0123456789",
             email: "test@mail.com"
         };
 
@@ -121,6 +139,8 @@ describe("Auth Repository", () => {
         const db = DatabaseService.getInstance();
         const repo = new AuthRepository(db);
         const userCredentials = {
+            id: "0198bbd8-6935-7743-8d79-51eee3fe7d92",
+            public_id: "9876543210",
             email: "findme@mail.com",
             password: "securepassword"
         };

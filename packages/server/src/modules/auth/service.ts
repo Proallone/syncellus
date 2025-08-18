@@ -3,6 +3,8 @@ import { HttpError } from "@syncellus/errors/HttpError.js";
 import type { AuthCredentials, Credentials, User } from "@syncellus/types/index.js";
 import { compareHash, hashPassword } from "@syncellus/utils/crypto.js";
 import type { AuthRepository } from "@syncellus/modules/auth/repository.js";
+import { customAlphabet } from "nanoid";
+import { uuidv7 } from "uuidv7";
 
 export class AuthService {
     constructor(private readonly repo: AuthRepository) {}
@@ -11,10 +13,14 @@ export class AuthService {
         const exists = await this.repo.selectUserByEmailFromDb(user.email);
 
         if (exists) return undefined;
+        const nanoid = customAlphabet("1234567890abcdef", 10); //TODO move to helper class?
+        const passwordHash = await hashPassword(user.password);
 
         const newUser = await this.repo.insertNewUserToDb({
+            id: uuidv7(),
+            public_id: nanoid(),
             ...user,
-            password: await hashPassword(user.password)
+            password: passwordHash //? password after spread operator so we overwrite original value
         });
 
         eventBus.emit("user.created", newUser); //TODO this might not be the best idea to use event for this in case of failure it would not insert employee for a user...

@@ -24,7 +24,7 @@ export class TimesheetService {
         return await this.repo.deleteTimesheetFromDb(id);
     };
 
-    public selectAllTimesheetsByEmployeeId = async (id: number) => {
+    public selectAllTimesheetsByEmployeeId = async (id: string) => {
         return await this.repo.selectTimesheetsByEmployeeIdFromDb(id);
     };
 }
