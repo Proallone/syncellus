@@ -16,12 +16,13 @@ export class AuthService {
 
         if (exists) return undefined;
         const nanoid = customAlphabet("1234567890abcdef", 10); //TODO move to helper class?
+        const passwordHash = await hashPassword(user.password);
 
         const newUser = await this.repo.insertNewUserToDb({
             id: uuidv7(),
             public_id: nanoid(),
-            password: await hashPassword(user.password),
-            ...user
+            ...user,
+            password: passwordHash //? password after spread operator so we overwrite original value
         });
 
         eventBus.emit("user.created", newUser); //TODO this might not be the best idea to use event for this in case of failure it would not insert employee for a user...

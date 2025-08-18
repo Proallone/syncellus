@@ -20,7 +20,7 @@
         "format": "NODE_OPTIONS='--experimental-strip-types' prettier . --config ../../prettier.config.ts --write"
     },
     "dependencies": {
-        "bcrypt": "^6.0.0",
+        "argon2": "^0.44.0",
         "better-sqlite3": "^12.2.0",
         "cors": "^2.8.5",
         "express": "^5.1.0",
