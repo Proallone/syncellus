@@ -9,10 +9,14 @@ export class AuthRepository {
     };
 
     public selectUserByEmailFromDb = async (email: string) => {
-        return await this.db.selectFrom("users").select(["id", "email", "role", "password"]).where("email", "=", email).executeTakeFirst();
+        return await this.db.selectFrom("users").select(["public_id", "email", "role", "password"]).where("email", "=", email).executeTakeFirst();
     };
 
-    public selectUserByIdFromDb = async (id: number) => {
+    public selectUserByIdFromDb = async (id: string) => {
         return await this.db.selectFrom("users").select(["id", "role"]).where("id", "=", id).executeTakeFirst();
+    };
+
+    public selectUserByPublicIDfromDb = async (public_id: string) => {
+        return await this.db.selectFrom("users").select(["public_id", "role"]).where("public_id", "=", public_id).executeTakeFirst();
     };
 }

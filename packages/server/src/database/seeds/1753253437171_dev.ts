@@ -6,21 +6,21 @@ const users: NewUser[] = [
         id: "0189f7ea-ae2c-7809-8aeb-b819cf5e9e7f",
         public_id: "84ghpuj191",
         email: "bartek@test.com",
-        password: "$argon2id$v=19$m=65536,t=3,p=4$XWB6gDpfPlms3afnlqO9sA$01bQzR/99YFMocGHU+jEs8Vi6rAjb3u7TVJmuF3iDN0",
+        password: "$argon2id$v=19$m=65536,t=3,p=4$hNK3M9yxMNNz/i+4SbHHKA$ac3903HBtHQ8nUD2ZAWdzUEfkioUpYDgEDlwItDrSG8",
         role: "employee"
     },
     {
         id: "0189f7ea-ae2f-72b9-9be8-9c3c5a60214f",
         public_id: "vigdb4t07d",
         email: "bartek@admin.com",
-        password: "$argon2id$v=19$m=65536,t=3,p=4$XWB6gDpfPlms3afnlqO9sA$01bQzR/99YFMocGHU+jEs8Vi6rAjb3u7TVJmuF3iDN0",
+        password: "$argon2id$v=19$m=65536,t=3,p=4$hNK3M9yxMNNz/i+4SbHHKA$ac3903HBtHQ8nUD2ZAWdzUEfkioUpYDgEDlwItDrSG8",
         role: "admin"
     },
     {
         id: "0189f7ea-ae2f-72b9-9be8-9c3d224082ef",
         public_id: "pffza5gbco",
         email: "bartek@manager.com",
-        password: "$argon2id$v=19$m=65536,t=3,p=4$XWB6gDpfPlms3afnlqO9sA$01bQzR/99YFMocGHU+jEs8Vi6rAjb3u7TVJmuF3iDN0",
+        password: "$argon2id$v=19$m=65536,t=3,p=4$hNK3M9yxMNNz/i+4SbHHKA$ac3903HBtHQ8nUD2ZAWdzUEfkioUpYDgEDlwItDrSG8",
         role: "manager"
     }
 ];
