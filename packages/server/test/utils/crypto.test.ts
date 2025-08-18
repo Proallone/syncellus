@@ -13,7 +13,7 @@ describe("Crypto utils (Argon2)", () => {
         // Argon2 hashes have a specific structure, typically starting with $argon2id$
         // followed by version, cost parameters (m, t, p), salt, and the hash itself.
         // Example: $argon2id$v=19$m=65536,t=3,p=4$c2FsdHNvZnNhbHQ$somehashvalue
-        const argon2Regex = /^\$argon2(i|d|id)\$v=\d+\$m=\d+,t=\d+,p=\d+\$[./A-Za-z0-9]+\$[./A-Za-z0-9]+$/;
+        const argon2Regex = /^\$argon2(?:i|d|id)\$v=\d+\$m=\d+,t=\d+,p=\d+\$[A-Za-z0-9+/]+={0,2}\$[A-Za-z0-9+/]+={0,2}$/;
         expect(hash).toMatch(argon2Regex);
     });
 
@@ -42,7 +42,7 @@ describe("Crypto utils (Argon2)", () => {
             // Assert
             expect(passwordHash.length).toBeGreaterThan(0);
             // Optionally, you can re-check the format here too for robustness
-            const argon2Regex = /^\$argon2(i|d|id)\$v=\d+\$m=\d+,t=\d+,p=\d+\$[./A-Za-z0-9]+\$[./A-Za-z0-9]+$/;
+            const argon2Regex = /^\$argon2(?:i|d|id)\$v=\d+\$m=\d+,t=\d+,p=\d+\$[A-Za-z0-9+/]+={0,2}\$[A-Za-z0-9+/]+={0,2}$/;
             expect(passwordHash).toMatch(argon2Regex);
         });
 

@@ -3,6 +3,8 @@ import { AuthService } from "@syncellus/modules/auth/service.js";
 import { eventBus } from "@syncellus/core/eventBus.js";
 import { HttpError } from "@syncellus/errors/HttpError.js";
 import Jwt from "jsonwebtoken";
+import { customAlphabet } from "nanoid";
+import { uuidv7 } from "uuidv7";
 
 vi.mock("@syncellus/configs/config.js", () => ({
     default: { jwt_secret: "test-secret" }
@@ -15,6 +17,12 @@ vi.mock("@syncellus/core/eventBus.js", () => ({
 vi.mock("@syncellus/utils/crypto.js", () => ({
     hashPassword: vi.fn(async (pwd: string) => `hashed-${pwd}`),
     compareHash: vi.fn()
+}));
+
+vi.mock("uuidv7", () => ({ uuidv7: vi.fn() }));
+
+vi.mock("nanoid", () => ({
+    customAlphabet: vi.fn()
 }));
 
 vi.mock("@syncellus/errors/HttpError.js", () => ({
@@ -53,18 +61,20 @@ describe("AuthService", () => {
     it("should insert a new user if email does not exist", async () => {
         const newUser = { email: "test@example.com", password: "secret" };
         mockRepo.selectUserByEmailFromDb.mockResolvedValue(null);
-        mockRepo.insertNewUserToDb.mockResolvedValue({ id: "0198b9dc-7515-71fc-bf31-23fa1057ffd1", public_id: "84ghpuj191", ...newUser, password: "hashed-secret" });
+        mockRepo.insertNewUserToDb.mockResolvedValue({ ...newUser, password: "hashed-secret" });
 
         const result = await service.insertNewUser(newUser);
 
         expect(mockRepo.selectUserByEmailFromDb).toHaveBeenCalledWith("test@example.com");
         expect(hashPassword).toHaveBeenCalledWith("secret");
         expect(mockRepo.insertNewUserToDb).toHaveBeenCalledWith({
+            id: "0198b9dc-7515-71fc-bf31-23fa1057ffd1",
+            public_id: "84ghpuj191",
             ...newUser,
             password: "hashed-secret"
         });
-        expect(eventBus.emit).toHaveBeenCalledWith("user.created", { id: "0198b9dc-7515-71fc-bf31-23fa1057ffd1", public_id: "84ghpuj191", ...newUser, password: "hashed-secret" });
-        expect(result).toEqual({ id: "0198b9dc-7515-71fc-bf31-23fa1057ffd1", public_id: "84ghpuj191", ...newUser, password: "hashed-secret" });
+        expect(eventBus.emit).toHaveBeenCalledWith("user.created", { ...newUser, password: "hashed-secret" });
+        expect(result).toEqual({ ...newUser, password: "hashed-secret" });
     });
 
     it("should return an accessToken for valid credentials", async () => {

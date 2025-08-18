@@ -6,13 +6,7 @@ import * as argon2 from "argon2";
  * @returns A Promise that resolves to the hashed password string.
  */
 const hashPassword = async (password: string): Promise<string> => {
-    try {
-        const h = await argon2.hash(password);
-        console.info(h);
-        return h;
-    } catch (err) {
-        console.error(err);
-    }
+    return await argon2.hash(password);
 };
 
 /**
