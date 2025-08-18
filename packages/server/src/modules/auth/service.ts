@@ -1,10 +1,8 @@
-import Jwt from "jsonwebtoken";
 import { eventBus } from "@syncellus/core/eventBus.js";
 import { HttpError } from "@syncellus/errors/HttpError.js";
 import type { AuthCredentials, Credentials, User } from "@syncellus/types/index.js";
 import { compareHash, hashPassword } from "@syncellus/utils/crypto.js";
 import type { AuthRepository } from "@syncellus/modules/auth/repository.js";
-import config from "@syncellus/configs/config.js";
 import { customAlphabet } from "nanoid";
 import { uuidv7 } from "uuidv7";
 
@@ -40,10 +38,20 @@ export class AuthService {
 
         if (!match) throw new HttpError(401, "Invalid credentials");
 
-        const user: User = { id: userFromDb.id, role: userFromDb.role };
-        const accessToken = Jwt.sign(user, config.jwt_secret, { expiresIn: "30m" });
-        // TODO issue a refresh token?
+        const user: User = { id: userFromDb.public_id, role: userFromDb.role };
 
-        return { accessToken };
+        return { user };
+    };
+
+    public findUserById = async (id: string) => {
+        const user = await this.repo.selectUserByIdFromDb(id);
+        if (!user) throw new HttpError(401, `User with id ${id} not found`);
+        return { user };
+    };
+
+    public findUserByPublicID = async (public_id: string) => {
+        const user = await this.repo.selectUserByPublicIDfromDb(public_id);
+        if (!user) throw new HttpError(401, `User with id ${public_id} not found`);
+        return { user };
     };
 }
