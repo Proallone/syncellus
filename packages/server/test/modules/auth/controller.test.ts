@@ -70,34 +70,33 @@ describe("Auth Controller", () => {
             expect(mockRes.status).toHaveBeenCalledWith(201);
             expect(mockRes.json).toHaveBeenCalledWith(mockedUser);
         });
-    });
 
-    it("should return 409 if the user already exists", async () => {
-        mockReq.body = { email: "test@mail.com", password: "secret" };
+        it("should return 409 if the user already exists", async () => {
+            mockReq.body = { email: "test@mail.com", password: "secret" };
 
-        vi.mocked(mockService.insertNewUser).mockResolvedValue(undefined);
+            vi.mocked(mockService.insertNewUser).mockResolvedValue(undefined);
 
-        await controller.signUp(mockReq as Request, mockRes as Response, mockNext);
+            await controller.signUp(mockReq as Request, mockRes as Response, mockNext);
 
-        expect(mockRes.status).toHaveBeenCalledWith(409);
-        expect(mockRes.send).toHaveBeenCalledWith({
-            message: "User with email test@mail.com already exists!"
+            expect(mockRes.status).toHaveBeenCalledWith(409);
+            expect(mockRes.send).toHaveBeenCalledWith({
+                message: "User with email test@mail.com already exists!"
+            });
+        });
+
+        it("should call next(error) if insertNewUser throws", async () => {
+            const error = new Error("db error");
+            vi.mocked(mockService.insertNewUser).mockRejectedValue(error);
+
+            await controller.signUp(mockReq as Request, mockRes as Response, mockNext);
+
+            expect(mockNext).toHaveBeenCalledWith(error);
         });
     });
-
-    it("should call next(error) if insertNewUser throws", async () => {
-        const error = new Error("db error");
-        vi.mocked(mockService.insertNewUser).mockRejectedValue(error);
-
-        await controller.signUp(mockReq as Request, mockRes as Response, mockNext);
-
-        expect(mockNext).toHaveBeenCalledWith(error);
-    });
-
     describe("signIn", () => {
         it("should return a 200 status with the signedin user", async () => {
             // Arrange
-            const mockedServiceResponse = { user: { id: "testid1", role: "employee" } };
+            const mockedServiceResponse = { user: { public_id: "testid1", role: "employee" } };
             vi.mocked(mockService.verifyUserCredentials).mockResolvedValue(mockedServiceResponse);
 
             // Act
@@ -108,33 +107,34 @@ describe("Auth Controller", () => {
             expect(mockRes.status).toHaveBeenCalledWith(200);
             expect(mockRes.json).toHaveBeenCalledWith(mockedServiceResponse);
         });
-    });
-    it("should return 200 and a token when credentials are valid", async () => {
-        mockReq.body = { email: "test@mail.com", password: "secret" };
 
-        vi.mocked(mockService.verifyUserCredentials).mockResolvedValue({
-            user: {
-                id: "userid1",
-                role: "employee"
-            }
+        it("should return 200 and a token when credentials are valid", async () => {
+            mockReq.body = { email: "test@mail.com", password: "secret" };
+
+            vi.mocked(mockService.verifyUserCredentials).mockResolvedValue({
+                user: {
+                    public_id: "userid1",
+                    role: "employee"
+                }
+            });
+
+            controller.signIn(mockReq as Request, mockRes as Response);
+
+            expect(mockService.verifyUserCredentials).toHaveBeenCalledWith(mockReq.body);
+            expect(mockRes.status).toHaveBeenCalledWith(200);
+            expect(mockRes.json).toHaveBeenCalledWith({
+                message: "Successfull sign in!",
+                accessToken: "fake-token"
+            });
         });
 
-        controller.signIn(mockReq as Request, mockRes as Response);
+        it("should call next(error) if verifyUserCredentials throws", async () => {
+            const error = new Error("invalid creds");
+            vi.mocked(mockService.verifyUserCredentials).mockRejectedValue(error);
 
-        expect(mockService.verifyUserCredentials).toHaveBeenCalledWith(mockReq.body);
-        expect(mockRes.status).toHaveBeenCalledWith(200);
-        expect(mockRes.json).toHaveBeenCalledWith({
-            message: "Successfull sign in!",
-            accessToken: "fake-token"
+            controller.signIn(mockReq as Request, mockRes as Response);
+
+            expect(mockNext).toHaveBeenCalledWith(error);
         });
-    });
-
-    it("should call next(error) if verifyUserCredentials throws", async () => {
-        const error = new Error("invalid creds");
-        vi.mocked(mockService.verifyUserCredentials).mockRejectedValue(error);
-
-        controller.signIn(mockReq as Request, mockRes as Response);
-
-        expect(mockNext).toHaveBeenCalledWith(error);
     });
 });

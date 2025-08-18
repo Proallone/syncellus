@@ -2,6 +2,14 @@ import { describe, it, expect, vi } from "vitest";
 import { Router } from "express";
 
 // Mock dependencies
+const passportAuthenticateMiddleware = vi.fn((_req, _res, next) => next());
+
+vi.mock("passport", () => ({
+    default: {
+        authenticate: vi.fn(() => passportAuthenticateMiddleware)
+    }
+}));
+
 const validateMiddleware = vi.fn((_req, _res, next) => next());
 vi.mock("@syncellus/middlewares/validator.middleware.js", () => ({
     validate: vi.fn().mockImplementation(() => validateMiddleware)
@@ -54,7 +62,7 @@ describe("Auth Router", () => {
             {
                 path: "/signin",
                 method: "post",
-                handlers: [validateMiddleware, signInHandler]
+                handlers: [validateMiddleware, passportAuthenticateMiddleware, signInHandler]
             }
         ]);
     });
