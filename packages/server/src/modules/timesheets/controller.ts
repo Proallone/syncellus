@@ -27,7 +27,7 @@ export class TimesheetController {
     public getTimesheetById = async (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
         try {
-            const timesheet = await this.service.selectOneTimesheetById(Number(id));
+            const timesheet = await this.service.selectOneTimesheetById(id);
             if (!timesheet) {
                 return res.status(404).send({
                     message: `Timesheet with ID ${id} not found!`
@@ -62,7 +62,7 @@ export class TimesheetController {
     public deleteTimesheet = async (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
         try {
-            const deletion = await this.service.deleteTimesheetById(Number(id));
+            const deletion = await this.service.deleteTimesheetById(id);
             if (!deletion) {
                 return res.status(404).send({
                     message: `Timesheet with ID ${id} not found!`

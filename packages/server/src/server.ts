@@ -5,8 +5,8 @@ import { LoggerService } from "@syncellus/core/logger.js";
 
 const logger = LoggerService.getInstance();
 
-const server = app.listen(config.port, () => {
-    logger.info(`Server running on port ${config.port} in ${config.nodeEnv} environment`);
+const server = app.listen(config.PORT, () => {
+    logger.info(`Server running on port ${config.PORT} in ${config.NODE_ENV} environment`);
 });
 
 const shutdown = () => {

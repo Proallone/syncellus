@@ -1,6 +1,7 @@
 import type { Database as DB } from "@syncellus/types/database.js";
 import { Kysely, SqliteDialect } from "kysely";
 import Database from "better-sqlite3-multiple-ciphers";
+import config from "@syncellus/configs/config.js";
 
 export class DatabaseService {
     private static instance: Kysely<DB> | null = null;
@@ -9,21 +10,20 @@ export class DatabaseService {
 
     public static getInstance(): Kysely<DB> {
         if (!DatabaseService.instance) {
-            const encryptionKey = process.env.DATABASE_KEY;
+            const encryptionKey = config.DATABASE_KEY;
 
-            if (!encryptionKey) {
+            const isDev = ["dev", "development", "test"].includes(config.NODE_ENV);
+            if (!encryptionKey && !isDev) {
                 throw new Error("DATABASE_KEY environment variable is not set.");
             }
 
             const dbInstance = new Database("syncellus.sqlite");
-
-            try {
-                dbInstance.pragma(`key='${encryptionKey}'`);
-            } catch (err) {
-                dbInstance.close();
-                console.error("Failed to open encrypted database. The key may be incorrect.");
-                throw err;
+            if (!isDev) {
+                //encrypt database only if not in dev
+                dbInstance.pragma(`key='${encryptionKey}'`); //? this has to be executed first - otherwise throws
             }
+
+            dbInstance.pragma(`journal_mode = WAL`);
 
             const dialect = new SqliteDialect({
                 database: dbInstance

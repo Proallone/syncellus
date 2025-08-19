@@ -4,9 +4,10 @@ import type { employeeGetQuery } from "@syncellus/modules/employees/schema.js";
 import type { Request } from "express";
 
 export interface Config {
-    port: number;
-    nodeEnv: string;
-    jwt_secret: string;
+    PORT: number;
+    NODE_ENV: string;
+    JWT_TOKEN_SECRET: string;
+    DATABASE_KEY: string;
 }
 
 export type AuthCredentials = z.infer<typeof AuthBasePayload>;

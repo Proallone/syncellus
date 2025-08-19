@@ -33,7 +33,7 @@ export const configurePassport = (authService: AuthService, passportInstance = p
         new JwtStrategy(
             {
                 jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-                secretOrKey: config.jwt_secret
+                secretOrKey: config.JWT_TOKEN_SECRET
             },
             async (jwtPayload, done) => {
                 try {

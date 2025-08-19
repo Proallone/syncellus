@@ -7,7 +7,7 @@ const logger = LoggerService.getInstance();
 
 const requireRole = (roles: string[]) => {
     return (req: AuthRequest, res: Response, next: NextFunction) => {
-        const isDevMode = ["dev", "development", "test"].includes(config.nodeEnv); //TODO this is not a good idea but for the time beeing...
+        const isDevMode = ["dev", "development", "test"].includes(config.NODE_ENV); //TODO this is not a good idea but for the time beeing...
         if (isDevMode) return next();
 
         const { user } = req;

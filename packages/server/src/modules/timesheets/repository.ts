@@ -12,7 +12,7 @@ export class TimesheetRepository {
         return await this.db.selectFrom("timesheets").selectAll().execute();
     };
 
-    public selectTimesheetByIdFromDb = async (id: number) => {
+    public selectTimesheetByIdFromDb = async (id: string) => {
         return await this.db.selectFrom("timesheets").selectAll().where("id", "=", id).executeTakeFirst();
     };
 
@@ -21,10 +21,10 @@ export class TimesheetRepository {
     };
 
     public updateTimesheetByIdInDb = async (timesheet: TimesheetUpdate) => {
-        return await this.db.updateTable("timesheets").set(timesheet).where("id", "=", Number(timesheet.id)).returningAll().executeTakeFirst();
+        return await this.db.updateTable("timesheets").set(timesheet).where("id", "=", timesheet.id).returningAll().executeTakeFirst();
     };
 
-    public deleteTimesheetFromDb = async (id: number) => {
+    public deleteTimesheetFromDb = async (id: string) => {
         return await this.db.deleteFrom("timesheets").where("id", "=", id).executeTakeFirstOrThrow();
     };
 }

@@ -30,7 +30,7 @@ export class AuthController {
     //TODO cleanup
     public signIn = (req: Request, res: Response) => {
         const user = req.user as { public_id: string; role: string };
-        const accessToken = Jwt.sign(user, config.jwt_secret, { expiresIn: "30m" });
+        const accessToken = Jwt.sign(user, config.JWT_TOKEN_SECRET, { expiresIn: "30m" });
 
         return res.status(200).json({
             message: "Successful sign in!",

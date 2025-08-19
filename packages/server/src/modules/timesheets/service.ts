@@ -12,7 +12,7 @@ export class TimesheetService {
         return await this.repo.selectAllTimesheetsFromDb();
     };
 
-    public selectOneTimesheetById = async (id: number) => {
+    public selectOneTimesheetById = async (id: string) => {
         return await this.repo.selectTimesheetByIdFromDb(id);
     };
 
@@ -20,7 +20,7 @@ export class TimesheetService {
         return await this.repo.updateTimesheetByIdInDb(timeshet);
     };
 
-    public deleteTimesheetById = async (id: number) => {
+    public deleteTimesheetById = async (id: string) => {
         return await this.repo.deleteTimesheetFromDb(id);
     };
 
