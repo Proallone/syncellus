@@ -1060,13 +1060,6 @@
   dependencies:
     "@types/node" "*"
 
-"@types/better-sqlite3@^7.6.13":
-  version "7.6.13"
-  resolved "https://registry.yarnpkg.com/@types/better-sqlite3/-/better-sqlite3-7.6.13.tgz#a72387f00d2f53cab699e63f2e2c05453cf953f0"
-  integrity sha512-NMv9ASNARoKksWtsq/SHakpYAYnhBrQgGD8zkLYk/jaK8jUGn08CfEdTRgYhMypUQAfzSP8W6gNLe0q19/t4VA==
-  dependencies:
-    "@types/node" "*"
-
 "@types/body-parser@*":
   version "1.19.6"
   resolved "https://registry.yarnpkg.com/@types/body-parser/-/body-parser-1.19.6.tgz#1859bebb8fd7dac9918a45d54c1971ab8b5af474"
@@ -1571,14 +1564,6 @@ better-sqlite3-multiple-ciphers@^12.2.0:
   version "12.2.0"
   resolved "https://registry.yarnpkg.com/better-sqlite3-multiple-ciphers/-/better-sqlite3-multiple-ciphers-12.2.0.tgz#6c5a75b60e08487311001707c800e760488ce741"
   integrity sha512-RWNb++urDg03mRKoHTLWOgZijiQmDnwdvm2SavauOOniJUBPBh1HMisJ9NxDF0Fqf0ml5iGunXhWu9fM7ALSyA==
-  dependencies:
-    bindings "^1.5.0"
-    prebuild-install "^7.1.1"
-
-better-sqlite3@^12.2.0:
-  version "12.2.0"
-  resolved "https://registry.yarnpkg.com/better-sqlite3/-/better-sqlite3-12.2.0.tgz#de7c3466074f2d1a5d260f510647e822e42684d2"
-  integrity sha512-eGbYq2CT+tos1fBwLQ/tkBt9J5M3JEHjku4hbvQUePCckkvVf14xWj+1m7dGoK81M/fOjFT7yM9UMeKT/+vFLQ==
   dependencies:
     bindings "^1.5.0"
     prebuild-install "^7.1.1"
