@@ -1,8 +1,7 @@
 import type { Database as DB } from "@syncellus/types/database.js";
 import { Kysely, SqliteDialect } from "kysely";
 import Database from "better-sqlite3-multiple-ciphers";
-import config from "@syncellus/configs/config.js";
-
+// import config from "@syncellus/configs/config.js";
 export class DatabaseService {
     private static instance: Kysely<DB> | null = null;
 
@@ -10,9 +9,9 @@ export class DatabaseService {
 
     public static getInstance(): Kysely<DB> {
         if (!DatabaseService.instance) {
-            const encryptionKey = config.DATABASE_KEY;
+            const encryptionKey = process.env.DATABASE_KEY; //TODO fix this to use config
 
-            const isDev = ["dev", "development", "test"].includes(config.NODE_ENV);
+            const isDev = ["dev", "development", "test"].includes(process.env.NODE_ENV); //TODO fix this to use config
             if (!encryptionKey && !isDev) {
                 throw new Error("DATABASE_KEY environment variable is not set.");
             }

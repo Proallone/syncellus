@@ -1,13 +1,30 @@
 import type { Request, Response } from "express";
 import type { AppError } from "@syncellus/types/index.js";
 import { LoggerService } from "@syncellus/core/logger.js";
+import { HttpError } from "@syncellus/errors/Errors.js";
 
 const logger = LoggerService.getInstance();
 
 const errorHandler = (err: AppError, _req: Request, res: Response) => {
-    logger.warn(err);
-    return res.status(err.status || 500).json({
-        message: err.message || "Internal Server Error"
+    logger.error(err);
+
+    if (err instanceof HttpError) {
+        return res.status(err.status).json({
+            error: {
+                message: err.message
+            }
+        });
+    }
+
+    const statusCode = 500;
+    const message = "An unexpected error occurred.";
+
+    return res.status(statusCode).json({
+        error: {
+            message,
+            // Only send the stack trace in development
+            details: process.env.NODE_ENV === "development" ? err.stack : undefined
+        }
     });
 };
 

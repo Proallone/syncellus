@@ -1,5 +1,5 @@
 import { eventBus } from "@syncellus/core/eventBus.js";
-import { HttpError } from "@syncellus/errors/HttpError.js";
+import { UnauthorizedError } from "@syncellus/errors/Errors.js";
 import type { AuthCredentials, Credentials, UserJWTPayload } from "@syncellus/types/index.js";
 import { compareHash, hashPassword } from "@syncellus/utils/crypto.js";
 import type { AuthRepository } from "@syncellus/modules/auth/repository.js";
@@ -32,11 +32,11 @@ export class AuthService {
         const { email, password } = credentials;
         const userFromDb = await this.repo.selectUserByEmailFromDb(email);
 
-        if (!userFromDb) throw new HttpError(401, "Invalid credentials");
+        if (!userFromDb) throw new UnauthorizedError("DASDAS");
 
         const match = await compareHash(password, userFromDb.password);
 
-        if (!match) throw new HttpError(401, "Invalid credentials");
+        if (!match) throw new UnauthorizedError("DSDA");
 
         const user: UserJWTPayload = { public_id: userFromDb.public_id, role: userFromDb.role };
 
@@ -45,13 +45,13 @@ export class AuthService {
 
     public findUserById = async (id: string) => {
         const user = await this.repo.selectUserByIdFromDb(id);
-        if (!user) throw new HttpError(401, `User with id ${id} not found`);
+        if (!user) throw new UnauthorizedError(`User with id ${id} not found`);
         return { user };
     };
 
     public findUserByPublicID = async (public_id: string) => {
         const user = await this.repo.selectUserByPublicIDfromDb(public_id);
-        if (!user) throw new HttpError(401, `User with public_id ${public_id} not found`);
+        if (!user) throw new UnauthorizedError(`User with public_id ${public_id} not found`);
         return { user };
     };
 }
