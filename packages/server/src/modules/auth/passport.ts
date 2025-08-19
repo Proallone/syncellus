@@ -4,10 +4,12 @@ import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
 import type { AuthService } from "@syncellus/modules/auth/service.js";
 import type { User } from "@syncellus/types/database.js";
 import { LoggerService } from "@syncellus/core/logger.js";
-import config from "@syncellus/configs/config.js";
+import { AppConfig } from "@syncellus/configs/config.js";
 
 //TODO cleanup
 const logger = LoggerService.getInstance();
+const config = AppConfig.getInstance();
+console.error(config);
 
 export const configurePassport = (authService: AuthService, passportInstance = passport) => {
     passportInstance.use(

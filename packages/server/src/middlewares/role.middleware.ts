@@ -1,8 +1,9 @@
 import type { Response, NextFunction } from "express";
 import type { AuthRequest } from "@syncellus/types/index.js";
 import { LoggerService } from "@syncellus/core/logger.js";
-import config from "@syncellus/configs/config.js";
+import { AppConfig } from "@syncellus/configs/config.js";
 
+const config = AppConfig.getInstance();
 const logger = LoggerService.getInstance();
 
 const requireRole = (roles: string[]) => {

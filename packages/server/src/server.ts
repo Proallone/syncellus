@@ -1,7 +1,9 @@
 import app from "@syncellus/app.js";
-import config from "@syncellus/configs/config.js";
 import { DatabaseService } from "@syncellus/database/database.js";
 import { LoggerService } from "@syncellus/core/logger.js";
+import { AppConfig } from "@syncellus/configs/config.js";
+
+const config = AppConfig.getInstance();
 
 const logger = LoggerService.getInstance();
 

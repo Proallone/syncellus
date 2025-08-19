@@ -3,7 +3,9 @@ import type { AuthCredentials } from "@syncellus/types/index.js";
 import type { AuthService } from "@syncellus/modules/auth/service.js";
 import type { Logger } from "pino";
 import Jwt from "jsonwebtoken";
-import config from "@syncellus/configs/config.js";
+import { AppConfig } from "@syncellus/configs/config.js";
+
+const config = AppConfig.getInstance();
 export class AuthController {
     constructor(
         private readonly service: AuthService,
