@@ -12,8 +12,8 @@ export class EmployeeRepository {
     public selectAllEmployeesFromDb = async (query: GetEmployeeQuery) => {
         let q = this.db
             .selectFrom("employees")
-            .leftJoin("users", "employees.user_id", "users.id")
-            .select(["employees.id", "name", "surname", "email", "is_active", "role", "users.createdAt", "users.modifiedAt"]);
+            .leftJoin("auth_users", "employees.user_id", "auth_users.id")
+            .select(["employees.id", "name", "surname", "email", "is_active", "role", "auth_users.createdAt", "auth_users.modifiedAt"]);
 
         if (query.is_active) q = q.where("is_active", "=", query.is_active === "true" ? 1 : 0); //? no boolean in sqlite...
 
@@ -25,9 +25,9 @@ export class EmployeeRepository {
     public selectOneEmployeeByIdFromDb = async (id: string) => {
         return await this.db
             .selectFrom("employees")
-            .leftJoin("users", "employees.user_id", "users.id")
-            .select(["employees.id", "name", "surname", "email", "is_active", "role", "users.createdAt", "users.modifiedAt"])
-            .where("users.id", "=", id)
+            .leftJoin("auth_users", "employees.user_id", "auth_users.id")
+            .select(["employees.id", "name", "surname", "email", "is_active", "role", "auth_users.createdAt", "auth_users.modifiedAt"])
+            .where("auth_users.id", "=", id)
             .executeTakeFirst();
     };
 

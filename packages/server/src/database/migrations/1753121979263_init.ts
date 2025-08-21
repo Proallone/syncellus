@@ -9,7 +9,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     await sql`PRAGMA journal_mode=WAL;`.execute(db);
 
     await db.schema
-        .createTable("users")
+        .createTable("auth_users")
         .addColumn("id", "text", (col) => col.primaryKey().check(sql`LENGTH(id) = 36`))
         .addColumn("public_id", "text", (col) =>
             col
@@ -30,12 +30,12 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("role", "text", (col) => col.check(sql`role in ('admin', 'manager', 'employee')`).defaultTo("employee"))
         .execute();
 
-    await db.schema.createIndex("user_email").on("users").column("email").execute();
+    await db.schema.createIndex("user_email").on("auth_users").column("email").execute();
 
     await sql`
-		CREATE TRIGGER IF NOT EXISTS update_users_modifiedAt BEFORE
-		UPDATE ON users FOR EACH ROW BEGIN
-			UPDATE users
+		CREATE TRIGGER IF NOT EXISTS update_auth_users_modifiedAt BEFORE
+		UPDATE ON auth_users FOR EACH ROW BEGIN
+			UPDATE auth_users
 			SET
 			modifiedAT = datetime ('now')
 			WHERE
@@ -45,12 +45,12 @@ export async function up(db: Kysely<any>): Promise<void> {
     await db.schema
         .createTable("employees")
         .addColumn("id", "text", (col) => col.primaryKey().check(sql`LENGTH(id) = 36`))
-        .addColumn("user_id", "text", (col) => col.unique().notNull().references("users.id"))
+        .addColumn("user_id", "text", (col) => col.unique().notNull().references("auth_users.id"))
         .addColumn("name", "text", (col) => col.check(sql`LENGTH(name) >= 3 AND LENGTH(name) <= 255`))
         .addColumn("surname", "text", (col) => col.check(sql`LENGTH(surname) >= 3 AND LENGTH(surname) <= 255`))
         .addColumn("createdAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .addColumn("modifiedAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
-        .addForeignKeyConstraint("employees_users_id_fk", ["user_id"], "users", ["id"], (cb) => cb.onDelete("cascade"))
+        .addForeignKeyConstraint("employees_auth_users_id_fk", ["user_id"], "auth_users", ["id"], (cb) => cb.onDelete("cascade"))
         .execute();
 
     await sql`
@@ -117,9 +117,9 @@ export async function down(db: Kysely<any>): Promise<void> {
 
     await db.schema.dropTable("employees").execute();
 
-    await sql`DROP TRIGGER IF EXISTS update_users_modifiedAt;`.execute(db);
+    await sql`DROP TRIGGER IF EXISTS update_auth_users_modifiedAt;`.execute(db);
 
-    await db.schema.dropTable("users").execute();
+    await db.schema.dropTable("auth_users").execute();
 
     await sql`PRAGMA journal_mode=DELETE;`.execute(db);
 }

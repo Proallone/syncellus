@@ -84,7 +84,7 @@ const timesheets: NewTimesheet[] = [
 ];
 
 export async function seed(db: Kysely<Database>): Promise<void> {
-    await db.insertInto("users").values(users).execute();
+    await db.insertInto("auth_users").values(users).execute();
     await db.insertInto("employees").values(employees).execute();
     await db.insertInto("timesheets").values(timesheets).execute();
 }

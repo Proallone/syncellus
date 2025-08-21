@@ -1,7 +1,7 @@
 import type { ColumnType, Generated, Insertable, Selectable, Updateable } from "kysely";
 
 export interface Database {
-    users: UsersTable;
+    auth_users: UsersTable;
     employees: EmployeeTable;
     timesheets: TimesheetTable;
 }
