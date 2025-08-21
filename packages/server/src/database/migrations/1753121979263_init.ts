@@ -43,7 +43,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 		END;`.execute(db);
 
     await db.schema
-        .createTable("employees")
+        .createTable("accounts_profiles")
         .addColumn("id", "text", (col) => col.primaryKey().check(sql`LENGTH(id) = 36`))
         .addColumn("user_id", "text", (col) => col.unique().notNull().references("auth_users.id"))
         .addColumn("name", "text", (col) => col.check(sql`LENGTH(name) >= 3 AND LENGTH(name) <= 255`))
@@ -55,8 +55,8 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     await sql`
 		CREATE TRIGGER IF NOT EXISTS update_employees_modifiedAt BEFORE
-		UPDATE ON employees FOR EACH ROW BEGIN
-			UPDATE employees
+		UPDATE ON accounts_profiles FOR EACH ROW BEGIN
+			UPDATE accounts_profiles
 			SET
 			modifiedAT = datetime ('now')
 			WHERE
@@ -68,7 +68,7 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("id", "text", (col) => col.primaryKey().check(sql`LENGTH(id) = 36`))
         .addColumn("employee_id", "text", (col) =>
             col
-                .references("employees.id")
+                .references("accounts_profiles.id")
                 .notNull()
                 .check(sql`LENGTH(employee_id) = 36`)
         )
@@ -86,7 +86,7 @@ export async function up(db: Kysely<any>): Promise<void> {
                 .stored()
         )
         .addColumn("status", "text", (col) => col.check(sql`status in ('draft', 'submitted', 'approved', 'rejected')`).defaultTo("draft"))
-        .addForeignKeyConstraint("timesheets_employee_id_fk", ["employee_id"], "employees", ["id"], (cb) => cb.onDelete("cascade"))
+        .addForeignKeyConstraint("timesheets_employee_id_fk", ["employee_id"], "accounts_profiles", ["id"], (cb) => cb.onDelete("cascade"))
         .execute();
 
     await db.schema.createIndex("timesheets_employee_id").on("timesheets").column("employee_id").execute();
@@ -115,7 +115,7 @@ export async function down(db: Kysely<any>): Promise<void> {
 
     await sql`DROP TRIGGER IF EXISTS update_employees_modifiedAt;`.execute(db);
 
-    await db.schema.dropTable("employees").execute();
+    await db.schema.dropTable("accounts_profiles").execute();
 
     await sql`DROP TRIGGER IF EXISTS update_auth_users_modifiedAt;`.execute(db);
 

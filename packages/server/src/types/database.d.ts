@@ -2,7 +2,7 @@ import type { ColumnType, Generated, Insertable, Selectable, Updateable } from "
 
 export interface Database {
     auth_users: UsersTable;
-    employees: EmployeeTable;
+    accounts_profiles: ProfilesTable;
     timesheets: TimesheetTable;
 }
 
@@ -21,7 +21,7 @@ export type User = Selectable<UsersTable>;
 export type NewUser = Insertable<UsersTable>;
 export type UserUpdate = Updateable<UsersTable>;
 
-export interface EmployeeTable {
+export interface ProfilesTable {
     id: Generated<string>;
     user_id: string;
     name: string | undefined;
@@ -30,9 +30,9 @@ export interface EmployeeTable {
     modifiedAt: ColumnType<Date, string | undefined, never>;
 }
 
-export type Employee = Selectable<EmployeeTable>;
-export type NewEmployee = Insertable<EmployeeTable>;
-export type EmployeeUpdate = Updateable<EmployeeTable>;
+export type Employee = Selectable<ProfilesTable>;
+export type NewEmployee = Insertable<ProfilesTable>;
+export type EmployeeUpdate = Updateable<ProfilesTable>;
 
 export interface TimesheetTable {
     id: Generated<string>;

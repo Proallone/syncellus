@@ -1,6 +1,6 @@
 import type { EmployeeUpdate, NewEmployee } from "@syncellus/types/database.js";
 import type { GetEmployeeQuery } from "@syncellus/types/index.js";
-import type { EmployeeRepository } from "@syncellus/modules/employees/repository.js";
+import type { EmployeeRepository } from "@syncellus/modules/accounts/repository.js";
 import { uuidv7 } from "uuidv7";
 
 export class EmployeeService {

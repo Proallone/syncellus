@@ -1,13 +1,13 @@
 import { Router } from "express";
 import { validate } from "@syncellus/middlewares/validator.middleware.js";
-import { EmployeeController } from "@syncellus/modules/employees/controller.js";
-import { EmployeePostSchema, EmployeePatchSchema, EmployeesGetSchema } from "@syncellus/modules/employees/schema.js";
+import { EmployeeController } from "@syncellus/modules/accounts/controller.js";
+import { EmployeePostSchema, EmployeePatchSchema, EmployeesGetSchema } from "@syncellus/modules/accounts/schema.js";
 import { TimesheetPostSchema } from "@syncellus/modules/timesheets/schema.js";
 // import { authMiddleware } from "@syncellus/middlewares/auth.middleware.js";
 import { requireRole } from "@syncellus/middlewares/role.middleware.js";
-import { EmployeeRepository } from "@syncellus/modules/employees/repository.js";
+import { EmployeeRepository } from "@syncellus/modules/accounts/repository.js";
 import { DatabaseService } from "@syncellus/database/database.js";
-import { EmployeeService } from "@syncellus/modules/employees/service.js";
+import { EmployeeService } from "@syncellus/modules/accounts/service.js";
 import { eventBus } from "@syncellus/core/eventBus.js";
 import { UserCreatedHandler } from "./events.js";
 import { TimesheetService } from "../timesheets/service.js";

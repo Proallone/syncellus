@@ -1,6 +1,6 @@
 import z from "zod";
 import type { AuthBasePayload } from "@syncellus/modules/auth/schema.js";
-import type { employeeGetQuery } from "@syncellus/modules/employees/schema.js";
+import type { employeeGetQuery } from "@syncellus/modules/accounts/schema.ts";
 import type { Request } from "express";
 
 export interface Config {

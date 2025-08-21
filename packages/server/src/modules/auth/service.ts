@@ -32,11 +32,11 @@ export class AuthService {
         const { email, password } = credentials;
         const userFromDb = await this.repo.selectUserByEmailFromDb(email);
 
-        if (!userFromDb) throw new UnauthorizedError("DASDAS");
+        if (!userFromDb) throw new UnauthorizedError("Invalid credentials");
 
         const match = await compareHash(password, userFromDb.password);
 
-        if (!match) throw new UnauthorizedError("DSDA");
+        if (!match) throw new UnauthorizedError("Invalid credentials");
 
         const user: UserJWTPayload = { public_id: userFromDb.public_id, role: userFromDb.role };
 

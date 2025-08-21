@@ -6,14 +6,14 @@ export class EmployeeRepository {
     constructor(private readonly db: Kysely<Database>) {}
 
     public insertNewEmployeeToDb = async (employee: NewEmployee) => {
-        return await this.db.insertInto("employees").values(employee).returningAll().executeTakeFirstOrThrow();
+        return await this.db.insertInto("accounts_profiles").values(employee).returningAll().executeTakeFirstOrThrow();
     };
 
     public selectAllEmployeesFromDb = async (query: GetEmployeeQuery) => {
         let q = this.db
-            .selectFrom("employees")
-            .leftJoin("auth_users", "employees.user_id", "auth_users.id")
-            .select(["employees.id", "name", "surname", "email", "is_active", "role", "auth_users.createdAt", "auth_users.modifiedAt"]);
+            .selectFrom("accounts_profiles")
+            .leftJoin("auth_users", "accounts_profiles.user_id", "auth_users.id")
+            .select(["accounts_profiles.id", "name", "surname", "email", "is_active", "role", "auth_users.createdAt", "auth_users.modifiedAt"]);
 
         if (query.is_active) q = q.where("is_active", "=", query.is_active === "true" ? 1 : 0); //? no boolean in sqlite...
 
@@ -24,18 +24,18 @@ export class EmployeeRepository {
 
     public selectOneEmployeeByIdFromDb = async (id: string) => {
         return await this.db
-            .selectFrom("employees")
-            .leftJoin("auth_users", "employees.user_id", "auth_users.id")
-            .select(["employees.id", "name", "surname", "email", "is_active", "role", "auth_users.createdAt", "auth_users.modifiedAt"])
+            .selectFrom("accounts_profiles")
+            .leftJoin("auth_users", "accounts_profiles.user_id", "auth_users.id")
+            .select(["accounts_profiles.id", "name", "surname", "email", "is_active", "role", "auth_users.createdAt", "auth_users.modifiedAt"])
             .where("auth_users.id", "=", id)
             .executeTakeFirst();
     };
 
     public updateEmployeeByIdInDb = async (employee: EmployeeUpdate) => {
-        return await this.db.updateTable("employees").set(employee).where("id", "=", employee.id).returningAll().executeTakeFirst();
+        return await this.db.updateTable("accounts_profiles").set(employee).where("id", "=", employee.id).returningAll().executeTakeFirst();
     };
 
     public deleteEmployeeByIdInDb = async (id: string) => {
-        return await this.db.deleteFrom("employees").where("id", "=", id).executeTakeFirst();
+        return await this.db.deleteFrom("accounts_profiles").where("id", "=", id).executeTakeFirst();
     };
 }

@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import type { EmployeeService } from "@syncellus/modules/employees/service.js";
+import type { EmployeeService } from "@syncellus/modules/accounts/service.js";
 import type { EmployeeUpdate, NewEmployee, NewTimesheet } from "@syncellus/types/database.js";
 import type { TimesheetService } from "@syncellus/modules/timesheets/service.js";
 import { uuidv7 } from "uuidv7";

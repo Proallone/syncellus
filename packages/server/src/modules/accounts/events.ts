@@ -1,6 +1,6 @@
 import { EventHandler } from "@syncellus/core/eventHandler.js";
 import { AppEvents } from "@syncellus/core/eventBus.js";
-import { EmployeeRepository } from "@syncellus/modules/employees/repository.js";
+import { EmployeeRepository } from "@syncellus/modules/accounts/repository.js";
 import { EventBus } from "@syncellus/core/eventBus.js";
 import type { Logger } from "pino";
 

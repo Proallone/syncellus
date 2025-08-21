@@ -1,7 +1,7 @@
 import express, { Router } from "express";
 import { errorHandler } from "@syncellus/middlewares/error.middleware.js";
 import healthRoutes from "@syncellus/modules/health/routes.js";
-import userRoutes from "@syncellus/modules/employees/routes.js";
+import userRoutes from "@syncellus/modules/accounts/routes.js";
 import authRoutes from "@syncellus/modules/auth/routes.js";
 import timesheetsRoutes from "@syncellus/modules/timesheets/routes.js";
 import { pinoHttp } from "pino-http";
