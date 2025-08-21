@@ -64,7 +64,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 		END;`.execute(db);
 
     await db.schema
-        .createTable("timesheets")
+        .createTable("timesheets_entries")
         .addColumn("id", "text", (col) => col.primaryKey().check(sql`LENGTH(id) = 36`))
         .addColumn("employee_id", "text", (col) =>
             col
@@ -86,15 +86,15 @@ export async function up(db: Kysely<any>): Promise<void> {
                 .stored()
         )
         .addColumn("status", "text", (col) => col.check(sql`status in ('draft', 'submitted', 'approved', 'rejected')`).defaultTo("draft"))
-        .addForeignKeyConstraint("timesheets_employee_id_fk", ["employee_id"], "accounts_profiles", ["id"], (cb) => cb.onDelete("cascade"))
+        .addForeignKeyConstraint("timesheets_entries_employee_id_fk", ["employee_id"], "accounts_profiles", ["id"], (cb) => cb.onDelete("cascade"))
         .execute();
 
-    await db.schema.createIndex("timesheets_employee_id").on("timesheets").column("employee_id").execute();
+    await db.schema.createIndex("timesheets_entries_employee_id").on("timesheets_entries").column("employee_id").execute();
 
     await sql`
-		CREATE TRIGGER IF NOT EXISTS update_timesheets_modifiedAt BEFORE
-		UPDATE ON timesheets FOR EACH ROW BEGIN
-			UPDATE timesheets
+		CREATE TRIGGER IF NOT EXISTS update_timesheets_entries_modifiedAt BEFORE
+		UPDATE ON timesheets_entries FOR EACH ROW BEGIN
+			UPDATE timesheets_entries
 			SET
 			modifiedAT = datetime ('now')
 			WHERE
@@ -108,10 +108,10 @@ export async function down(db: Kysely<any>): Promise<void> {
     // down migration code goes here...
     // note: down migrations are optional. you can safely delete this function.
     // For more info, see: https://kysely.dev/docs/migrations
-    await sql`DROP TRIGGER IF EXISTS update_timesheets_modifiedAt;`.execute(db);
-    await db.schema.dropIndex("timesheets_employee_id").execute();
+    await sql`DROP TRIGGER IF EXISTS update_timesheets_entries_modifiedAt;`.execute(db);
+    await db.schema.dropIndex("timesheets_entries_employee_id").execute();
 
-    await db.schema.dropTable("timesheets").execute();
+    await db.schema.dropTable("timesheets_entries").execute();
 
     await sql`DROP TRIGGER IF EXISTS update_employees_modifiedAt;`.execute(db);
 

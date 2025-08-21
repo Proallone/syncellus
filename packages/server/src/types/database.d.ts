@@ -3,7 +3,7 @@ import type { ColumnType, Generated, Insertable, Selectable, Updateable } from "
 export interface Database {
     auth_users: UsersTable;
     accounts_profiles: ProfilesTable;
-    timesheets: TimesheetTable;
+    timesheets_entries: TimesheetTable;
 }
 
 export interface UsersTable {
