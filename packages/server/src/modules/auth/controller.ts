@@ -12,25 +12,21 @@ export class AuthController {
         private readonly logger: Logger
     ) {}
 
-    public signUp = async (req: Request, res: Response, next: NextFunction) => {
-        const user: AuthCredentials = {
-            ...req.body
-        };
+    public register = async (req: Request, res: Response, next: NextFunction) => {
+        const user: AuthCredentials = req.body;
 
-        this.logger.debug(`User ${user.email} signs up`);
         try {
-            const newUser = await this.service.insertNewUser(user);
-            if (!newUser) {
-                return res.status(409).send({ message: `User with email ${user.email} already exists!` });
-            }
+            const newUser = await this.service.registerNewUser(user);
+            this.logger.info(`User ${user.email} successfully registered on ${newUser.createdAt}`);
             return res.status(201).json(newUser);
         } catch (error) {
+            this.logger.error(`Unsuccessful user registration for ${user.email}`);
             next(error);
         }
     };
 
     //TODO cleanup
-    public signIn = (req: Request, res: Response) => {
+    public login = (req: Request, res: Response) => {
         const user = req.user as { public_id: string; role: string };
         const accessToken = Jwt.sign(user, config.JWT_TOKEN_SECRET, { expiresIn: "30m" });
 

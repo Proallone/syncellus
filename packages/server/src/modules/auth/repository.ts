@@ -4,19 +4,19 @@ import { Kysely } from "kysely";
 export class AuthRepository {
     constructor(private readonly db: Kysely<Database>) {}
 
-    public insertNewUserToDb = async (user: NewUser) => {
+    public insertNewUser = async (user: NewUser) => {
         return await this.db.insertInto("auth_users").values(user).returning(["id", "public_id", "email", "createdAt", "modifiedAt", "is_active", "role"]).executeTakeFirst(); //TODO do not return id
     };
 
-    public selectUserByEmailFromDb = async (email: string) => {
+    public selectUserByEmail = async (email: string) => {
         return await this.db.selectFrom("auth_users").select(["public_id", "email", "role", "password"]).where("email", "=", email).executeTakeFirst();
     };
 
-    public selectUserByIdFromDb = async (id: string) => {
+    public selectUserByID = async (id: string) => {
         return await this.db.selectFrom("auth_users").select(["id", "role"]).where("id", "=", id).executeTakeFirst();
     };
 
-    public selectUserByPublicIDfromDb = async (public_id: string) => {
+    public selectUserByPublicID = async (public_id: string) => {
         return await this.db.selectFrom("auth_users").select(["public_id", "role"]).where("public_id", "=", public_id).executeTakeFirst();
     };
 }

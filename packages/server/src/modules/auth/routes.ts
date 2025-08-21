@@ -12,11 +12,11 @@ const router = Router();
 const db = DatabaseService.getInstance();
 
 const repo = new AuthRepository(db);
-const service = new AuthService(repo);
 const logger = LoggerService.getInstance();
+const service = new AuthService(repo);
 const controller = new AuthController(service, logger);
 
-router.post("/signup", validate(AuthSchema), controller.signUp);
-router.post("/signin", validate(AuthSchema), passport.authenticate("local", { session: false }), controller.signIn); //TODO cleanup?
+router.post("/register", validate(AuthSchema), controller.register);
+router.post("/login", validate(AuthSchema), passport.authenticate("local", { session: false }), controller.login); //TODO cleanup?
 
 export default router;

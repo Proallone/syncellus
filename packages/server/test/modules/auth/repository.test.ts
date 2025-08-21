@@ -60,7 +60,7 @@ describe("Auth Repository", () => {
         };
 
         // Act
-        const result = await repo.insertNewUserToDb(user);
+        const result = await repo.insertNewUser(user);
 
         // Assert
         expect(result).toBeInstanceOf(Object);
@@ -79,7 +79,7 @@ describe("Auth Repository", () => {
         };
 
         // Act & Assert
-        await expect(repo.insertNewUserToDb(user)).rejects.toThrow(/NOT NULL constraint failed: users.email/);
+        await expect(repo.insertNewUser(user)).rejects.toThrow(/NOT NULL constraint failed: users.email/);
     });
 
     it("should throw for user payload with missing public_id", async () => {
@@ -92,7 +92,7 @@ describe("Auth Repository", () => {
         };
 
         // Act & Assert
-        await expect(repo.insertNewUserToDb(user)).rejects.toThrow(/NOT NULL constraint failed: users.public_id/);
+        await expect(repo.insertNewUser(user)).rejects.toThrow(/NOT NULL constraint failed: users.public_id/);
     });
 
     it("should throw for user payload with incorrect password property", async () => {
@@ -105,7 +105,7 @@ describe("Auth Repository", () => {
         };
 
         // Act & Assert
-        await expect(repo.insertNewUserToDb(user)).rejects.toThrow(/table users has no column named notpassword/);
+        await expect(repo.insertNewUser(user)).rejects.toThrow(/table users has no column named notpassword/);
     });
 
     it("should throw for user payload with incorrect email property", async () => {
@@ -118,7 +118,7 @@ describe("Auth Repository", () => {
         };
 
         // Act & Assert
-        await expect(repo.insertNewUserToDb(user)).rejects.toThrow(/table users has no column named notemail/);
+        await expect(repo.insertNewUser(user)).rejects.toThrow(/table users has no column named notemail/);
     });
 
     it("should throw for user payload with missing password", async () => {
@@ -131,7 +131,7 @@ describe("Auth Repository", () => {
         };
 
         // Act & Assert
-        await expect(repo.insertNewUserToDb(user)).rejects.toThrow(/NOT NULL constraint failed: users.password/);
+        await expect(repo.insertNewUser(user)).rejects.toThrow(/NOT NULL constraint failed: users.password/);
     });
 
     it("should find a user by email if they exist", async () => {
@@ -144,10 +144,10 @@ describe("Auth Repository", () => {
             email: "findme@mail.com",
             password: "securepassword"
         };
-        const insertedUser = await repo.insertNewUserToDb(userCredentials);
+        const insertedUser = await repo.insertNewUser(userCredentials);
 
         // Act
-        const foundUser = await repo.selectUserByEmailFromDb(userCredentials.email);
+        const foundUser = await repo.selectUserByEmail(userCredentials.email);
 
         // Assert
         expect(foundUser).toBeInstanceOf(Object);
@@ -168,7 +168,7 @@ describe("Auth Repository", () => {
         const nonExistentEmail = "nonexistent@mail.com";
 
         // Act
-        const foundUser = await repo.selectUserByEmailFromDb(nonExistentEmail);
+        const foundUser = await repo.selectUserByEmail(nonExistentEmail);
 
         // Assert
         expect(foundUser).toBeUndefined();

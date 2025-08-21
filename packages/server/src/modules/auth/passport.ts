@@ -9,7 +9,6 @@ import { AppConfig } from "@syncellus/configs/config.js";
 //TODO cleanup
 const logger = LoggerService.getInstance();
 const config = AppConfig.getInstance();
-console.error(config);
 
 export const configurePassport = (authService: AuthService, passportInstance = passport) => {
     passportInstance.use(

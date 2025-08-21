@@ -76,7 +76,7 @@ describe("AuthService", () => {
         });
 
         // Act
-        const result = await service.insertNewUser(newUser);
+        const result = await service.registerNewUser(newUser);
 
         // Assert
         expect(mockRepo.selectUserByEmailFromDb).toHaveBeenCalledWith("test@example.com");

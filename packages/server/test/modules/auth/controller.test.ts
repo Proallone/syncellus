@@ -60,13 +60,13 @@ describe("Auth Controller", () => {
                 role: "employee",
                 is_active: 1
             };
-            vi.mocked(mockService.insertNewUser).mockResolvedValue(mockedUser);
+            vi.mocked(mockService.registerNewUser).mockResolvedValue(mockedUser);
 
             // Act
-            await controller.signUp(mockReq as Request, mockRes as Response, mockNext);
+            await controller.register(mockReq as Request, mockRes as Response, mockNext);
 
             // Assert
-            expect(mockService.insertNewUser).toHaveBeenCalledTimes(1);
+            expect(mockService.registerNewUser).toHaveBeenCalledTimes(1);
             expect(mockRes.status).toHaveBeenCalledWith(201);
             expect(mockRes.json).toHaveBeenCalledWith(mockedUser);
         });
@@ -74,9 +74,9 @@ describe("Auth Controller", () => {
         it("should return 409 if the user already exists", async () => {
             mockReq.body = { email: "test@mail.com", password: "secret" };
 
-            vi.mocked(mockService.insertNewUser).mockResolvedValue(undefined);
+            vi.mocked(mockService.registerNewUser).mockResolvedValue(undefined);
 
-            await controller.signUp(mockReq as Request, mockRes as Response, mockNext);
+            await controller.register(mockReq as Request, mockRes as Response, mockNext);
 
             expect(mockRes.status).toHaveBeenCalledWith(409);
             expect(mockRes.send).toHaveBeenCalledWith({
@@ -86,9 +86,9 @@ describe("Auth Controller", () => {
 
         it("should call next(error) if insertNewUser throws", async () => {
             const error = new Error("db error");
-            vi.mocked(mockService.insertNewUser).mockRejectedValue(error);
+            vi.mocked(mockService.registerNewUser).mockRejectedValue(error);
 
-            await controller.signUp(mockReq as Request, mockRes as Response, mockNext);
+            await controller.register(mockReq as Request, mockRes as Response, mockNext);
 
             expect(mockNext).toHaveBeenCalledWith(error);
         });
@@ -100,7 +100,7 @@ describe("Auth Controller", () => {
             vi.mocked(mockService.verifyUserCredentials).mockResolvedValue(mockedServiceResponse);
 
             // Act
-            controller.signIn(mockReq as Request, mockRes as Response);
+            controller.login(mockReq as Request, mockRes as Response);
 
             // Assert
             expect(mockService.verifyUserCredentials).toHaveBeenCalledTimes(1);
@@ -118,7 +118,7 @@ describe("Auth Controller", () => {
                 }
             });
 
-            controller.signIn(mockReq as Request, mockRes as Response);
+            controller.login(mockReq as Request, mockRes as Response);
 
             expect(mockService.verifyUserCredentials).toHaveBeenCalledWith(mockReq.body);
             expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -132,7 +132,7 @@ describe("Auth Controller", () => {
             const error = new Error("invalid creds");
             vi.mocked(mockService.verifyUserCredentials).mockRejectedValue(error);
 
-            controller.signIn(mockReq as Request, mockRes as Response);
+            controller.login(mockReq as Request, mockRes as Response);
 
             expect(mockNext).toHaveBeenCalledWith(error);
         });

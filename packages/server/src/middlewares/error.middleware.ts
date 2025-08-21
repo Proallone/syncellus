@@ -1,11 +1,11 @@
-import type { Request, Response } from "express";
+import type { Request, Response, NextFunction } from "express";
 import type { AppError } from "@syncellus/types/index.js";
 import { LoggerService } from "@syncellus/core/logger.js";
 import { HttpError } from "@syncellus/errors/Errors.js";
 
 const logger = LoggerService.getInstance();
 
-const errorHandler = (err: AppError, _req: Request, res: Response) => {
+const errorHandler = (err: AppError, _req: Request, res: Response, _next: NextFunction) => {
     logger.error(err);
 
     if (err instanceof HttpError) {
@@ -17,12 +17,11 @@ const errorHandler = (err: AppError, _req: Request, res: Response) => {
     }
 
     const statusCode = 500;
-    const message = "An unexpected error occurred.";
+    const message = err.message ? err.message : "An unexpected error occurred.";
 
     return res.status(statusCode).json({
         error: {
             message,
-            // Only send the stack trace in development
             details: process.env.NODE_ENV === "development" ? err.stack : undefined
         }
     });
