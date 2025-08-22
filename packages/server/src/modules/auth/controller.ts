@@ -1,9 +1,10 @@
-import type { Request, Response, NextFunction } from "express";
-import type { AuthCredentials } from "@syncellus/types/index.js";
+import type { Response, NextFunction } from "express";
+import type { AuthRequestBody, PasswordResetRequestBody } from "@syncellus/types/index.js";
 import type { AuthService } from "@syncellus/modules/auth/service.js";
 import type { Logger } from "pino";
 import Jwt from "jsonwebtoken";
 import { AppConfig } from "@syncellus/configs/config.js";
+import { TypedRequest } from "@syncellus/types/express.js";
 
 const config = AppConfig.getInstance();
 export class AuthController {
@@ -12,8 +13,8 @@ export class AuthController {
         private readonly logger: Logger
     ) {}
 
-    public register = async (req: Request, res: Response, next: NextFunction) => {
-        const user: AuthCredentials = req.body;
+    public register = async (req: TypedRequest<AuthRequestBody>, res: Response, next: NextFunction) => {
+        const user = req.body;
 
         try {
             const newUser = await this.service.registerNewUser(user);
@@ -26,7 +27,7 @@ export class AuthController {
     };
 
     //TODO cleanup
-    public login = (req: Request, res: Response) => {
+    public login = (req: TypedRequest<AuthRequestBody>, res: Response) => {
         const user = req.user as { public_id: string; role: string };
         const accessToken = Jwt.sign(user, config.JWT_TOKEN_SECRET, { expiresIn: "30m" });
 
@@ -34,5 +35,19 @@ export class AuthController {
             message: "Successful sign in!",
             accessToken
         });
+    };
+
+    public forgotPassword = async (req: TypedRequest<PasswordResetRequestBody>, res: Response, next: NextFunction) => {
+        const { email } = req.body;
+        try {
+            this.logger.info(`Password reset for ${email} called`);
+            const token = await this.service.issuePasswordResetToken(email);
+            return res.status(200).json({
+                message: "Password reset",
+                token
+            });
+        } catch (error) {
+            next(error);
+        }
     };
 }

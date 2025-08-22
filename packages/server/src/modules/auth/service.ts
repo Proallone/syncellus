@@ -1,10 +1,12 @@
 import { eventBus } from "@syncellus/core/eventBus.js";
-import { ConflictError, UnauthorizedError } from "@syncellus/errors/Errors.js";
+import { ConflictError, NotFoundError, UnauthorizedError } from "@syncellus/errors/Errors.js";
 import type { AuthCredentials, Credentials, UserJWTPayload } from "@syncellus/types/index.js";
 import { compareHash, hashPassword } from "@syncellus/utils/crypto.js";
 import type { AuthRepository } from "@syncellus/modules/auth/repository.js";
 import { nanoid } from "@syncellus/utils/nanoid.js";
 import { uuidv7 } from "uuidv7";
+import Jwt from "jsonwebtoken";
+import { AppConfig } from "@syncellus/configs/config.js";
 
 export class AuthService {
     constructor(private readonly repo: AuthRepository) {}
@@ -38,6 +40,14 @@ export class AuthService {
 
         const user: UserJWTPayload = { public_id: userFromDb.public_id, role: userFromDb.role };
         return { user };
+    };
+
+    public issuePasswordResetToken = async (email: string) => {
+        const user = await this.repo.selectUserByEmail(email);
+        if (!user) throw new NotFoundError(`User with email ${email} not found`);
+        const config = AppConfig.getInstance();
+        //TODO finish
+        return Jwt.sign(user, config.JWT_TOKEN_SECRET, { expiresIn: "15m" });
     };
 
     public findUserById = async (id: string) => {
