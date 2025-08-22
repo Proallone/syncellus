@@ -1,5 +1,5 @@
 import type { Response, NextFunction } from "express";
-import type { AuthRequestBody, PasswordResetRequestBody } from "@syncellus/types/index.js";
+import type { AuthRequestBody, ForgotPasswordRequestBody, ResetPasswordRequestBody } from "@syncellus/types/index.js";
 import type { AuthService } from "@syncellus/modules/auth/service.js";
 import type { Logger } from "pino";
 import Jwt from "jsonwebtoken";
@@ -37,10 +37,10 @@ export class AuthController {
         });
     };
 
-    public forgotPassword = async (req: TypedRequest<PasswordResetRequestBody>, res: Response, next: NextFunction) => {
+    public forgotPassword = async (req: TypedRequest<ForgotPasswordRequestBody>, res: Response, next: NextFunction) => {
         const { email } = req.body;
         try {
-            this.logger.info(`Password reset for ${email} called`);
+            this.logger.info(`Password forgot for ${email} called`);
             const token = await this.service.issuePasswordResetToken(email);
             return res.status(200).json({
                 message: "Password reset",
@@ -49,5 +49,11 @@ export class AuthController {
         } catch (error) {
             next(error);
         }
+    };
+
+    public resetPassword = async (req: TypedRequest<ResetPasswordRequestBody>, res: Response, _next: NextFunction) => {
+        const { email, token } = req.body;
+        this.logger.info(`Password reset for ${email} called, token ${token}`);
+        return res.status(200).json({ message: "test" });
     };
 }

@@ -1,5 +1,5 @@
 import z from "zod";
-import type { AuthBasePayload, PasswordResetPayload } from "@syncellus/modules/auth/schema.js";
+import type { AuthBasePayload, ForgotPasswordPayload, ResetPasswordPayload } from "@syncellus/modules/auth/schema.js";
 import type { employeeGetQuery } from "@syncellus/modules/accounts/schema.ts";
 import type { Request } from "express";
 
@@ -36,4 +36,5 @@ export interface Credentials {
 }
 
 export type AuthRequestBody = z.infer<typeof AuthBasePayload>;
-export type PasswordResetRequestBody = z.infer<typeof PasswordResetPayload>;
+export type ForgotPasswordRequestBody = z.infer<typeof ForgotPasswordPayload>;
+export type ResetPasswordRequestBody = z.infer<typeof ResetPasswordPayload>;

@@ -9,12 +9,20 @@ const AuthSchema = z.object({
     body: AuthBasePayload
 });
 
-const PasswordResetPayload = z.strictObject({
+const ForgotPasswordPayload = z.strictObject({
     email: z.email()
 });
 
-const PasswordResetSchema = z.object({
-    body: PasswordResetPayload
+const ForgotPasswordSchema = z.object({
+    body: ForgotPasswordPayload
 });
 
-export { AuthSchema, AuthBasePayload, PasswordResetSchema, PasswordResetPayload };
+const ResetPasswordPayload = z.strictObject({
+    email: z.email(),
+    token: z.jwt()
+});
+
+const ResetPasswordSchema = z.object({
+    body: ResetPasswordPayload
+});
+export { AuthSchema, AuthBasePayload, ForgotPasswordSchema, ForgotPasswordPayload, ResetPasswordPayload, ResetPasswordSchema };
