@@ -1,64 +1,44 @@
-import type { Response, NextFunction } from "express";
+import type { Response } from "express";
 import type { AuthRequestBody, ForgotPasswordRequestBody, ResetPasswordRequestBody } from "@syncellus/types/index.js";
 import type { AuthService } from "@syncellus/modules/auth/service.js";
 import type { Logger } from "pino";
-import Jwt from "jsonwebtoken";
-import { AppConfig } from "@syncellus/configs/config.js";
-import { TypedRequest } from "@syncellus/types/express.js";
+import type { TypedRequest } from "@syncellus/types/express.js";
+import { handlerWrapper } from "@syncellus/utils/handlerWrapper.js";
+import { sendResponse } from "@syncellus/utils/responseBuilder.js";
 
-const config = AppConfig.getInstance();
 export class AuthController {
     constructor(
         private readonly service: AuthService,
         private readonly logger: Logger
     ) {}
 
-    public register = async (req: TypedRequest<AuthRequestBody>, res: Response, next: NextFunction) => {
-        const user = req.body;
+    public register = handlerWrapper(async (req: TypedRequest<AuthRequestBody>, res: Response) => {
+        const registerData = req.body;
+        const newUser = await this.service.registerNewUser(registerData);
+        this.logger.info({ email: registerData.email }, "User registration attempt");
+        return sendResponse(res, 201, { message: "Registration successful", data: newUser });
+    });
 
-        try {
-            const newUser = await this.service.registerNewUser(user);
-            this.logger.info(`User ${user.email} successfully registered on ${newUser.createdAt}`);
-            return res.status(201).json(newUser);
-        } catch (error) {
-            this.logger.error(`Unsuccessful user registration for ${user.email}`);
-            next(error);
-        }
-    };
+    public login = handlerWrapper((req: TypedRequest<AuthRequestBody>, res: Response) => {
+        const { user } = req;
+        const accessToken = this.service.issueLoginToken(user);
 
-    //TODO cleanup
-    public login = (req: TypedRequest<AuthRequestBody>, res: Response) => {
-        const user = req.user as { public_id: string; role: string };
-        const accessToken = Jwt.sign(user, config.JWT_TOKEN_SECRET, { expiresIn: "30m" });
+        return sendResponse(res, 200, { message: "Login successful", data: { accessToken } });
+    });
 
-        return res.status(200).json({
-            message: "Successful sign in!",
-            accessToken
-        });
-    };
-
-    public forgotPassword = async (req: TypedRequest<ForgotPasswordRequestBody>, res: Response, next: NextFunction) => {
+    public forgotPassword = handlerWrapper(async (req: TypedRequest<ForgotPasswordRequestBody>, res: Response) => {
         const { email } = req.body;
-        try {
-            this.logger.info(`Password forgot for ${email} called`);
-            const token = await this.service.issuePasswordResetToken(email);
-            return res.status(200).json({
-                message: "Password reset",
-                token
-            });
-        } catch (error) {
-            next(error);
-        }
-    };
+        this.logger.info({ email: email }, "User login attempt");
+        const token = await this.service.issuePasswordResetToken(email);
 
-    public resetPassword = async (req: TypedRequest<ResetPasswordRequestBody>, res: Response, next: NextFunction) => {
+        return sendResponse(res, 200, { message: "Password reset process started successfully", data: { token } });
+    });
+
+    public resetPassword = handlerWrapper(async (req: TypedRequest<ResetPasswordRequestBody>, res: Response) => {
         const { token, newPassword } = req.body;
-        try {
-            this.logger.info(`Password reset for called`);
-            await this.service.performPasswordReset(token, newPassword);
-            return res.status(200).json({ message: "Password reset successful!" });
-        } catch (error) {
-            next(error);
-        }
-    };
+        this.logger.info("User password reset attempt");
+        await this.service.performPasswordReset(token, newPassword);
+
+        return sendResponse(res, 200, { message: "Password reset successfully" });
+    });
 }

@@ -43,6 +43,11 @@ export class AuthService {
         return { user };
     };
 
+    public issueLoginToken = (user: Express.User) => {
+        const config = AppConfig.getInstance();
+        return Jwt.sign(user, config.JWT_TOKEN_SECRET, { expiresIn: "30m" });
+    };
+
     public issuePasswordResetToken = async (email: string) => {
         const user = await this.repo.selectUserByEmail(email);
         if (!user) throw new NotFoundError(`User with email ${email} not found`);
@@ -57,22 +62,17 @@ export class AuthService {
 
     public performPasswordReset = async (token: string, newPassword: string) => {
         const { sub, type } = Jwt.decode(token) as { sub: string; type: string };
-        if (type !== "password_reset" || !sub) {
-            throw new BadRequestError("Invalid password reset token!");
-        }
+        if (type !== "password_reset" || !sub) throw new BadRequestError("Invalid password reset token!");
 
         const user = await this.repo.selectUserByPublicID(sub);
 
-        if (!user) {
-            throw new NotFoundError("User not found!");
-        }
+        if (!user) throw new NotFoundError("User not found!");
 
         const config = AppConfig.getInstance();
         const key = createHmac("sha256", config.CRYPTO_HMAC_KEY).update(user.password, "utf-8").digest();
         const tokenVerified = Jwt.verify(token, key);
-        if (!tokenVerified) {
-            throw new UnauthorizedError("Unauthorized for password reset!");
-        }
+
+        if (!tokenVerified) throw new UnauthorizedError("Unauthorized for password reset!");
 
         const passwordHash = await hashPassword(newPassword);
 
