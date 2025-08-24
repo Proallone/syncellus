@@ -8,9 +8,13 @@ import { uuidv7 } from "uuidv7";
 import Jwt from "jsonwebtoken";
 import { AppConfig } from "@syncellus/configs/config.js";
 import { createHmac } from "crypto";
+import type { MailService } from "../mailer/service.js";
 
 export class AuthService {
-    constructor(private readonly repo: AuthRepository) {}
+    constructor(
+        private readonly repo: AuthRepository,
+        private readonly mailService: MailService
+    ) {}
 
     public registerNewUser = async (user: AuthCredentials) => {
         const userExists = await this.repo.selectUserByEmail(user.email);
@@ -57,7 +61,11 @@ export class AuthService {
         };
         const config = AppConfig.getInstance();
         const key = createHmac("sha256", config.CRYPTO_HMAC_KEY).update(user.password, "utf-8").digest();
-        return Jwt.sign(payload, key, { expiresIn: "15m" });
+        const token = Jwt.sign(payload, key, { expiresIn: "15m" });
+
+        await this.mailService.sendPasswordReset(user.email, token);
+
+        return token;
     };
 
     public performPasswordReset = async (token: string, newPassword: string) => {
