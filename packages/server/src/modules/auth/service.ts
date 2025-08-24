@@ -1,5 +1,5 @@
 import { eventBus } from "@syncellus/core/eventBus.js";
-import { ConflictError, NotFoundError, UnauthorizedError } from "@syncellus/errors/Errors.js";
+import { BadRequestError, ConflictError, NotFoundError, UnauthorizedError } from "@syncellus/errors/Errors.js";
 import type { AuthCredentials, Credentials, UserJWTPayload } from "@syncellus/types/index.js";
 import { compareHash, hashPassword } from "@syncellus/utils/crypto.js";
 import type { AuthRepository } from "@syncellus/modules/auth/repository.js";
@@ -7,6 +7,7 @@ import { nanoid } from "@syncellus/utils/nanoid.js";
 import { uuidv7 } from "uuidv7";
 import Jwt from "jsonwebtoken";
 import { AppConfig } from "@syncellus/configs/config.js";
+import { createHmac } from "crypto";
 
 export class AuthService {
     constructor(private readonly repo: AuthRepository) {}
@@ -45,9 +46,37 @@ export class AuthService {
     public issuePasswordResetToken = async (email: string) => {
         const user = await this.repo.selectUserByEmail(email);
         if (!user) throw new NotFoundError(`User with email ${email} not found`);
+        const payload = {
+            sub: user.public_id,
+            type: "password_reset"
+        };
         const config = AppConfig.getInstance();
-        //TODO finish
-        return Jwt.sign(user, config.JWT_TOKEN_SECRET, { expiresIn: "15m" });
+        const key = createHmac("sha256", config.CRYPTO_HMAC_KEY).update(user.password, "utf-8").digest();
+        return Jwt.sign(payload, key, { expiresIn: "15m" });
+    };
+
+    public performPasswordReset = async (token: string, newPassword: string) => {
+        const { sub, type } = Jwt.decode(token) as { sub: string; type: string };
+        if (type !== "password_reset" || !sub) {
+            throw new BadRequestError("Invalid password reset token!");
+        }
+
+        const user = await this.repo.selectUserByPublicID(sub);
+
+        if (!user) {
+            throw new NotFoundError("User not found!");
+        }
+
+        const config = AppConfig.getInstance();
+        const key = createHmac("sha256", config.CRYPTO_HMAC_KEY).update(user.password, "utf-8").digest();
+        const tokenVerified = Jwt.verify(token, key);
+        if (!tokenVerified) {
+            throw new UnauthorizedError("Unauthorized for password reset!");
+        }
+
+        const passwordHash = await hashPassword(newPassword);
+
+        await this.repo.updateUserPassword(sub, passwordHash);
     };
 
     public findUserById = async (id: string) => {

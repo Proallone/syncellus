@@ -16,6 +16,7 @@ export class AppConfig {
         const NODE_ENV = process.env.NODE_ENV;
         const JWT_TOKEN_SECRET = process.env.JWT_TOKEN_SECRET;
         const DATABASE_KEY = process.env.DATABASE_KEY;
+        const CRYPTO_HMAC_KEY = process.env.CRYPTO_HMAC_KEY;
 
         if (!JWT_TOKEN_SECRET) {
             throw new Error("Critical: JWT_TOKEN_SECRET is not set.");
@@ -30,7 +31,8 @@ export class AppConfig {
             PORT: Number(PORT) || 3000,
             NODE_ENV: NODE_ENV || "development",
             JWT_TOKEN_SECRET: JWT_TOKEN_SECRET,
-            DATABASE_KEY: DATABASE_KEY || ""
+            DATABASE_KEY: DATABASE_KEY || "",
+            CRYPTO_HMAC_KEY: CRYPTO_HMAC_KEY || ""
         };
     }
 }

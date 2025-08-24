@@ -17,6 +17,10 @@ export class AuthRepository {
     };
 
     public selectUserByPublicID = async (public_id: string) => {
-        return await this.db.selectFrom("auth_users").select(["public_id", "role"]).where("public_id", "=", public_id).executeTakeFirst();
+        return await this.db.selectFrom("auth_users").select(["public_id", "role", "password"]).where("public_id", "=", public_id).executeTakeFirst();
+    };
+
+    public updateUserPassword = async (public_id: string, newPassword: string) => {
+        return await this.db.updateTable("auth_users").set({ password: newPassword }).where("public_id", "=", public_id).executeTakeFirst();
     };
 }

@@ -18,8 +18,8 @@ const ForgotPasswordSchema = z.object({
 });
 
 const ResetPasswordPayload = z.strictObject({
-    email: z.email(),
-    token: z.jwt()
+    token: z.jwt(),
+    newPassword: z.string().min(8).max(40)
 });
 
 const ResetPasswordSchema = z.object({

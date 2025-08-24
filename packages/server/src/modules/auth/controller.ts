@@ -51,9 +51,14 @@ export class AuthController {
         }
     };
 
-    public resetPassword = async (req: TypedRequest<ResetPasswordRequestBody>, res: Response, _next: NextFunction) => {
-        const { email, token } = req.body;
-        this.logger.info(`Password reset for ${email} called, token ${token}`);
-        return res.status(200).json({ message: "test" });
+    public resetPassword = async (req: TypedRequest<ResetPasswordRequestBody>, res: Response, next: NextFunction) => {
+        const { token, newPassword } = req.body;
+        try {
+            this.logger.info(`Password reset for called`);
+            await this.service.performPasswordReset(token, newPassword);
+            return res.status(200).json({ message: "Password reset successful!" });
+        } catch (error) {
+            next(error);
+        }
     };
 }

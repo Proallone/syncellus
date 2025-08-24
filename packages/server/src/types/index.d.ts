@@ -8,6 +8,7 @@ export interface Config {
     NODE_ENV: string;
     JWT_TOKEN_SECRET: string;
     DATABASE_KEY: string;
+    CRYPTO_HMAC_KEY: string;
 }
 
 export type AuthCredentials = z.infer<typeof AuthBasePayload>;
