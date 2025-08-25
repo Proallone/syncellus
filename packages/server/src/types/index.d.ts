@@ -9,6 +9,8 @@ export interface Config {
     JWT_TOKEN_SECRET: string;
     DATABASE_KEY: string;
     CRYPTO_HMAC_KEY: string;
+    SMTP_HOST: string;
+    SMTP_PORT: number;
 }
 
 export type AuthCredentials = z.infer<typeof AuthBasePayload>;
