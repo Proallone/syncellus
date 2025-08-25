@@ -16,7 +16,7 @@ export class NodemailerMailer implements Mailer {
 
     async send(mail: Mail) {
         await this.transporter.sendMail({
-            from: "TEST@syncellus.com", //TODO add to config?
+            from: "do-not-reply@syncellus.com", //TODO add to config?
             to: mail.to,
             subject: mail.subject,
             text: mail.text,
