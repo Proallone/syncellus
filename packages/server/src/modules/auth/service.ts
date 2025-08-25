@@ -31,6 +31,8 @@ export class AuthService {
 
         eventBus.emit("user.created", newUser); //TODO this might not be the best idea to use event for this in case of failure it would not insert employee for a user...
 
+        await this.mailService.sendWelcome(user.email, newUser.email);
+
         return newUser;
     };
 

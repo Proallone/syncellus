@@ -11,6 +11,19 @@ const compileTemplate = (name: string) => {
 export class MailService {
     constructor(private readonly mailer: Mailer) {}
 
+    async sendWelcome(to: string, username: string) {
+        const template = compileTemplate("welcome");
+        const data = {
+            appName: "Syncellus",
+            username: username,
+            currentYear: new Date().getFullYear().toString()
+        };
+        const html = template(data);
+        const subject = "Welcome to Syncellus";
+
+        await this.mailer.send({ to, subject, html });
+    }
+
     async sendPasswordReset(to: string, resetLink: string) {
         const template = compileTemplate("passwordReset");
         const html = template({ resetLink });
