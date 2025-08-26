@@ -7,25 +7,36 @@ const users: NewUser[] = [
         public_id: "84ghpuj191",
         email: "bartek@test.com",
         password: "$argon2id$v=19$m=65536,t=3,p=4$hNK3M9yxMNNz/i+4SbHHKA$ac3903HBtHQ8nUD2ZAWdzUEfkioUpYDgEDlwItDrSG8",
-        role: "employee"
+        role: "employee",
+        active: 1
     },
     {
         id: "0189f7ea-ae2f-72b9-9be8-9c3c5a60214f",
         public_id: "vigdb4t07d",
         email: "bartek@admin.com",
         password: "$argon2id$v=19$m=65536,t=3,p=4$hNK3M9yxMNNz/i+4SbHHKA$ac3903HBtHQ8nUD2ZAWdzUEfkioUpYDgEDlwItDrSG8",
-        role: "admin"
+        role: "admin",
+        active: 1
     },
     {
         id: "0189f7ea-ae2f-72b9-9be8-9c3d224082ef",
         public_id: "pffza5gbco",
         email: "bartek@manager.com",
         password: "$argon2id$v=19$m=65536,t=3,p=4$hNK3M9yxMNNz/i+4SbHHKA$ac3903HBtHQ8nUD2ZAWdzUEfkioUpYDgEDlwItDrSG8",
-        role: "manager"
+        role: "manager",
+        active: 1
+    },
+    {
+        id: "0198e817-6726-75fb-be07-6edf8bdd9421",
+        public_id: "081ddcee2d",
+        email: "bartek@inactive.com",
+        password: "$argon2id$v=19$m=65536,t=3,p=4$hNK3M9yxMNNz/i+4SbHHKA$ac3903HBtHQ8nUD2ZAWdzUEfkioUpYDgEDlwItDrSG8",
+        role: "manager",
+        active: 0
     }
 ];
 
-const employees: NewEmployee[] = [
+const accounts: NewEmployee[] = [
     {
         id: "0198b988-0a22-71af-990a-7dce68a5114f",
         user_id: "0189f7ea-ae2c-7809-8aeb-b819cf5e9e7f",
@@ -43,6 +54,12 @@ const employees: NewEmployee[] = [
         user_id: "0189f7ea-ae2f-72b9-9be8-9c3d224082ef",
         name: "Elisabeth",
         surname: "Turner"
+    },
+    {
+        id: "0198e819-d89c-75a6-9a61-c076ede5ac1c",
+        user_id: "0198e817-6726-75fb-be07-6edf8bdd9421",
+        name: "Victor",
+        surname: "Vector"
     }
 ];
 
@@ -85,6 +102,6 @@ const timesheets: NewTimesheet[] = [
 
 export async function seed(db: Kysely<Database>): Promise<void> {
     await db.insertInto("auth_users").values(users).execute();
-    await db.insertInto("accounts_profiles").values(employees).execute();
+    await db.insertInto("accounts_profiles").values(accounts).execute();
     await db.insertInto("timesheets_entries").values(timesheets).execute();
 }

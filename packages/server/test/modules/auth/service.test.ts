@@ -45,6 +45,7 @@ import { hashPassword, compareHash } from "@syncellus/utils/crypto.js";
 
 describe("AuthService", () => {
     let mockRepo: any;
+    let mockMailer: any;
     let service: AuthService;
 
     beforeEach(() => {
@@ -55,7 +56,12 @@ describe("AuthService", () => {
             insertNewUserToDb: vi.fn()
         };
 
-        service = new AuthService(mockRepo);
+        mockMailer = {
+            sendWelcome: vi.fn(),
+            sendPasswordReset: vi.fn()
+        };
+
+        service = new AuthService(mockRepo, mockMailer);
     });
 
     it("should insert a new user if email does not exist", async () => {

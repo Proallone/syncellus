@@ -1,6 +1,6 @@
 import z from "zod";
 import type { AuthBasePayload, ForgotPasswordPayload, ResetPasswordPayload } from "@syncellus/modules/auth/schema.js";
-import type { employeeGetQuery } from "@syncellus/modules/accounts/schema.ts";
+import type { AccountsGetQuery, AccountsPostPayload, AccountsUpdatePayload } from "@syncellus/modules/accounts/schema.ts";
 import type { Request } from "express";
 import { TimesheetPostPayload } from "@syncellus/modules/timesheets/schema.ts";
 
@@ -15,7 +15,7 @@ export interface Config {
 }
 
 export type AuthCredentials = z.infer<typeof AuthBasePayload>;
-export type GetEmployeeQuery = z.infer<typeof employeeGetQuery>;
+export type GetEmployeeQuery = z.infer<typeof AccountsGetQuery>;
 
 export interface DbHealthResponse {
     sqlite_version: string;
@@ -41,5 +41,8 @@ export interface Credentials {
 
 export type AuthRequestBody = z.infer<typeof AuthBasePayload>;
 export type NewTimesheetBody = z.infer<typeof TimesheetPostPayload>;
+export type NewAccountBody = z.infer<typeof AccountsPostPayload>;
+export type UpdateAccoundBody = z.infer<typeof AccountsUpdatePayload>;
+
 export type ForgotPasswordRequestBody = z.infer<typeof ForgotPasswordPayload>;
 export type ResetPasswordRequestBody = z.infer<typeof ResetPasswordPayload>;

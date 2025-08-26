@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { validate } from "@syncellus/middlewares/validator.middleware.js";
 import { AccountsController } from "@syncellus/modules/accounts/controller.js";
-import { EmployeePostSchema, EmployeePatchSchema, EmployeesGetSchema } from "@syncellus/modules/accounts/schema.js";
+import { AccountsPostSchema, AccountsPatchSchema, AccountsGetSchema } from "@syncellus/modules/accounts/schema.js";
 import { TimesheetPostSchema } from "@syncellus/modules/timesheets/schema.js";
 import { requireRole } from "@syncellus/middlewares/role.middleware.js";
 import { AccountsRepository } from "@syncellus/modules/accounts/repository.js";
@@ -29,10 +29,10 @@ new UserCreatedHandler(eventBus, repo, logger).register();
 
 router.use(passport.authenticate("jwt", { session: false }));
 
-router.post("/", requireRole(["admin"]), validate(EmployeePostSchema), controller.createAccount);
-router.get("/", validate(EmployeesGetSchema), controller.getAccounts);
+router.post("/", requireRole(["admin"]), validate(AccountsPostSchema), controller.createAccount);
+router.get("/", validate(AccountsGetSchema), controller.getAccounts);
 router.get("/:id", controller.getOneAccount);
-router.patch("/:id", validate(EmployeePatchSchema), controller.updateAccount);
+router.patch("/:id", validate(AccountsPatchSchema), controller.updateAccount);
 router.delete("/:id", requireRole(["admin"]), controller.deleteAccount);
 
 router.get("/:employeeId/timesheets", controller.getTimesheetsByAccount);

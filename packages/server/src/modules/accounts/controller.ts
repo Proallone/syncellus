@@ -1,12 +1,14 @@
 import type { Request, Response } from "express";
 import type { AccountsService } from "@syncellus/modules/accounts/service.js";
-import type { EmployeeUpdate, NewEmployee, NewTimesheet } from "@syncellus/types/database.js";
+import type { EmployeeUpdate, NewTimesheet } from "@syncellus/types/database.js";
 import type { TimesheetService } from "@syncellus/modules/timesheets/service.js";
 import { uuidv7 } from "uuidv7";
 import { sendResponse } from "@syncellus/utils/responseBuilder.js";
 import { HttpStatus } from "@syncellus/core/http.js";
 import { NotFoundError } from "@syncellus/errors/errors.js";
 import { handlerWrapper } from "@syncellus/utils/handlerWrapper.js";
+import { TypedRequest } from "@syncellus/types/express.js";
+import { NewAccountBody } from "@syncellus/types/index.js";
 
 export class AccountsController {
     constructor(
@@ -14,43 +16,40 @@ export class AccountsController {
         private readonly timesheetService: TimesheetService
     ) {}
 
-    public createAccount = handlerWrapper(async (req: Request, res: Response) => {
-        const { body } = req;
-        const employee: NewEmployee = {
-            ...body
-        };
-        const newEmployee = await this.service.insertNewEmployee(employee);
+    public createAccount = handlerWrapper(async (req: TypedRequest<NewAccountBody>, res: Response) => {
+        const employee = req.body;
+        const newEmployee = await this.service.insertNewAccount(employee);
         return sendResponse(res, HttpStatus.CREATED, { message: "Account created", data: newEmployee });
     });
 
     public getAccounts = handlerWrapper(async (req: Request, res: Response) => {
         const { query } = req;
-        const employees = await this.service.selectAllEmployees(query);
+        const employees = await this.service.selectAllAccounts(query);
         return sendResponse(res, HttpStatus.OK, { message: "Accounts data fetched", data: employees });
     });
 
     public getOneAccount = handlerWrapper(async (req: Request, res: Response) => {
         const { id } = req.params;
-        const employee = await this.service.selectOneEmployeeById(id);
+        const employee = await this.service.selectOneAccountById(id);
         if (!employee) throw new NotFoundError(`Account with ID ${id} not found!`);
         return sendResponse(res, HttpStatus.OK, { message: "Account data fetched", data: employee });
     });
 
-    public updateAccount = handlerWrapper(async (req: Request, res: Response) => {
+    public updateAccount = handlerWrapper(async (req: TypedRequest<EmployeeUpdate>, res: Response) => {
         const { id } = req.params;
-        const { body } = req;
-        const data: EmployeeUpdate = {
+        const data = req.body;
+        const update: EmployeeUpdate = {
             id,
-            ...body
+            ...data
         };
-        const patched = await this.service.updateEmployeeById(data);
+        const patched = await this.service.updateAccountById(update);
         if (!patched) throw new NotFoundError(`Account with ID ${id} not found!`);
         return sendResponse(res, HttpStatus.OK, { message: `Account ${id} updated successfully`, data: patched });
     });
 
     public deleteAccount = handlerWrapper(async (req: Request, res: Response) => {
         const { id } = req.params;
-        const deletion = await this.service.deleteEmployeeById(id);
+        const deletion = await this.service.deleteAccountById(id);
         if (!deletion.numDeletedRows) throw new NotFoundError(`Account with ID ${id} not found!`);
         return sendResponse(res, HttpStatus.OK, { message: `Account ${id} deleted successfully`, data: deletion });
     });

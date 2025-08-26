@@ -58,7 +58,7 @@ describe("Auth Controller", () => {
                 createdAt: new Date(),
                 modifiedAt: new Date(),
                 role: "employee",
-                is_active: 1
+                active: true
             };
             vi.mocked(mockService.registerNewUser).mockResolvedValue(mockedUser);
 

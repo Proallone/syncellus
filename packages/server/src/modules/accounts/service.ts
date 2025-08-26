@@ -6,23 +6,23 @@ import { uuidv7 } from "uuidv7";
 export class AccountsService {
     constructor(private readonly repo: AccountsRepository) {}
 
-    public insertNewEmployee = async (employee: NewEmployee) => {
-        return await this.repo.insertNewAccountToDb({ id: uuidv7(), ...employee });
+    public insertNewAccount = async (account: NewEmployee) => {
+        return await this.repo.insertNewAccountToDb({ id: uuidv7(), ...account });
     };
 
-    public selectAllEmployees = async (query: GetEmployeeQuery) => {
+    public selectAllAccounts = async (query: GetEmployeeQuery) => {
         return await this.repo.selectAllAccountsFromDb(query);
     };
 
-    public selectOneEmployeeById = async (id: string) => {
+    public selectOneAccountById = async (id: string) => {
         return await this.repo.selectOneAccountByIdFromDb(id);
     };
 
-    public updateEmployeeById = async (employee: EmployeeUpdate) => {
-        return await this.repo.updateAccountByIdInDb(employee);
+    public updateAccountById = async (account: EmployeeUpdate) => {
+        return await this.repo.updateAccountByIdInDb(account);
     };
 
-    public deleteEmployeeById = async (id: string) => {
+    public deleteAccountById = async (id: string) => {
         return await this.repo.deleteAccountByIdInDb(id);
     };
 }

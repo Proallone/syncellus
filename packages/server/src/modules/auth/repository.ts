@@ -5,7 +5,7 @@ export class AuthRepository {
     constructor(private readonly db: Kysely<Database>) {}
 
     public insertNewUser = async (user: NewUser) => {
-        return await this.db.insertInto("auth_users").values(user).returning(["id", "public_id", "email", "createdAt", "modifiedAt", "is_active", "role"]).executeTakeFirst(); //TODO do not return id
+        return await this.db.insertInto("auth_users").values(user).returning(["id", "public_id", "email", "createdAt", "modifiedAt", "active", "role"]).executeTakeFirst(); //TODO do not return id
     };
 
     public selectUserByEmail = async (email: string) => {

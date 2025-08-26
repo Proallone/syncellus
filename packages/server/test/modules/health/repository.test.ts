@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { Kysely, SqliteDialect } from "kysely";
-import Database from "better-sqlite3";
+import Database from "better-sqlite3-multiple-ciphers";
 import { HealthRepository } from "@syncellus/modules/health/repository.js";
 import type { Database as DB } from "@syncellus/types/database.js";
 import { DatabaseService } from "@syncellus/database/database.js";

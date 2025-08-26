@@ -13,7 +13,7 @@ export interface UsersTable {
     password: string;
     createdAt: ColumnType<Date, string | undefined, never>;
     modifiedAt: ColumnType<Date, string | undefined, never>;
-    is_active: Generated<number>;
+    active: Generated<number>;
     role: string;
 }
 

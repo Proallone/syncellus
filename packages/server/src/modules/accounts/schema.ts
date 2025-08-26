@@ -1,29 +1,29 @@
 import { z } from "zod";
 
-const EmployeeBasePayload = z.strictObject({
-    user_id: z.int().gt(0),
+const AccountsBasePayload = z.strictObject({
+    user_id: z.string(),
     name: z.string().min(3).max(255),
     surname: z.string().min(3).max(255)
 });
 
-const EmployeePostPayload = EmployeeBasePayload.required();
-const EmployeeUpdatePalyoad = EmployeeBasePayload.partial();
+const AccountsPostPayload = AccountsBasePayload.required();
+const AccountsUpdatePayload = AccountsBasePayload.partial();
 
-const employeeGetQuery = z.object({
-    is_active: z.enum(["true", "false"]).optional(),
+const AccountsGetQuery = z.object({
+    active: z.boolean().optional(),
     role: z.enum(["employee", "manager", "admin"]).optional() //TODO fix later so multiple roles are available to query
 });
 
-const EmployeesGetSchema = z.object({
-    query: employeeGetQuery
+const AccountsGetSchema = z.object({
+    query: AccountsGetQuery
 });
 
-const EmployeePostSchema = z.object({
-    body: EmployeePostPayload
+const AccountsPostSchema = z.object({
+    body: AccountsPostPayload
 });
 
-const EmployeePatchSchema = z.object({
-    body: EmployeeUpdatePalyoad
+const AccountsUpdateSchema = z.object({
+    body: AccountsUpdatePayload
 });
 
-export { EmployeePostPayload, EmployeePostSchema, EmployeeUpdatePalyoad, EmployeePatchSchema, employeeGetQuery, EmployeesGetSchema };
+export { AccountsPostPayload, AccountsUpdatePayload, AccountsGetQuery, AccountsGetSchema, AccountsPostSchema, AccountsUpdateSchema as AccountsPatchSchema };

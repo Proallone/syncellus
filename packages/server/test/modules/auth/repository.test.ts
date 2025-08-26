@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, beforeAll } from "vitest";
 import { FileMigrationProvider, Kysely, Migrator, SqliteDialect } from "kysely";
-import Database from "better-sqlite3";
+import Database from "better-sqlite3-multiple-ciphers";
 import { AuthRepository } from "@syncellus/modules/auth/repository.js";
 import { Database as DB } from "@syncellus/types/database.js";
 import { DatabaseService } from "@syncellus/database/database.js";
