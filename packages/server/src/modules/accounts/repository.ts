@@ -2,14 +2,14 @@ import type { Database, EmployeeUpdate, NewEmployee } from "@syncellus/types/dat
 import type { GetEmployeeQuery } from "@syncellus/types/index.js";
 import type { Kysely } from "kysely";
 
-export class EmployeeRepository {
+export class AccountsRepository {
     constructor(private readonly db: Kysely<Database>) {}
 
-    public insertNewEmployeeToDb = async (employee: NewEmployee) => {
+    public insertNewAccountToDb = async (employee: NewEmployee) => {
         return await this.db.insertInto("accounts_profiles").values(employee).returningAll().executeTakeFirstOrThrow();
     };
 
-    public selectAllEmployeesFromDb = async (query: GetEmployeeQuery) => {
+    public selectAllAccountsFromDb = async (query: GetEmployeeQuery) => {
         let q = this.db
             .selectFrom("accounts_profiles")
             .leftJoin("auth_users", "accounts_profiles.user_id", "auth_users.id")
@@ -22,7 +22,7 @@ export class EmployeeRepository {
         return await q.execute();
     };
 
-    public selectOneEmployeeByIdFromDb = async (id: string) => {
+    public selectOneAccountByIdFromDb = async (id: string) => {
         return await this.db
             .selectFrom("accounts_profiles")
             .leftJoin("auth_users", "accounts_profiles.user_id", "auth_users.id")
@@ -31,11 +31,11 @@ export class EmployeeRepository {
             .executeTakeFirst();
     };
 
-    public updateEmployeeByIdInDb = async (employee: EmployeeUpdate) => {
+    public updateAccountByIdInDb = async (employee: EmployeeUpdate) => {
         return await this.db.updateTable("accounts_profiles").set(employee).where("id", "=", employee.id).returningAll().executeTakeFirst();
     };
 
-    public deleteEmployeeByIdInDb = async (id: string) => {
+    public deleteAccountByIdInDb = async (id: string) => {
         return await this.db.deleteFrom("accounts_profiles").where("id", "=", id).executeTakeFirst();
     };
 }

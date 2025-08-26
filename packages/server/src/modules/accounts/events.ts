@@ -1,13 +1,13 @@
 import { EventHandler } from "@syncellus/core/eventHandler.js";
 import { AppEvents } from "@syncellus/core/eventBus.js";
-import { EmployeeRepository } from "@syncellus/modules/accounts/repository.js";
+import { AccountsRepository } from "@syncellus/modules/accounts/repository.js";
 import { EventBus } from "@syncellus/core/eventBus.js";
 import type { Logger } from "pino";
 
 export class UserCreatedHandler extends EventHandler<"user.created"> {
     constructor(
         eventBus: EventBus,
-        private readonly repo: EmployeeRepository,
+        private readonly repo: AccountsRepository,
         private readonly logger: Logger
     ) {
         super(eventBus);
@@ -19,6 +19,6 @@ export class UserCreatedHandler extends EventHandler<"user.created"> {
 
     async handle(user: AppEvents["user.created"]): Promise<void> {
         this.logger.info(`event user.created called with body: ${JSON.stringify(user)}`);
-        await this.repo.insertNewEmployeeToDb({ user_id: user.id });
+        await this.repo.insertNewAccountToDb({ user_id: user.public_id });
     }
 }
