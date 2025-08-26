@@ -5,6 +5,7 @@ import type { Logger } from "pino";
 import type { TypedRequest } from "@syncellus/types/express.js";
 import { handlerWrapper } from "@syncellus/utils/handlerWrapper.js";
 import { sendResponse } from "@syncellus/utils/responseBuilder.js";
+import { HttpStatus } from "@syncellus/core/http.js";
 
 export class AuthController {
     constructor(
@@ -16,14 +17,14 @@ export class AuthController {
         const registerData = req.body;
         const newUser = await this.service.registerNewUser(registerData);
         this.logger.info({ email: registerData.email }, "User registration attempt");
-        return sendResponse(res, 201, { message: "Registration successful", data: newUser });
+        return sendResponse(res, HttpStatus.CREATED, { message: "Registration successful", data: newUser });
     });
 
     public login = handlerWrapper((req: TypedRequest<AuthRequestBody>, res: Response) => {
         const { user } = req;
         const accessToken = this.service.issueLoginToken(user);
 
-        return sendResponse(res, 200, { message: "Login successful", data: { accessToken } });
+        return sendResponse(res, HttpStatus.OK, { message: "Login successful", data: { accessToken } });
     });
 
     public forgotPassword = handlerWrapper(async (req: TypedRequest<ForgotPasswordRequestBody>, res: Response) => {
@@ -31,7 +32,7 @@ export class AuthController {
         this.logger.info({ email: email }, "User login attempt");
         const token = await this.service.issuePasswordResetToken(email);
 
-        return sendResponse(res, 200, { message: "Password reset process started successfully", data: { token } });
+        return sendResponse(res, HttpStatus.OK, { message: "Password reset process started successfully", data: { token } });
     });
 
     public resetPassword = handlerWrapper(async (req: TypedRequest<ResetPasswordRequestBody>, res: Response) => {
@@ -39,6 +40,6 @@ export class AuthController {
         this.logger.info("User password reset attempt");
         await this.service.performPasswordReset(token, newPassword);
 
-        return sendResponse(res, 200, { message: "Password reset successfully" });
+        return sendResponse(res, HttpStatus.OK, { message: "Password reset successfully" });
     });
 }

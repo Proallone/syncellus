@@ -1,5 +1,5 @@
 import { eventBus } from "@syncellus/core/eventBus.js";
-import { BadRequestError, ConflictError, NotFoundError, UnauthorizedError } from "@syncellus/errors/Errors.js";
+import { BadRequestError, ConflictError, NotFoundError, UnauthorizedError } from "@syncellus/errors/errors.js";
 import type { AuthCredentials, Credentials, UserJWTPayload } from "@syncellus/types/index.js";
 import { compareHash, hashPassword } from "@syncellus/utils/crypto.js";
 import type { AuthRepository } from "@syncellus/modules/auth/repository.js";

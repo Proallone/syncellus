@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import type { AppError } from "@syncellus/types/index.js";
 import { LoggerService } from "@syncellus/core/logger.js";
-import { HttpError } from "@syncellus/errors/Errors.js";
+import { HttpError } from "@syncellus/errors/errors.js";
 import { sendResponse } from "@syncellus/utils/responseBuilder.js";
 
 const logger = LoggerService.getInstance();
