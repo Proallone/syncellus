@@ -9,11 +9,13 @@ export class HealthController {
 
     public getApplicationHealth = handlerWrapper((_req: Request, res: Response) => {
         const status = this.service.getApplicationStatus();
+
         return sendResponse(res, HttpStatus.OK, { message: "Service status", data: status });
     });
 
     public getDatabaseHealth = handlerWrapper(async (_req: Request, res: Response) => {
         const version = await this.service.getDatabaseStatus();
+
         return sendResponse(res, HttpStatus.OK, { message: "Database service status", data: version });
     });
 }

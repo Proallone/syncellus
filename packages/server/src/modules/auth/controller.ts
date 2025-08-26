@@ -17,6 +17,7 @@ export class AuthController {
         const registerData = req.body;
         const newUser = await this.service.registerNewUser(registerData);
         this.logger.info({ email: registerData.email }, "User registration attempt");
+
         return sendResponse(res, HttpStatus.CREATED, { message: "Registration successful", data: newUser });
     });
 
