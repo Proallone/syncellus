@@ -1,13 +1,5 @@
 import type { Mailer } from "@syncellus/modules/mailer/types.js";
-import path from "path";
-import fs from "fs";
-import Handlebars from "handlebars";
-
-const compileTemplate = (name: string) => {
-    const filePath = path.join(import.meta.dirname, "templates", `${name}.hbs`);
-    const source = fs.readFileSync(filePath, "utf-8");
-    return Handlebars.compile(source);
-};
+import { compileTemplate } from "@syncellus/modules/mailer/utils/compileTemplate.js";
 export class MailService {
     constructor(private readonly mailer: Mailer) {}
 
