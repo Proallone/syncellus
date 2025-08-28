@@ -63,7 +63,12 @@ export async function up(db: Kysely<any>): Promise<void> {
     await db.schema
         .createTable("auth_scopes")
         .addColumn("id", "text", (col) => col.primaryKey().check(sql`LENGTH(id) = 36`))
-        .addColumn("scope", "text", (col) => col.notNull().check(sql`LENGTH(scope) <= 256`))
+        .addColumn("scope", "text", (col) =>
+            col
+                .notNull()
+                .unique()
+                .check(sql`LENGTH(scope) <= 256`)
+        )
         .addColumn("description", "text", (col) => col.check(sql`LENGTH(description) <= 256`))
         .addColumn("createdAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .addColumn("modifiedAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
@@ -78,6 +83,24 @@ export async function up(db: Kysely<any>): Promise<void> {
 			WHERE
 			id = OLD.id;
 		END;`.execute(db);
+
+    await db.schema
+        .createTable("auth_role_scopes")
+        .addColumn("role_id", "text", (col) =>
+            col
+                .notNull()
+                .check(sql`LENGTH(role_id) = 36`)
+                .references("auth_roles.id")
+        )
+        .addColumn("scope_id", "text", (col) =>
+            col
+                .notNull()
+                .check(sql`LENGTH(scope_id) = 36`)
+                .references("auth_scopes.id")
+        )
+        .addForeignKeyConstraint("auth_role_scopes_role_id_fk", ["role_id"], "auth_roles", ["id"], (cb) => cb.onDelete("cascade"))
+        .addForeignKeyConstraint("auth_role_scopes_scope_id_fk", ["scope_id"], "auth_scopes", ["id"], (cb) => cb.onDelete("cascade"))
+        .execute();
 }
 
 // `any` is required here since migrations should be frozen in time. alternatively, keep a "snapshot" db interface.
@@ -86,6 +109,8 @@ export async function down(db: Kysely<any>): Promise<void> {
     // down migration code goes here...
     // note: down migrations are optional. you can safely delete this function.
     // For more info, see: https://kysely.dev/docs/migrations
+    await db.schema.dropTable("auth_role_scopes").execute();
+
     await sql`DROP TRIGGER IF EXISTS update_auth_scopes_modifiedAt;`.execute(db);
     await db.schema.dropTable("auth_scopes").execute();
 

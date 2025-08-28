@@ -1,5 +1,5 @@
 import type { Kysely } from "kysely";
-import type { Database, NewRole, NewScope, NewUser } from "@syncellus/types/database.js";
+import type { Database, NewRole, NewRoleScope, NewScope, NewUser } from "@syncellus/types/database.js";
 
 const users: NewUser[] = [
     {
@@ -58,8 +58,24 @@ const scopes: NewScope[] = [
     }
 ];
 
+const role_scopes: NewRoleScope[] = [
+    {
+        role_id: "0198f237-5cc2-7328-a024-03b986c7b3b5",
+        scope_id: "0198f237-5cc2-76be-92fb-9e00e52ad827"
+    },
+    {
+        role_id: "0198f237-5cc2-7328-a024-03b986c7b3b5",
+        scope_id: "0198f237-5cc2-7980-a50f-e0ff18289301"
+    },
+    {
+        role_id: "0198f237-5cc2-70d7-a6c2-25f3796ee756",
+        scope_id: "0198f237-5cc2-7980-a50f-e0ff18289301"
+    }
+];
+
 export async function seed(db: Kysely<Database>): Promise<void> {
     await db.insertInto("auth_users").values(users).execute();
     await db.insertInto("auth_roles").values(roles).execute();
     await db.insertInto("auth_scopes").values(scopes).execute();
+    await db.insertInto("auth_role_scopes").values(role_scopes).execute();
 }

@@ -44,6 +44,15 @@ export type Scope = Selectable<ScopesTable>;
 export type NewScope = Insertable<ScopesTable>;
 export type ScopeUpdate = Updateable<ScopesTable>;
 
+export interface RoleScopesTable {
+    role_id: Generated<string>;
+    scope_id: Generated<string>;
+}
+
+export type RoleScope = Selectable<RoleScopesTable>;
+export type NewRoleScope = Insertable<RoleScopesTable>;
+export type RoleScopeUpdate = Updateable<RoleScopesTable>;
+
 export interface ProfilesTable {
     id: Generated<string>;
     user_id: string;
