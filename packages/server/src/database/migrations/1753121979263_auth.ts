@@ -23,7 +23,7 @@ export async function up(db: Kysely<any>): Promise<void> {
                 .notNull()
                 .check(sql`LENGTH(email) >= 3 AND LENGTH(email) <= 255`)
         )
-        .addColumn("password", "text", (col) => col.notNull().check(sql`LENGTH(password) >= 3 AND LENGTH(password) <= 255`))
+        .addColumn("password", "text", (col) => col.notNull().check(sql`LENGTH(password) >= 3 AND LENGTH(password) <= 40`))
         .addColumn("createdAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .addColumn("modifiedAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .addColumn("active", "integer", (col) => col.defaultTo(0))
