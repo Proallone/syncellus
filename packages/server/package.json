@@ -13,9 +13,9 @@
         "watch:prod": "NODE_ENV=production DEBUG=* tsx watch --env-file=.env src/server.ts | pino-pretty",
         "test": "vitest --reporter=verbose",
         "test:cov": "vitest run --coverage",
-        "up": "kysely migrate:up",
+        "up": "kysely migrate:latest",
         "postup": "kysely seed run",
-        "down": "kysely migrate:down",
+        "down": "kysely migrate:rollback --all",
         "build": "tsc --build",
         "format": "NODE_OPTIONS='--experimental-strip-types' prettier . --config ../../prettier.config.ts --write"
     },
