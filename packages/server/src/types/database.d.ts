@@ -20,6 +20,18 @@ export type User = Selectable<UsersTable>;
 export type NewUser = Insertable<UsersTable>;
 export type UserUpdate = Updateable<UsersTable>;
 
+export interface RolesTable {
+    id: Generated<string>;
+    name: string;
+    description: string;
+    createdAt: ColumnType<Date, string | undefined, never>;
+    modifiedAt: ColumnType<Date, string | undefined, never>;
+}
+
+export type Role = Selectable<RolesTable>;
+export type NewRole = Insertable<RolesTable>;
+export type RoleUpdate = Updateable<RolesTable>;
+
 export interface ProfilesTable {
     id: Generated<string>;
     user_id: string;

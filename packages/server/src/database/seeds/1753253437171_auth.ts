@@ -1,5 +1,5 @@
 import type { Kysely } from "kysely";
-import type { Database, NewUser } from "@syncellus/types/database.js";
+import type { Database, NewRole, NewUser } from "@syncellus/types/database.js";
 
 const users: NewUser[] = [
     {
@@ -32,6 +32,20 @@ const users: NewUser[] = [
     }
 ];
 
+const roles: NewRole[] = [
+    {
+        id: "0198f237-5cc2-7328-a024-03b986c7b3b5",
+        name: "admin",
+        description: "Standard administrator role"
+    },
+    {
+        id: "0198f237-5cc2-70d7-a6c2-25f3796ee756",
+        name: "user",
+        description: "Standard user role"
+    }
+];
+
 export async function seed(db: Kysely<Database>): Promise<void> {
     await db.insertInto("auth_users").values(users).execute();
+    await db.insertInto("auth_roles").values(roles).execute();
 }
