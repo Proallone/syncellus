@@ -32,6 +32,18 @@ export type Role = Selectable<RolesTable>;
 export type NewRole = Insertable<RolesTable>;
 export type RoleUpdate = Updateable<RolesTable>;
 
+export interface ScopesTable {
+    id: Generated<string>;
+    scope: string;
+    description: string;
+    createdAt: ColumnType<Date, string | undefined, never>;
+    modifiedAt: ColumnType<Date, string | undefined, never>;
+}
+
+export type Scope = Selectable<ScopesTable>;
+export type NewScope = Insertable<ScopesTable>;
+export type ScopeUpdate = Updateable<ScopesTable>;
+
 export interface ProfilesTable {
     id: Generated<string>;
     user_id: string;

@@ -59,6 +59,25 @@ export async function up(db: Kysely<any>): Promise<void> {
 			WHERE
 			id = OLD.id;
 		END;`.execute(db);
+
+    await db.schema
+        .createTable("auth_scopes")
+        .addColumn("id", "text", (col) => col.primaryKey().check(sql`LENGTH(id) = 36`))
+        .addColumn("scope", "text", (col) => col.notNull().check(sql`LENGTH(scope) <= 256`))
+        .addColumn("description", "text", (col) => col.check(sql`LENGTH(description) <= 256`))
+        .addColumn("createdAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("modifiedAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .execute();
+
+    await sql`
+		CREATE TRIGGER IF NOT EXISTS update_auth_scopes_modifiedAt BEFORE
+		UPDATE ON auth_scopes FOR EACH ROW BEGIN
+			UPDATE auth_scopes
+			SET
+			modifiedAT = datetime ('now')
+			WHERE
+			id = OLD.id;
+		END;`.execute(db);
 }
 
 // `any` is required here since migrations should be frozen in time. alternatively, keep a "snapshot" db interface.
@@ -67,6 +86,9 @@ export async function down(db: Kysely<any>): Promise<void> {
     // down migration code goes here...
     // note: down migrations are optional. you can safely delete this function.
     // For more info, see: https://kysely.dev/docs/migrations
+    await sql`DROP TRIGGER IF EXISTS update_auth_scopes_modifiedAt;`.execute(db);
+    await db.schema.dropTable("auth_scopes").execute();
+
     await sql`DROP TRIGGER IF EXISTS update_auth_roles_modifiedAt;`.execute(db);
     await db.schema.dropTable("auth_roles").execute();
 
