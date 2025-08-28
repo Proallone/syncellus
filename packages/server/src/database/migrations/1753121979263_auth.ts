@@ -98,8 +98,28 @@ export async function up(db: Kysely<any>): Promise<void> {
                 .check(sql`LENGTH(scope_id) = 36`)
                 .references("auth_scopes.id")
         )
+        .addPrimaryKeyConstraint("primary_key", ["role_id", "scope_id"])
         .addForeignKeyConstraint("auth_role_scopes_role_id_fk", ["role_id"], "auth_roles", ["id"], (cb) => cb.onDelete("cascade"))
         .addForeignKeyConstraint("auth_role_scopes_scope_id_fk", ["scope_id"], "auth_scopes", ["id"], (cb) => cb.onDelete("cascade"))
+        .execute();
+
+    await db.schema
+        .createTable("auth_user_roles")
+        .addColumn("user_id", "text", (col) =>
+            col
+                .notNull()
+                .check(sql`LENGTH(user_id) = 36`)
+                .references("auth_users.id")
+        )
+        .addColumn("role_id", "text", (col) =>
+            col
+                .notNull()
+                .check(sql`LENGTH(role_id) = 36`)
+                .references("auth_roles.id")
+        )
+        .addPrimaryKeyConstraint("primary_key", ["user_id", "role_id"])
+        .addForeignKeyConstraint("auth_user_role_user_id_fk", ["user_id"], "auth_users", ["id"], (cb) => cb.onDelete("cascade"))
+        .addForeignKeyConstraint("auth_user_roles_role_id_fk", ["role_id"], "auth_roles", ["id"], (cb) => cb.onDelete("cascade"))
         .execute();
 }
 
@@ -109,6 +129,8 @@ export async function down(db: Kysely<any>): Promise<void> {
     // down migration code goes here...
     // note: down migrations are optional. you can safely delete this function.
     // For more info, see: https://kysely.dev/docs/migrations
+    await db.schema.dropTable("auth_user_roles").execute();
+
     await db.schema.dropTable("auth_role_scopes").execute();
 
     await sql`DROP TRIGGER IF EXISTS update_auth_scopes_modifiedAt;`.execute(db);
