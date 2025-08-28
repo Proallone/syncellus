@@ -45,7 +45,7 @@ export class AuthService {
         const match = await compareHash(password, userFromDb.password);
         if (!match) throw new UnauthorizedError("Invalid credentials");
 
-        const user: UserJWTPayload = { public_id: userFromDb.public_id, role: userFromDb.role };
+        const user: UserJWTPayload = { public_id: userFromDb.public_id };
         return { user };
     };
 

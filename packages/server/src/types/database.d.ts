@@ -14,7 +14,6 @@ export interface UsersTable {
     createdAt: ColumnType<Date, string | undefined, never>;
     modifiedAt: ColumnType<Date, string | undefined, never>;
     active: Generated<number>;
-    role: string;
 }
 
 export type User = Selectable<UsersTable>;

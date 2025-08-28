@@ -57,8 +57,7 @@ describe("Auth Controller", () => {
                 password: "password",
                 createdAt: new Date(),
                 modifiedAt: new Date(),
-                role: "employee",
-                active: true
+                active: 1
             };
             vi.mocked(mockService.registerNewUser).mockResolvedValue(mockedUser);
 
@@ -113,8 +112,7 @@ describe("Auth Controller", () => {
 
             vi.mocked(mockService.verifyUserCredentials).mockResolvedValue({
                 user: {
-                    public_id: "userid1",
-                    role: "employee"
+                    public_id: "userid1"
                 }
             });
 

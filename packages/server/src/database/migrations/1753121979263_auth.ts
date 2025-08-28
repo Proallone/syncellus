@@ -27,7 +27,6 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("createdAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .addColumn("modifiedAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .addColumn("active", "integer", (col) => col.defaultTo(0))
-        .addColumn("role", "text", (col) => col.check(sql`role in ('admin', 'manager', 'employee')`).defaultTo("employee"))
         .execute();
 
     await db.schema.createIndex("user_email").on("auth_users").column("email").execute();

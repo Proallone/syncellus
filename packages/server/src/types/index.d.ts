@@ -23,7 +23,6 @@ export interface DbHealthResponse {
 
 export interface UserJWTPayload {
     public_id: string;
-    role: string;
 }
 
 export interface AuthRequest extends Request {
