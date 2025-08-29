@@ -39,7 +39,6 @@ export const configurePassport = (authService: AuthService, passportInstance = p
             async (jwtPayload, done) => {
                 try {
                     const { user } = await authService.findUserByPublicID(jwtPayload.public_id);
-                    logger.info(user);
                     done(null, user);
                 } catch (error) {
                     logger.error(error);
@@ -50,10 +49,10 @@ export const configurePassport = (authService: AuthService, passportInstance = p
     );
 
     passportInstance.serializeUser((user: User, done) => {
-        done(null, user.id);
+        done(null, user.public_id);
     });
 
-    passportInstance.deserializeUser(async (id: string, done) => {
-        done(null, { id });
+    passportInstance.deserializeUser(async (public_id: string, done) => {
+        done(null, { public_id });
     });
 };

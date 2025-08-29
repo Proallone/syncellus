@@ -2,6 +2,10 @@ import type { ColumnType, Generated, Insertable, Selectable, Updateable } from "
 
 export interface Database {
     auth_users: UsersTable;
+    auth_roles: RolesTable;
+    auth_scopes: ScopesTable;
+    auth_role_scopes: RoleScopesTable;
+    auth_user_roles: UserRolesTable;
     accounts_profiles: ProfilesTable;
     timesheets_entries: TimesheetTable;
 }

@@ -3,7 +3,6 @@ import type { AuthBasePayload, ForgotPasswordPayload, ResetPasswordPayload } fro
 import type { AccountsGetQuery, AccountsPostPayload, AccountsUpdatePayload } from "@syncellus/modules/accounts/schema.ts";
 import type { Request } from "express";
 import { TimesheetPostPayload } from "@syncellus/modules/timesheets/schema.ts";
-
 export interface Config {
     PORT: number;
     NODE_ENV: string;
@@ -23,6 +22,8 @@ export interface DbHealthResponse {
 
 export interface UserJWTPayload {
     public_id: string;
+    roles: string[];
+    scopes: string[];
 }
 
 export interface AuthRequest extends Request {

@@ -49,9 +49,16 @@ export class AuthService {
         return { user };
     };
 
-    public issueLoginToken = (user: Express.User) => {
+    public issueLoginToken = async (user: Express.User & { public_id: string }) => {
+        const roles = await this.repo.getUserRoles(user.public_id);
+        const scopes = await this.repo.getUserScopes(user.public_id);
+        const payload = {
+            sub: user.public_id,
+            roles,
+            scopes
+        };
         const config = AppConfig.getInstance();
-        return Jwt.sign(user, config.JWT_TOKEN_SECRET, { expiresIn: "30m" });
+        return Jwt.sign(payload, config.JWT_TOKEN_SECRET, { expiresIn: "30m" });
     };
 
     public issuePasswordResetToken = async (email: string) => {
