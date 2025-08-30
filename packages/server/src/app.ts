@@ -14,7 +14,8 @@ import passport from "passport";
 import { container } from "@syncellus/container.js";
 
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit: "1mb" }));
+app.use(express.urlencoded({ limit: "100kb", extended: true }));
 app.use(passport.initialize());
 
 configurePassport(container.authService);
