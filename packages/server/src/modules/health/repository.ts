@@ -1,8 +1,9 @@
-import { type Kysely, QueryResult, sql } from "kysely";
+import { type Kysely, sql } from "kysely";
 import type { DbHealthResponse } from "@syncellus/types/index.js";
 import type { Database } from "@syncellus/types/database.js";
+import type { IHealthRepository } from "./types.js";
 
-export class HealthRepository {
+export class HealthRepository implements IHealthRepository {
     constructor(private readonly db: Kysely<Database>) {}
 
     public getDatabaseVersionFromDb = async (): Promise<DbHealthResponse> => {
@@ -10,7 +11,7 @@ export class HealthRepository {
         return version[0];
     };
 
-    public getDatabaseHealth = async (): Promise<QueryResult<string>> => {
-        return await sql<string>`SELECT 1;`.execute(this.db);
+    public getDatabaseHealth = async (): Promise<boolean> => {
+        return !!sql<string>`SELECT 1;`.execute(this.db);
     };
 }

@@ -1,3 +1,5 @@
+import type { DbHealthResponse } from "@syncellus/types/index.js";
+
 export type HealthStatus = "Healthy" | "Unhealthy" | "Degraded";
 
 export type ServiceHealthResponse = {
@@ -9,7 +11,12 @@ export type DatabaseHealthResponse = {
     sqlite_version: string;
 } & ServiceHealthResponse;
 
-interface IHealthService {
+export interface IHealthService {
     getApplicationStatus(): ServiceHealthResponse;
     getDatabaseStatus(): Promise<DatabaseHealthResponse>;
+}
+
+export interface IHealthRepository {
+    getDatabaseVersionFromDb(): Promise<DbHealthResponse>;
+    getDatabaseHealth(): Promise<boolean>;
 }
