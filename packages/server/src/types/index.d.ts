@@ -7,6 +7,7 @@ export interface Config {
     PORT: number;
     NODE_ENV: string;
     JWT_TOKEN_SECRET: string;
+    DATABASE_URL: string;
     DATABASE_KEY: string;
     CRYPTO_HMAC_KEY: string;
     SMTP_HOST: string;

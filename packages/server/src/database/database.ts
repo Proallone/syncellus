@@ -16,7 +16,7 @@ export class DatabaseService {
                 throw new Error("DATABASE_KEY environment variable is not set.");
             }
 
-            const dbInstance = new Database("syncellus.sqlite");
+            const dbInstance = new Database(process.env.DATABASE_URL); //TODO fix this to use config
             if (!isDev) {
                 //encrypt database only if not in dev
                 dbInstance.pragma(`key='${encryptionKey}'`); //? this has to be executed first - otherwise throws
