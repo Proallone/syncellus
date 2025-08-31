@@ -9,6 +9,7 @@ import { LoggerService } from "@syncellus/core/logger.js";
 import passport from "passport";
 import { NodemailerMailer } from "@syncellus/modules/mailer/providers/NodemailerMailer.js";
 import { MailService } from "@syncellus/modules/mailer/service.js";
+import { hw } from "@syncellus/utils/handlerWrapper.js";
 
 const router = Router();
 const db = DatabaseService.getInstance();
@@ -22,10 +23,10 @@ const mailService = new MailService(mailer);
 const service = new AuthService(repo, mailService);
 const controller = new AuthController(service, logger);
 
-router.post("/register", validate(AuthSchema), controller.register);
-router.post("/forgot-password", validate(ForgotPasswordSchema), controller.forgotPassword);
-router.post("/reset-password", validate(ResetPasswordSchema), controller.resetPassword);
-router.post("/login", validate(AuthSchema), passport.authenticate("local", { session: false }), controller.login); //TODO cleanup?
-router.get("/me", passport.authenticate("jwt", { session: false }), controller.getMeInformation);
+router.post("/register", validate(AuthSchema), hw(controller.register));
+router.post("/forgot-password", validate(ForgotPasswordSchema), hw(controller.forgotPassword));
+router.post("/reset-password", validate(ResetPasswordSchema), hw(controller.resetPassword));
+router.post("/login", validate(AuthSchema), passport.authenticate("local", { session: false }), hw(controller.login)); //TODO cleanup?
+router.get("/me", passport.authenticate("jwt", { session: false }), hw(controller.getMeInformation));
 
 export default router;

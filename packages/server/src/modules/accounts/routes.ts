@@ -12,6 +12,7 @@ import { TimesheetService } from "../timesheets/service.js";
 import { TimesheetRepository } from "../timesheets/repository.js";
 import { LoggerService } from "@syncellus/core/logger.js";
 import passport from "passport";
+import { hw } from "@syncellus/utils/handlerWrapper.js";
 
 const router = Router();
 const db = DatabaseService.getInstance();
@@ -28,13 +29,13 @@ new UserCreatedHandler(eventBus, repo, logger).register();
 
 router.use(passport.authenticate("jwt", { session: false }));
 
-router.post("/", validate(AccountsPostSchema), controller.createAccount);
-router.get("/", validate(AccountsGetSchema), controller.getAccounts);
-router.get("/:id", controller.getOneAccount);
-router.patch("/:id", validate(AccountsPatchSchema), controller.updateAccount);
-router.delete("/:id", controller.deleteAccount);
+router.post("/", validate(AccountsPostSchema), hw(controller.createAccount));
+router.get("/", validate(AccountsGetSchema), hw(controller.getAccounts));
+router.get("/:id", hw(controller.getOneAccount));
+router.patch("/:id", validate(AccountsPatchSchema), hw(controller.updateAccount));
+router.delete("/:id", hw(controller.deleteAccount));
 
-router.get("/:employeeId/timesheets", controller.getTimesheetsByAccount);
-router.post("/:employeeId/timesheets", validate(TimesheetPostSchema), controller.createTimesheetForAccount);
+router.get("/:employeeId/timesheets", hw(controller.getTimesheetsByAccount));
+router.post("/:employeeId/timesheets", validate(TimesheetPostSchema), hw(controller.createTimesheetForAccount));
 
 export default router;
