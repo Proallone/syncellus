@@ -15,7 +15,6 @@ const repo = new TimesheetRepository(db);
 const service = new TimesheetService(repo);
 const controller = new TimesheetController(service);
 
-// router.use(authMiddleware);
 router.use(passport.authenticate("jwt", { session: false }));
 
 router.get("/", controller.getTimesheets);

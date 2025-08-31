@@ -1,4 +1,4 @@
-import type { Response } from "express";
+import type { Request, Response } from "express";
 import type { AuthRequestBody, ForgotPasswordRequestBody, ResetPasswordRequestBody } from "@syncellus/types/index.js";
 import type { AuthService } from "@syncellus/modules/auth/service.js";
 import type { Logger } from "pino";
@@ -23,7 +23,7 @@ export class AuthController {
 
     public login = handlerWrapper(async (req: TypedRequest<AuthRequestBody>, res: Response) => {
         const { user } = req;
-        const accessToken = await this.service.issueLoginToken(user);
+        const accessToken = await this.service.issueLoginToken(user); //TODO fix
 
         return sendResponse(res, HttpStatus.OK, { message: "Login successful", data: { accessToken } });
     });
@@ -42,5 +42,11 @@ export class AuthController {
         await this.service.performPasswordReset(token, newPassword);
 
         return sendResponse(res, HttpStatus.OK, { message: "Password reset successfully" });
+    });
+
+    public getMeInformation = handlerWrapper(async (req: Request, res: Response) => {
+        const { user } = req;
+        const data = await this.service.findUserByPublicID(user.public_id); //TODO fix
+        return sendResponse(res, HttpStatus.OK, { message: "This account information", data: data });
     });
 }

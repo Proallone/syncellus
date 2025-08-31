@@ -26,5 +26,6 @@ router.post("/register", validate(AuthSchema), controller.register);
 router.post("/forgot-password", validate(ForgotPasswordSchema), controller.forgotPassword);
 router.post("/reset-password", validate(ResetPasswordSchema), controller.resetPassword);
 router.post("/login", validate(AuthSchema), passport.authenticate("local", { session: false }), controller.login); //TODO cleanup?
+router.get("/me", passport.authenticate("jwt", { session: false }), controller.getMeInformation);
 
 export default router;

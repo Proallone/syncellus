@@ -1,4 +1,4 @@
-import type { Database, NewUser } from "@syncellus/types/database.js";
+import type { Database, NewUser, User } from "@syncellus/types/database.js";
 import { Kysely } from "kysely";
 
 export class AuthRepository {
@@ -16,15 +16,15 @@ export class AuthRepository {
         return await this.db.selectFrom("auth_users").select(["id"]).where("id", "=", id).executeTakeFirst();
     };
 
-    public selectUserByPublicID = async (public_id: string) => {
-        return await this.db.selectFrom("auth_users").select(["id", "public_id", "password"]).where("public_id", "=", public_id).executeTakeFirst();
+    public selectUserByPublicID = async (public_id: string): Promise<User> => {
+        return await this.db.selectFrom("auth_users").selectAll().where("public_id", "=", public_id).executeTakeFirst();
     };
 
     public updateUserPassword = async (public_id: string, newPassword: string) => {
         return await this.db.updateTable("auth_users").set({ password: newPassword }).where("public_id", "=", public_id).executeTakeFirst();
     };
 
-    public getUserRoles = async (user_public_id: string) => {
+    public getUserRoles = async (user_public_id: string): Promise<string[]> => {
         const { id } = await this.selectUserByPublicID(user_public_id);
         const roles = await this.db
             .selectFrom("auth_user_roles")
@@ -36,7 +36,7 @@ export class AuthRepository {
         return roles.map((role) => role.name);
     };
 
-    public getUserScopes = async (user_public_id: string) => {
+    public getUserScopes = async (user_public_id: string): Promise<string[]> => {
         const { id } = await this.selectUserByPublicID(user_public_id);
 
         const scopes = await this.db

@@ -1,28 +1,34 @@
 import { z } from "zod";
 
-const AuthBasePayload = z.strictObject({
+export const AuthBasePayload = z.strictObject({
     email: z.email(),
     password: z.string().min(8).max(40)
 });
 
-const AuthSchema = z.object({
+export const AuthSchema = z.object({
     body: AuthBasePayload
 });
 
-const ForgotPasswordPayload = z.strictObject({
+export const ForgotPasswordPayload = z.strictObject({
     email: z.email()
 });
 
-const ForgotPasswordSchema = z.object({
+export const ForgotPasswordSchema = z.object({
     body: ForgotPasswordPayload
 });
 
-const ResetPasswordPayload = z.strictObject({
+export const ResetPasswordPayload = z.strictObject({
     token: z.jwt(),
     newPassword: z.string().min(8).max(40)
 });
 
-const ResetPasswordSchema = z.object({
+export const ResetPasswordSchema = z.object({
     body: ResetPasswordPayload
 });
-export { AuthSchema, AuthBasePayload, ForgotPasswordSchema, ForgotPasswordPayload, ResetPasswordPayload, ResetPasswordSchema };
+
+export const MeData = z.object({
+    public_id: z.string().length(10),
+    email: z.email(),
+    createdAt: z.iso.datetime(),
+    modifiedAt: z.iso.datetime()
+});
