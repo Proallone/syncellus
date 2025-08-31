@@ -5,7 +5,7 @@ import type { Request, Response, NextFunction } from "express";
 import { HealthRepository } from "@syncellus/modules/health/repository.js";
 import type { Database as DB } from "@syncellus/types/database.js";
 import { Kysely } from "kysely";
-import type { DatabaseHealth, ServiceHealth } from "@syncellus/modules/health/types.js";
+import type { DatabaseHealthResponse, ServiceHealthResponse } from "@syncellus/modules/health/types.js";
 
 // Mock the HealthService dependency using the same class-based factory pattern.
 vi.mock("@syncellus/modules/health/service.js", () => {
@@ -48,7 +48,7 @@ describe("Health Controller", () => {
     describe("getApplicationHealth", () => {
         it("should return a 200 status with the application health status", () => {
             // Arrange
-            const mockStatus: ServiceHealth = { status: "Healthy" };
+            const mockStatus: ServiceHealthResponse = { status: "Healthy" };
             // Mock the service method to return the expected value.
             vi.mocked(mockService.getApplicationStatus).mockReturnValue(mockStatus);
 
@@ -65,7 +65,7 @@ describe("Health Controller", () => {
     describe("getDatabaseHealth", () => {
         it("should return a 200 status with the database version on success", async () => {
             // Arrange
-            const mockVersion: DatabaseHealth = { status: "Healthy", sqlite_version: "3.42.0" };
+            const mockVersion: DatabaseHealthResponse = { status: "Healthy", sqlite_version: "3.42.0" };
             // Mock the service's async method to resolve with the expected value.
             vi.mocked(mockService.getDatabaseStatus).mockResolvedValue(mockVersion);
 

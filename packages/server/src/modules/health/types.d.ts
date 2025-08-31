@@ -1,7 +1,12 @@
-export type ServiceHealth = {
+export type ServiceHealthResponse = {
     status: "Healthy" | "Unhealthy";
 };
 
-export type DatabaseHealth = {
+export type DatabaseHealthResponse = {
     sqlite_version: string;
-} & ServiceHealth;
+} & ServiceHealthResponse;
+
+interface IHealthService {
+    getApplicationStatus(): ServiceHealthResponse;
+    getDatabaseStatus(): Promise<DatabaseHealthResponse>;
+}
