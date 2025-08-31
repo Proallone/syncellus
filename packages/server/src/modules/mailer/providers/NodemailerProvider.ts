@@ -1,8 +1,8 @@
 import nodemailer, { type Transporter } from "nodemailer";
-import type { Mail, Mailer } from "@syncellus/modules/mailer/types.js";
+import type { Mail, IMailProvider } from "@syncellus/modules/mailer/types.js";
 import { AppConfig } from "@syncellus/configs/config.js";
 
-export class NodemailerMailer implements Mailer {
+export class NodemailerProvider implements IMailProvider {
     private readonly transporter: Transporter;
 
     constructor() {

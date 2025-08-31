@@ -7,7 +7,7 @@ import { AuthController } from "./controller.js";
 import { DatabaseService } from "@syncellus/database/database.js";
 import { LoggerService } from "@syncellus/core/logger.js";
 import passport from "passport";
-import { NodemailerMailer } from "@syncellus/modules/mailer/providers/NodemailerMailer.js";
+import { NodemailerProvider } from "@syncellus/modules/mailer/providers/NodemailerProvider.js";
 import { MailService } from "@syncellus/modules/mailer/service.js";
 import { hw } from "@syncellus/utils/handlerWrapper.js";
 
@@ -17,7 +17,7 @@ const db = DatabaseService.getInstance();
 const repo = new AuthRepository(db);
 const logger = LoggerService.getInstance();
 
-const mailer = new NodemailerMailer();
+const mailer = new NodemailerProvider();
 const mailService = new MailService(mailer);
 
 const service = new AuthService(repo, mailService);

@@ -1,7 +1,8 @@
-import type { Mailer } from "@syncellus/modules/mailer/types.js";
+import type { IMailService, IMailProvider } from "@syncellus/modules/mailer/types.js";
 import { compileTemplate } from "@syncellus/modules/mailer/utils/compileTemplate.js";
-export class MailService {
-    constructor(private readonly mailer: Mailer) {}
+
+export class MailService implements IMailService {
+    constructor(private readonly mailer: IMailProvider) {}
 
     async sendWelcome(to: string, username: string) {
         const template = compileTemplate("welcome");
