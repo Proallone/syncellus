@@ -1,5 +1,8 @@
+export type HealthStatus = "Healthy" | "Unhealthy" | "Degraded";
+
 export type ServiceHealthResponse = {
-    status: "Healthy" | "Unhealthy";
+    status: HealthStatus;
+    details?: Record<string, unknown>;
 };
 
 export type DatabaseHealthResponse = {
