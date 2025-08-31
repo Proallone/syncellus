@@ -1,4 +1,4 @@
-import type { Database as DB } from "@syncellus/types/database.js";
+import type { DB } from "@syncellus/types/db.js";
 import { Kysely } from "kysely";
 import { LibsqlDialect } from "kysely-libsql";
 import { createClient } from "@libsql/client";

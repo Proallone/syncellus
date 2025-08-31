@@ -1,10 +1,10 @@
-import type { Database, NewUser, User } from "@syncellus/types/database.js";
-import { Kysely } from "kysely";
+import type { AuthUsers, DB } from "@syncellus/types/db.js";
+import { Insertable, Kysely, Selectable } from "kysely";
 
 export class AuthRepository {
-    constructor(private readonly db: Kysely<Database>) {}
+    constructor(private readonly db: Kysely<DB>) {}
 
-    public insertNewUser = async (user: NewUser) => {
+    public insertNewUser = async (user: Insertable<AuthUsers>) => {
         return await this.db.insertInto("auth_users").values(user).returning(["id", "public_id", "email", "createdAt", "modifiedAt", "active"]).executeTakeFirst(); //TODO do not return id
     };
 
@@ -16,7 +16,7 @@ export class AuthRepository {
         return await this.db.selectFrom("auth_users").select(["id"]).where("id", "=", id).executeTakeFirst();
     };
 
-    public selectUserByPublicID = async (public_id: string): Promise<User> => {
+    public selectUserByPublicID = async (public_id: string): Promise<Selectable<AuthUsers>> => {
         return await this.db.selectFrom("auth_users").selectAll().where("public_id", "=", public_id).executeTakeFirst();
     };
 
