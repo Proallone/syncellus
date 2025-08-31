@@ -20,8 +20,8 @@
         "format": "NODE_OPTIONS='--experimental-strip-types' prettier . --config ../../prettier.config.ts --write"
     },
     "dependencies": {
+        "@libsql/client": "^0.15.1",
         "argon2": "^0.44.0",
-        "better-sqlite3-multiple-ciphers": "^12.2.0",
         "cors": "^2.8.5",
         "express": "^5.1.0",
         "express-rate-limit": "^8.0.1",
@@ -29,6 +29,7 @@
         "helmet": "^8.1.0",
         "jsonwebtoken": "^9.0.2",
         "kysely": "^0.28.5",
+        "kysely-libsql": "^0.7.1",
         "nanoid": "^5.1.5",
         "nodemailer": "^7.0.5",
         "passport": "^0.7.0",
