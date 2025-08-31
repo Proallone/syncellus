@@ -1,8 +1,7 @@
+import type { AuthService } from "@syncellus/modules/auth/service.js";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
-import type { AuthService } from "@syncellus/modules/auth/service.js";
-import type { User } from "@syncellus/types/database.js";
 import { LoggerService } from "@syncellus/core/logger.js";
 import { AppConfig } from "@syncellus/configs/config.js";
 
@@ -39,7 +38,6 @@ export const configurePassport = (authService: AuthService, passportInstance = p
             async (jwtPayload, done) => {
                 try {
                     const { user } = await authService.findUserByPublicID(jwtPayload.public_id);
-                    logger.info(user);
                     done(null, user);
                 } catch (error) {
                     logger.error(error);
@@ -48,12 +46,4 @@ export const configurePassport = (authService: AuthService, passportInstance = p
             }
         )
     );
-
-    passportInstance.serializeUser((user: User, done) => {
-        done(null, user.id);
-    });
-
-    passportInstance.deserializeUser(async (id: string, done) => {
-        done(null, { id });
-    });
 };

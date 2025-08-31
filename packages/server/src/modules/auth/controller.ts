@@ -21,9 +21,9 @@ export class AuthController {
         return sendResponse(res, HttpStatus.CREATED, { message: "Registration successful", data: newUser });
     });
 
-    public login = handlerWrapper((req: TypedRequest<AuthRequestBody>, res: Response) => {
+    public login = handlerWrapper(async (req: TypedRequest<AuthRequestBody>, res: Response) => {
         const { user } = req;
-        const accessToken = this.service.issueLoginToken(user);
+        const accessToken = await this.service.issueLoginToken(user);
 
         return sendResponse(res, HttpStatus.OK, { message: "Login successful", data: { accessToken } });
     });

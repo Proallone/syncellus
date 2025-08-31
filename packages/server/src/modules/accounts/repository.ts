@@ -9,15 +9,13 @@ export class AccountsRepository {
         return await this.db.insertInto("accounts_profiles").values(account).returningAll().executeTakeFirstOrThrow();
     };
 
-    public selectAllAccountsFromDb = async (query: GetEmployeeQuery) => {
-        let q = this.db
+    public selectAllAccountsFromDb = async (_query: GetEmployeeQuery) => {
+        const q = this.db
             .selectFrom("accounts_profiles")
             .leftJoin("auth_users", "accounts_profiles.user_id", "auth_users.id")
-            .select(["accounts_profiles.id", "name", "surname", "email", "active", "role", "auth_users.createdAt", "auth_users.modifiedAt"]);
+            .select(["accounts_profiles.id", "name", "surname", "email", "active", "auth_users.createdAt", "auth_users.modifiedAt"]);
 
-        if (query.active) q = q.where("active", "=", query.active); //? no boolean in sqlite...
-
-        if (query.role) q = q.where("role", "in", query.role.split(","));
+        // if (query.active) q = q.where("active", "=", query.active); //? no boolean in sqlite...
 
         return await q.execute();
     };
@@ -26,7 +24,7 @@ export class AccountsRepository {
         return await this.db
             .selectFrom("accounts_profiles")
             .leftJoin("auth_users", "accounts_profiles.user_id", "auth_users.id")
-            .select(["accounts_profiles.id", "name", "surname", "email", "active", "role", "auth_users.createdAt", "auth_users.modifiedAt"])
+            .select(["accounts_profiles.id", "name", "surname", "email", "active", "auth_users.createdAt", "auth_users.modifiedAt"])
             .where("auth_users.id", "=", id)
             .executeTakeFirst();
     };

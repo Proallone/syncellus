@@ -2,6 +2,10 @@ import type { ColumnType, Generated, Insertable, Selectable, Updateable } from "
 
 export interface Database {
     auth_users: UsersTable;
+    auth_roles: RolesTable;
+    auth_scopes: ScopesTable;
+    auth_role_scopes: RoleScopesTable;
+    auth_user_roles: UserRolesTable;
     accounts_profiles: ProfilesTable;
     timesheets_entries: TimesheetTable;
 }
@@ -14,12 +18,53 @@ export interface UsersTable {
     createdAt: ColumnType<Date, string | undefined, never>;
     modifiedAt: ColumnType<Date, string | undefined, never>;
     active: Generated<number>;
-    role: string;
 }
 
 export type User = Selectable<UsersTable>;
 export type NewUser = Insertable<UsersTable>;
 export type UserUpdate = Updateable<UsersTable>;
+
+export interface RolesTable {
+    id: Generated<string>;
+    name: string;
+    description: string;
+    createdAt: ColumnType<Date, string | undefined, never>;
+    modifiedAt: ColumnType<Date, string | undefined, never>;
+}
+
+export type Role = Selectable<RolesTable>;
+export type NewRole = Insertable<RolesTable>;
+export type RoleUpdate = Updateable<RolesTable>;
+
+export interface ScopesTable {
+    id: Generated<string>;
+    scope: string;
+    description: string;
+    createdAt: ColumnType<Date, string | undefined, never>;
+    modifiedAt: ColumnType<Date, string | undefined, never>;
+}
+
+export type Scope = Selectable<ScopesTable>;
+export type NewScope = Insertable<ScopesTable>;
+export type ScopeUpdate = Updateable<ScopesTable>;
+
+export interface RoleScopesTable {
+    role_id: Generated<string>;
+    scope_id: Generated<string>;
+}
+
+export type RoleScope = Selectable<RoleScopesTable>;
+export type NewRoleScope = Insertable<RoleScopesTable>;
+export type RoleScopeUpdate = Updateable<RoleScopesTable>;
+
+export interface UserRolesTable {
+    user_id: Generated<string>;
+    role_id: Generated<string>;
+}
+
+export type UserRole = Selectable<UserRolesTable>;
+export type NewUserRole = Insertable<UserRolesTable>;
+export type UserRoleUpdate = Updateable<UserRolesTable>;
 
 export interface ProfilesTable {
     id: Generated<string>;

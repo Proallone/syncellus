@@ -10,8 +10,7 @@ const AccountsPostPayload = AccountsBasePayload.required();
 const AccountsUpdatePayload = AccountsBasePayload.partial();
 
 const AccountsGetQuery = z.object({
-    active: z.boolean().optional(),
-    role: z.enum(["employee", "manager", "admin"]).optional() //TODO fix later so multiple roles are available to query
+    active: z.boolean().optional()
 });
 
 const AccountsGetSchema = z.object({
