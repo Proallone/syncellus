@@ -11,8 +11,8 @@ import { UserCreatedHandler } from "./events.js";
 import { TimesheetService } from "../timesheets/service.js";
 import { TimesheetRepository } from "../timesheets/repository.js";
 import { LoggerService } from "@syncellus/core/logger.js";
-import passport from "passport";
 import { hw } from "@syncellus/utils/handlerWrapper.js";
+import { authenticate } from "@syncellus/middlewares/auth.middleware.js";
 
 const router = Router();
 const db = DatabaseService.getInstance();
@@ -27,7 +27,7 @@ const controller = new AccountsController(service, timesheetService);
 const logger = LoggerService.getInstance();
 new UserCreatedHandler(eventBus, repo, logger).register();
 
-router.use(passport.authenticate("jwt", { session: false }));
+router.use(authenticate("jwt"));
 
 router.post("/", validate(AccountsPostSchema), hw(controller.createAccount));
 router.get("/", validate(AccountsGetSchema), hw(controller.getAccounts));

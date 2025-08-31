@@ -5,8 +5,8 @@ import { TimesheetPostSchema, TimesheetUpdateSchema } from "@syncellus/modules/t
 import { TimesheetRepository } from "@syncellus/modules/timesheets/repository.js";
 import { DatabaseService } from "@syncellus/database/database.js";
 import { TimesheetService } from "@syncellus/modules/timesheets/service.js";
-import passport from "passport";
 import { hw } from "@syncellus/utils/handlerWrapper.js";
+import { authenticate } from "@syncellus/middlewares/auth.middleware.js";
 
 const router = Router();
 const db = DatabaseService.getInstance();
@@ -15,7 +15,7 @@ const repo = new TimesheetRepository(db);
 const service = new TimesheetService(repo);
 const controller = new TimesheetController(service);
 
-router.use(passport.authenticate("jwt", { session: false }));
+router.use(authenticate("jwt"));
 
 router.get("/", hw(controller.getTimesheets));
 router.get("/:id", hw(controller.getTimesheetById));
