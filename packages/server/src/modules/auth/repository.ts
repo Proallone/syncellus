@@ -1,15 +1,16 @@
 import type { Database, NewUser, User } from "@syncellus/types/database.js";
+import type { IAuthRepository } from "@syncellus/modules/auth/types.js";
 import { Kysely } from "kysely";
 
-export class AuthRepository {
+export class AuthRepository implements IAuthRepository {
     constructor(private readonly db: Kysely<Database>) {}
 
     public insertNewUser = async (user: NewUser) => {
-        return await this.db.insertInto("auth_users").values(user).returning(["id", "public_id", "email", "createdAt", "modifiedAt", "active"]).executeTakeFirst(); //TODO do not return id
+        return await this.db.insertInto("auth_users").values(user).returningAll().executeTakeFirst(); //TODO do not return id
     };
 
     public selectUserByEmail = async (email: string) => {
-        return await this.db.selectFrom("auth_users").select(["public_id", "email", "password"]).where("email", "=", email).executeTakeFirst();
+        return await this.db.selectFrom("auth_users").selectAll().where("email", "=", email).executeTakeFirst();
     };
 
     public selectUserByID = async (id: string) => {
@@ -21,7 +22,7 @@ export class AuthRepository {
     };
 
     public updateUserPassword = async (public_id: string, newPassword: string) => {
-        return await this.db.updateTable("auth_users").set({ password: newPassword }).where("public_id", "=", public_id).executeTakeFirst();
+        return await this.db.updateTable("auth_users").set({ password: newPassword }).where("public_id", "=", public_id).returningAll().executeTakeFirst();
     };
 
     public getUserRoles = async (user_public_id: string): Promise<string[]> => {

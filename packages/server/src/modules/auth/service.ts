@@ -8,9 +8,10 @@ import { uuidv7 } from "uuidv7";
 import Jwt from "jsonwebtoken";
 import { AppConfig } from "@syncellus/configs/config.js";
 import { createHmac } from "crypto";
-import type { MailService } from "../mailer/service.js";
+import type { MailService } from "@syncellus/modules/mailer/service.js";
+import type { IAuthService } from "@syncellus/modules/auth/types.js";
 
-export class AuthService {
+export class AuthService implements IAuthService {
     constructor(
         private readonly repo: AuthRepository,
         private readonly mailService: MailService
@@ -46,7 +47,7 @@ export class AuthService {
         if (!match) throw new UnauthorizedError("Invalid credentials");
 
         const user: UserJWTPayload = { public_id: userFromDb.public_id };
-        return { user };
+        return user;
     };
 
     public issueLoginToken = async (user: Express.User & { public_id: string }) => {
@@ -99,12 +100,12 @@ export class AuthService {
     public findUserById = async (id: string) => {
         const user = await this.repo.selectUserByID(id);
         if (!user) throw new UnauthorizedError(`User with id ${id} not found`);
-        return { user };
+        return user;
     };
 
     public findUserByPublicID = async (public_id: string) => {
         const user = await this.repo.selectUserByPublicID(public_id);
         if (!user) throw new UnauthorizedError(`User with public_id ${public_id} not found`);
-        return { user };
+        return user;
     };
 }

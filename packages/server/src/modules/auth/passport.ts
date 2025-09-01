@@ -18,7 +18,7 @@ export const configurePassport = (authService: AuthService, passportInstance = p
             },
             async (email, password, done) => {
                 try {
-                    const { user } = await authService.verifyUserCredentials({ email, password });
+                    const user = await authService.verifyUserCredentials({ email, password });
                     return done(null, user);
                 } catch (error) {
                     //TODO cleanup
@@ -37,7 +37,7 @@ export const configurePassport = (authService: AuthService, passportInstance = p
             },
             async (jwtPayload, done) => {
                 try {
-                    const { user } = await authService.findUserByPublicID(jwtPayload.sub);
+                    const user = await authService.findUserByPublicID(jwtPayload.sub);
                     done(null, user);
                 } catch (error) {
                     logger.error(error);

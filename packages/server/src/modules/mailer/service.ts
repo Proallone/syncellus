@@ -1,6 +1,6 @@
 import type { IMailService, IMailProvider } from "@syncellus/modules/mailer/types.js";
 import { compileTemplate } from "@syncellus/modules/mailer/utils/compileTemplate.js";
-
+//TODO fix 500 if mailer provider is not available
 export class MailService implements IMailService {
     constructor(private readonly mailer: IMailProvider) {}
 
