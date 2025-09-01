@@ -1,10 +1,12 @@
 import type { Request } from "express";
-import type { User } from "@syncellus/types/database.d.ts";
+import type { UserJWTPayload } from "@syncellus/types/index.d.ts";
 export interface TypedRequest<T> extends Request {
     body: T;
 }
-declare namespace Express {
-    export interface Request {
-        user?: User;
+
+declare global {
+    namespace Express {
+        //TODO fix
+        interface User extends UserJWTPayload {} // eslint-disable-line @typescript-eslint/no-empty-object-type
     }
 }

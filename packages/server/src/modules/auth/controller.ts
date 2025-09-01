@@ -22,7 +22,7 @@ export class AuthController {
 
     public login = async (req: TypedRequest<AuthRequestBody>, res: Response) => {
         const { user } = req;
-        const accessToken = await this.service.issueLoginToken(user); //TODO fix
+        const accessToken = await this.service.issueLoginToken(user);
 
         return sendResponse(res, HttpStatus.OK, { message: "Login successful", data: { accessToken } });
     };
@@ -45,7 +45,7 @@ export class AuthController {
 
     public getMeInformation = async (req: Request, res: Response) => {
         const { user } = req;
-        const data = await this.service.findUserByPublicID(user.public_id); //TODO fix
+        const data = await this.service.findUserByPublicID(user.public_id);
         return sendResponse(res, HttpStatus.OK, { message: "This account information", data: data });
     };
 }
