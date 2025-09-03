@@ -5,6 +5,7 @@ import type { Logger } from "pino";
 import type { TypedRequest } from "@syncellus/types/express.js";
 import { sendResponse } from "@syncellus/utils/responseBuilder.js";
 import { HttpStatus } from "@syncellus/core/http.js";
+import { UserInformationResponse } from "@syncellus/modules/auth/schemas/response.js";
 
 export class AuthController {
     constructor(
@@ -17,7 +18,7 @@ export class AuthController {
         const newUser = await this.service.registerNewUser(registerData);
         this.logger.info({ email: registerData.email }, "User registration attempt");
 
-        return sendResponse(res, HttpStatus.CREATED, { message: "Registration successful", data: newUser });
+        return sendResponse(res, HttpStatus.CREATED, { message: "Registration successful", data: newUser, schema: UserInformationResponse });
     };
 
     public login = async (req: TypedRequest<AuthRequestBody>, res: Response) => {
@@ -46,6 +47,6 @@ export class AuthController {
     public getMeInformation = async (req: Request, res: Response) => {
         const { user } = req;
         const data = await this.service.findUserByPublicID(user.public_id);
-        return sendResponse(res, HttpStatus.OK, { message: "This account information", data: data });
+        return sendResponse(res, HttpStatus.OK, { message: "This account information", data: data, schema: UserInformationResponse });
     };
 }

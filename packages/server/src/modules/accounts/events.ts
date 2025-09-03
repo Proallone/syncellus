@@ -19,6 +19,6 @@ export class UserCreatedHandler extends EventHandler<"user.created"> {
 
     async handle(user: AppEvents["user.created"]): Promise<void> {
         this.logger.info(`event user.created called with body: ${JSON.stringify(user)}`);
-        await this.repo.insertNewAccountToDb({ user_id: user.public_id });
+        await this.repo.insertNewAccountToDb({ user_id: user.id });
     }
 }

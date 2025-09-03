@@ -25,10 +25,3 @@ export const ResetPasswordPayload = z.strictObject({
 export const ResetPasswordSchema = z.object({
     body: ResetPasswordPayload
 });
-
-export const MeData = z.object({
-    public_id: z.string().length(10),
-    email: z.email(),
-    createdAt: z.iso.datetime(),
-    modifiedAt: z.iso.datetime()
-});

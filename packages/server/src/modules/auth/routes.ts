@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { validate } from "@syncellus/middlewares/validator.middleware.js";
-import { AuthSchema, ForgotPasswordSchema, ResetPasswordSchema } from "@syncellus/modules/auth/schema.js";
+import { AuthSchema, ForgotPasswordSchema, ResetPasswordSchema } from "@syncellus/modules/auth/schemas/request.js";
 import { AuthRepository } from "./repository.js";
 import { AuthService } from "./service.js";
 import { AuthController } from "./controller.js";

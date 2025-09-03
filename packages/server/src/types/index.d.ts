@@ -1,5 +1,5 @@
 import z from "zod";
-import type { AuthBasePayload, ForgotPasswordPayload, ResetPasswordPayload } from "@syncellus/modules/auth/schema.js";
+import type { AuthBasePayload, ForgotPasswordPayload, ResetPasswordPayload } from "@syncellus/modules/auth/schemas/request.ts";
 import type { AccountsGetQuery, AccountsPostPayload, AccountsUpdatePayload } from "@syncellus/modules/accounts/schema.ts";
 import type { Request } from "express";
 import { TimesheetPostPayload } from "@syncellus/modules/timesheets/schema.ts";
