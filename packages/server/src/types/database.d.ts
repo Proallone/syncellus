@@ -6,6 +6,7 @@ export interface Database {
     auth_scopes: ScopesTable;
     auth_role_scopes: RoleScopesTable;
     auth_user_roles: UserRolesTable;
+    auth_password_reset_tokens: PasswordResetTokensTable;
     accounts_profiles: ProfilesTable;
     timesheets_entries: TimesheetTable;
 }
@@ -65,6 +66,18 @@ export interface UserRolesTable {
 export type UserRole = Selectable<UserRolesTable>;
 export type NewUserRole = Insertable<UserRolesTable>;
 export type UserRoleUpdate = Updateable<UserRolesTable>;
+
+export interface PasswordResetTokensTable {
+    id: Generated<string>;
+    user_id: string;
+    token_hash: string;
+    expires_at: ColumnType<Date, string | undefined, never>;
+    createdAt: ColumnType<Date, string | undefined, never>;
+}
+
+export type PasswordResetToken = Selectable<PasswordResetTokensTable>;
+export type NewPasswordResetToken = Insertable<PasswordResetTokensTable>;
+export type PasswordResetTokenUpdate = Updateable<PasswordResetTokensTable>;
 
 export interface ProfilesTable {
     id: Generated<string>;

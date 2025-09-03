@@ -1,5 +1,5 @@
 import { eventBus } from "@syncellus/core/eventBus.js";
-import { BadRequestError, ConflictError, NotFoundError, UnauthorizedError } from "@syncellus/errors/errors.js";
+import { ConflictError, NotFoundError, UnauthorizedError } from "@syncellus/errors/errors.js";
 import type { AuthCredentials, Credentials, UserJWTPayload } from "@syncellus/types/index.js";
 import { compareHash, hashPassword } from "@syncellus/utils/crypto.js";
 import type { AuthRepository } from "@syncellus/modules/auth/repository.js";
@@ -7,7 +7,7 @@ import { nanoid } from "@syncellus/utils/nanoid.js";
 import { uuidv7 } from "uuidv7";
 import Jwt from "jsonwebtoken";
 import { AppConfig } from "@syncellus/configs/config.js";
-import { createHmac } from "crypto";
+import { createHash, randomBytes } from "crypto";
 import type { MailService } from "@syncellus/modules/mailer/service.js";
 import type { IAuthService } from "@syncellus/modules/auth/types.js";
 
@@ -64,37 +64,37 @@ export class AuthService implements IAuthService {
 
     public issuePasswordResetToken = async (email: string) => {
         const user = await this.repo.selectUserByEmail(email);
+
         if (!user) throw new NotFoundError(`User with email ${email} not found`);
-        const payload = {
-            sub: user.public_id,
-            type: "password_reset"
-        };
-        const config = AppConfig.getInstance();
-        const key = createHmac("sha256", config.CRYPTO_HMAC_KEY).update(user.password, "utf-8").digest();
-        const token = Jwt.sign(payload, key, { expiresIn: "15m" });
 
-        await this.mailService.sendPasswordReset(user.email, token);
+        const resetToken = randomBytes(32).toString("hex");
+        const tokenHash = createHash("sha256").update(resetToken).digest("hex");
 
-        return token;
+        await this.repo.insertPasswordResetToken({ id: uuidv7(), user_id: user.id, token_hash: tokenHash });
+
+        const resetLink = `http://localhost:5137/reset-password?token=${resetToken}`; //TODO fix
+        await this.mailService.sendPasswordReset(user.email, resetLink);
+
+        return resetLink;
     };
 
     public performPasswordReset = async (token: string, newPassword: string) => {
-        const { sub, type } = Jwt.decode(token) as { sub: string; type: string };
-        if (type !== "password_reset" || !sub) throw new BadRequestError("Invalid password reset token!");
+        const tokenHash = createHash("sha256").update(token).digest("hex");
 
-        const user = await this.repo.selectUserByPublicID(sub);
+        const tokenRecord = await this.repo.selectPasswordResetTokenByHash(tokenHash);
+        if (!tokenRecord) {
+            throw new NotFoundError("Invalid or expired password reset token");
+        }
 
-        if (!user) throw new NotFoundError("User not found!");
+        const user = await this.repo.selectUserByID(tokenRecord.user_id);
+        if (!user) {
+            throw new NotFoundError("User not found for this reset token");
+        }
 
-        const config = AppConfig.getInstance();
-        const key = createHmac("sha256", config.CRYPTO_HMAC_KEY).update(user.password, "utf-8").digest();
-        const tokenVerified = Jwt.verify(token, key);
+        const hashedPassword = await hashPassword(newPassword);
 
-        if (!tokenVerified) throw new UnauthorizedError("Unauthorized for password reset!");
-
-        const passwordHash = await hashPassword(newPassword);
-
-        await this.repo.updateUserPassword(sub, passwordHash);
+        await this.repo.updateUserPassword(user.id, hashedPassword);
+        await this.repo.deletePasswordResetTokenByID(tokenRecord.id);
     };
 
     public findUserById = async (id: string) => {

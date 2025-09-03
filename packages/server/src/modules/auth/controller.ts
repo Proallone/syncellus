@@ -16,13 +16,14 @@ export class AuthController {
     public register = async (req: TypedRequest<AuthRequestBody>, res: Response) => {
         const registerData = req.body;
         const newUser = await this.service.registerNewUser(registerData);
-        this.logger.info({ email: registerData.email }, "User registration attempt");
+        this.logger.info({ email: registerData.email }, `User ${registerData.email} registration attempt`);
 
         return sendResponse(res, HttpStatus.CREATED, { message: "Registration successful", data: newUser, schema: UserInformationResponse });
     };
 
     public login = async (req: TypedRequest<AuthRequestBody>, res: Response) => {
         const { user } = req;
+        this.logger.info({ public_id: user.public_id }, "User login attempt");
         const accessToken = await this.service.issueLoginToken(user);
 
         return sendResponse(res, HttpStatus.OK, { message: "Login successful", data: { accessToken } });
@@ -30,10 +31,10 @@ export class AuthController {
 
     public forgotPassword = async (req: TypedRequest<ForgotPasswordRequestBody>, res: Response) => {
         const { email } = req.body;
-        this.logger.info({ email: email }, "User login attempt");
-        const token = await this.service.issuePasswordResetToken(email);
+        this.logger.info({ email: email }, `User ${email} has requested password reset`);
+        await this.service.issuePasswordResetToken(email);
 
-        return sendResponse(res, HttpStatus.OK, { message: "Password reset process started successfully", data: { token } });
+        return sendResponse(res, HttpStatus.OK, { message: "Password reset process started successfully - mail with details sent" });
     };
 
     public resetPassword = async (req: TypedRequest<ResetPasswordRequestBody>, res: Response) => {
@@ -46,6 +47,8 @@ export class AuthController {
 
     public getMeInformation = async (req: Request, res: Response) => {
         const { user } = req;
+        this.logger.info({ public_id: user.public_id }, `User ${user.public_id} has requested password reset`);
+
         const data = await this.service.findUserByPublicID(user.public_id);
         return sendResponse(res, HttpStatus.OK, { message: "This account information", data: data, schema: UserInformationResponse });
     };

@@ -1,12 +1,12 @@
-import type { Database, NewUser, User } from "@syncellus/types/database.js";
+import type { Database, NewPasswordResetToken, NewUser, User } from "@syncellus/types/database.js";
 import type { IAuthRepository } from "@syncellus/modules/auth/types.js";
-import { Kysely } from "kysely";
+import { DeleteResult, Kysely } from "kysely";
 
 export class AuthRepository implements IAuthRepository {
     constructor(private readonly db: Kysely<Database>) {}
 
     public insertNewUser = async (user: NewUser) => {
-        return await this.db.insertInto("auth_users").values(user).returningAll().executeTakeFirst(); //TODO do not return id
+        return await this.db.insertInto("auth_users").values(user).returningAll().executeTakeFirst();
     };
 
     public selectUserByEmail = async (email: string) => {
@@ -21,8 +21,8 @@ export class AuthRepository implements IAuthRepository {
         return await this.db.selectFrom("auth_users").selectAll().where("public_id", "=", public_id).executeTakeFirst();
     };
 
-    public updateUserPassword = async (public_id: string, newPassword: string) => {
-        return await this.db.updateTable("auth_users").set({ password: newPassword }).where("public_id", "=", public_id).returningAll().executeTakeFirst();
+    public updateUserPassword = async (id: string, newPassword: string) => {
+        return await this.db.updateTable("auth_users").set({ password: newPassword }).where("id", "=", id).returningAll().executeTakeFirst();
     };
 
     public getUserRoles = async (user_public_id: string): Promise<string[]> => {
@@ -49,5 +49,17 @@ export class AuthRepository implements IAuthRepository {
             .execute();
 
         return scopes.map((scope) => scope.scope);
+    };
+
+    public insertPasswordResetToken = async (entry: NewPasswordResetToken) => {
+        return await this.db.insertInto("auth_password_reset_tokens").values(entry).returningAll().executeTakeFirst();
+    };
+
+    public selectPasswordResetTokenByHash = async (tokenHash: string) => {
+        return await this.db.selectFrom("auth_password_reset_tokens").selectAll().where("auth_password_reset_tokens.token_hash", "=", tokenHash).executeTakeFirst();
+    };
+
+    public deletePasswordResetTokenByID = async (id: string): Promise<DeleteResult> => {
+        return await this.db.deleteFrom("auth_password_reset_tokens").where("auth_password_reset_tokens.id", "=", id).executeTakeFirst();
     };
 }

@@ -18,7 +18,7 @@ export const ForgotPasswordSchema = z.object({
 });
 
 export const ResetPasswordPayload = z.strictObject({
-    token: z.jwt(),
+    token: z.string().length(64),
     newPassword: z.string().min(8).max(40)
 });
 
