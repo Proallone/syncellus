@@ -29,8 +29,8 @@ export async function up(db: Kysely<any>): Promise<void> {
                 .check(sql`LENGTH(email) >= 3 AND LENGTH(email) <= 255`)
         )
         .addColumn("password", "text", (col) => col.notNull().check(sql`LENGTH(password) >= 3 AND LENGTH(password) <= 255`))
-        .addColumn("createdAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
-        .addColumn("modifiedAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("createdAt", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("modifiedAt", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .addColumn("active", "integer", (col) => col.defaultTo(0))
         .execute();
 
@@ -56,8 +56,8 @@ export async function up(db: Kysely<any>): Promise<void> {
         )
         .addColumn("name", "text", (col) => col.notNull().check(sql`LENGTH(name) <= 40`))
         .addColumn("description", "text", (col) => col.check(sql`LENGTH(description) <= 256`))
-        .addColumn("createdAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
-        .addColumn("modifiedAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("createdAt", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("modifiedAt", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .execute();
 
     await sql`
@@ -85,8 +85,8 @@ export async function up(db: Kysely<any>): Promise<void> {
                 .check(sql`LENGTH(scope) <= 256`)
         )
         .addColumn("description", "text", (col) => col.check(sql`LENGTH(description) <= 256`))
-        .addColumn("createdAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
-        .addColumn("modifiedAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("createdAt", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("modifiedAt", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .execute();
 
     await sql`
@@ -152,8 +152,8 @@ export async function up(db: Kysely<any>): Promise<void> {
                 .references("auth_users.id")
         )
         .addColumn("token_hash", "text", (col) => col.notNull().check(sql`LENGTH(token_hash) = 64`))
-        .addColumn("expires_at", "text", (col) => col.defaultTo(sql`(datetime('now', '+15 minutes'))`).notNull())
-        .addColumn("createdAt", "text", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("expires_at", "datetime", (col) => col.defaultTo(sql`(datetime('now', '+1 minutes'))`).notNull())
+        .addColumn("createdAt", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .execute();
 }
 

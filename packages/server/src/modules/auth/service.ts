@@ -83,7 +83,15 @@ export class AuthService implements IAuthService {
 
         const tokenRecord = await this.repo.selectPasswordResetTokenByHash(tokenHash);
         if (!tokenRecord) {
-            throw new NotFoundError("Invalid or expired password reset token");
+            //TODO add handling for expired tokens
+            throw new NotFoundError("Invalid password reset token");
+        }
+        const expires_at = new Date(tokenRecord.expires_at.replace(" ", "T") + "Z").toISOString();
+
+        if (expires_at < new Date().toISOString()) {
+            //TODO add handling for expired tokens
+            await this.repo.deletePasswordResetTokenByID(tokenRecord.id); //TODO what if fails?
+            throw new NotFoundError("Expired password reset token");
         }
 
         const user = await this.repo.selectUserByID(tokenRecord.user_id);
@@ -93,8 +101,8 @@ export class AuthService implements IAuthService {
 
         const hashedPassword = await hashPassword(newPassword);
 
-        await this.repo.updateUserPassword(user.id, hashedPassword);
-        await this.repo.deletePasswordResetTokenByID(tokenRecord.id);
+        await this.repo.updateUserPassword(user.id, hashedPassword); //TODO what if fails?
+        await this.repo.deletePasswordResetTokenByID(tokenRecord.id); //TODO what if fails? maybe add delete all user tokens?
     };
 
     public findUserById = async (id: string) => {

@@ -34,7 +34,7 @@ export class AuthController {
         this.logger.info({ email: email }, `User ${email} has requested password reset`);
         await this.service.issuePasswordResetToken(email);
 
-        return sendResponse(res, HttpStatus.OK, { message: "Password reset process started successfully - mail with details sent" });
+        return sendResponse(res, HttpStatus.OK, { message: `Password reset process started successfully - mail with details sent to ${email}` });
     };
 
     public resetPassword = async (req: TypedRequest<ResetPasswordRequestBody>, res: Response) => {
@@ -47,7 +47,7 @@ export class AuthController {
 
     public getMeInformation = async (req: Request, res: Response) => {
         const { user } = req;
-        this.logger.info({ public_id: user.public_id }, `User ${user.public_id} has requested password reset`);
+        this.logger.info({ public_id: user.public_id }, `User ${user.public_id} has requested his account data`);
 
         const data = await this.service.findUserByPublicID(user.public_id);
         return sendResponse(res, HttpStatus.OK, { message: "This account information", data: data, schema: UserInformationResponse });

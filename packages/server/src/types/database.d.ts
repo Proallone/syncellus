@@ -71,7 +71,7 @@ export interface PasswordResetTokensTable {
     id: Generated<string>;
     user_id: string;
     token_hash: string;
-    expires_at: ColumnType<Date, string | undefined, never>;
+    expires_at: ColumnType<string | undefined, never>;
     createdAt: ColumnType<Date, string | undefined, never>;
 }
 
