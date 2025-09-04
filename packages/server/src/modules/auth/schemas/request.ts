@@ -25,3 +25,11 @@ export const ResetPasswordPayload = z.strictObject({
 export const ResetPasswordSchema = z.object({
     body: ResetPasswordPayload
 });
+
+export const VerifyEmailPayload = z.strictObject({
+    token: z.string().length(64)
+});
+
+export const VerifyEmailSchema = z.object({
+    body: VerifyEmailPayload
+});

@@ -1,13 +1,12 @@
 import { eventBus } from "@syncellus/core/eventBus.js";
 import { ConflictError, NotFoundError, UnauthorizedError } from "@syncellus/errors/errors.js";
 import type { AuthCredentials, Credentials, UserJWTPayload } from "@syncellus/types/index.js";
-import { compareHash, hashPassword } from "@syncellus/utils/crypto.js";
+import { compareHash, generateToken, hashPassword, sha256 } from "@syncellus/utils/crypto.js";
 import type { AuthRepository } from "@syncellus/modules/auth/repository.js";
 import { nanoid } from "@syncellus/utils/nanoid.js";
 import { uuidv7 } from "uuidv7";
 import Jwt from "jsonwebtoken";
 import { AppConfig } from "@syncellus/configs/config.js";
-import { createHash, randomBytes } from "crypto";
 import type { MailService } from "@syncellus/modules/mailer/service.js";
 import type { IAuthService } from "@syncellus/modules/auth/types.js";
 
@@ -32,9 +31,40 @@ export class AuthService implements IAuthService {
 
         eventBus.emit("user.created", newUser); //TODO this might not be the best idea to use event for this in case of failure it would not insert employee for a user...
 
-        await this.mailService.sendWelcome(user.email, newUser.email);
+        const verificationToken = generateToken();
+        const tokenHash = sha256(verificationToken);
+        await this.repo.deleteEmailVerificationTokensByUserID(newUser.id);
+        await this.repo.insertEmailVerificationToken({ id: uuidv7(), user_id: newUser.id, token_hash: tokenHash });
+
+        const verificationLink = `http://127.0.0.1:5173/auth/verify-email?token=${tokenHash}`; //TODO fix
+        await this.mailService.sendWelcome(user.email, newUser.email, verificationLink);
 
         return newUser;
+    };
+
+    public verifyAccountEmail = async (tokenHash: string) => {
+        const tokenRecord = await this.repo.selectEmailVerificationTokenByHash(tokenHash);
+
+        if (!tokenRecord) {
+            //TODO add handling for expired tokens
+            throw new NotFoundError("Invalid email verification token");
+        }
+        const expires_at = new Date(tokenRecord.expires_at.replace(" ", "T") + "Z").toISOString();
+
+        if (expires_at < new Date().toISOString()) {
+            //TODO add handling for expired tokens
+            await this.repo.deleteEmailVerificationTokenByID(tokenRecord.id); //TODO what if fails?
+            throw new NotFoundError("Expired email verification token");
+        }
+
+        const user = await this.repo.selectUserByID(tokenRecord.user_id);
+        if (!user) {
+            throw new NotFoundError("User not found for this email verification token");
+        }
+
+        await this.repo.verifyUserEmail(user.id); //TODO what if fails?
+        await this.repo.deleteEmailVerificationTokensByUserID(user.id); //TODO what if fails? maybe add delete all user tokens?
+        return true;
     };
 
     public verifyUserCredentials = async (credentials: Credentials) => {
@@ -67,8 +97,8 @@ export class AuthService implements IAuthService {
 
         if (!user) throw new NotFoundError(`User with email ${email} not found`);
 
-        const resetToken = randomBytes(32).toString("hex");
-        const tokenHash = createHash("sha256").update(resetToken).digest("hex");
+        const resetToken = generateToken();
+        const tokenHash = sha256(resetToken);
 
         await this.repo.deletePasswordResetTokensByUserID(user.id);
         await this.repo.insertPasswordResetToken({ id: uuidv7(), user_id: user.id, token_hash: tokenHash });
@@ -80,7 +110,7 @@ export class AuthService implements IAuthService {
     };
 
     public performPasswordReset = async (token: string, newPassword: string) => {
-        const tokenHash = createHash("sha256").update(token).digest("hex");
+        const tokenHash = sha256(token);
 
         const tokenRecord = await this.repo.selectPasswordResetTokenByHash(tokenHash);
         if (!tokenRecord) {

@@ -7,6 +7,7 @@ const users: NewUser[] = [
         public_id: "84ghpuj191",
         email: "bartek@test.com",
         password: "$argon2id$v=19$m=65536,t=3,p=4$hNK3M9yxMNNz/i+4SbHHKA$ac3903HBtHQ8nUD2ZAWdzUEfkioUpYDgEDlwItDrSG8",
+        verified: 0,
         active: 1
     },
     {
@@ -14,6 +15,7 @@ const users: NewUser[] = [
         public_id: "vigdb4t07d",
         email: "bartek@admin.com",
         password: "$argon2id$v=19$m=65536,t=3,p=4$hNK3M9yxMNNz/i+4SbHHKA$ac3903HBtHQ8nUD2ZAWdzUEfkioUpYDgEDlwItDrSG8",
+        verified: 1,
         active: 1
     },
     {
@@ -21,6 +23,7 @@ const users: NewUser[] = [
         public_id: "pffza5gbco",
         email: "bartek@manager.com",
         password: "$argon2id$v=19$m=65536,t=3,p=4$hNK3M9yxMNNz/i+4SbHHKA$ac3903HBtHQ8nUD2ZAWdzUEfkioUpYDgEDlwItDrSG8",
+        verified: 1,
         active: 1
     },
     {
@@ -28,6 +31,7 @@ const users: NewUser[] = [
         public_id: "081ddcee2d",
         email: "bartek@inactive.com",
         password: "$argon2id$v=19$m=65536,t=3,p=4$hNK3M9yxMNNz/i+4SbHHKA$ac3903HBtHQ8nUD2ZAWdzUEfkioUpYDgEDlwItDrSG8",
+        verified: 1,
         active: 0
     }
 ];

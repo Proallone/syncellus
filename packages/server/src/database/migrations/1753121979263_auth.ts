@@ -31,6 +31,7 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("password", "text", (col) => col.notNull().check(sql`LENGTH(password) >= 3 AND LENGTH(password) <= 255`))
         .addColumn("createdAt", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .addColumn("modifiedAt", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("verified", "integer", (col) => col.defaultTo(0))
         .addColumn("active", "integer", (col) => col.defaultTo(0))
         .execute();
 
@@ -153,7 +154,27 @@ export async function up(db: Kysely<any>): Promise<void> {
                 .references("auth_users.id")
         )
         .addColumn("token_hash", "text", (col) => col.notNull().check(sql`LENGTH(token_hash) = 64`))
-        .addColumn("expires_at", "datetime", (col) => col.defaultTo(sql`(datetime('now', '+15 minutes'))`).notNull())
+        .addColumn("expires_at", "datetime", (col) => col.defaultTo(sql`(datetime('now', '+15 minutes'))`).notNull()) //TODO minutes from config
+        .addColumn("createdAt", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .execute();
+
+    await db.schema
+        .createTable("auth_email_verification_tokens")
+        .addColumn("id", "text", (col) =>
+            col
+                .primaryKey()
+                .notNull()
+                .check(sql`LENGTH(id) = 36`)
+        )
+        .addColumn("user_id", "text", (col) =>
+            col
+                .notNull()
+                .unique()
+                .check(sql`LENGTH(user_id) = 36`)
+                .references("auth_users.id")
+        )
+        .addColumn("token_hash", "text", (col) => col.notNull().check(sql`LENGTH(token_hash) = 64`))
+        .addColumn("expires_at", "datetime", (col) => col.defaultTo(sql`(datetime('now', '+24 hours'))`).notNull()) //TODO minutes from config
         .addColumn("createdAt", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .execute();
 }
@@ -164,6 +185,8 @@ export async function down(db: Kysely<any>): Promise<void> {
     // down migration code goes here...
     // note: down migrations are optional. you can safely delete this function.
     // For more info, see: https://kysely.dev/docs/migrations
+    await db.schema.dropTable("auth_email_verification_tokens").execute();
+
     await db.schema.dropTable("auth_password_reset_tokens").execute();
 
     await db.schema.dropTable("auth_user_roles").execute();

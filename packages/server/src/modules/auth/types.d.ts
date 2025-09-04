@@ -1,4 +1,4 @@
-import type { NewPasswordResetToken, NewUser, PasswordResetToken, User } from "@syncellus/types/database.js";
+import type { NewPasswordResetToken, NewUser, PasswordResetToken, User, EmailVerificationToken } from "@syncellus/types/database.js";
 import type { AuthCredentials, Credentials, UserJWTPayload } from "@syncellus/types/index.js";
 import type { DeleteResult } from "kysely";
 
@@ -9,14 +9,21 @@ export interface IAuthRepository {
     updateUserPassword(id: string, newPassword: string): Promise<User>;
     getUserRoles(user_public_id: string): Promise<string[]>;
     getUserScopes(user_public_id: string): Promise<string[]>;
+
     insertPasswordResetToken(entry: NewPasswordResetToken): Promise<PasswordResetToken>;
     selectPasswordResetTokenByHash(tokenHash: string): Promise<PasswordResetToken>;
     deletePasswordResetTokenByID(id: string): Promise<DeleteResult>;
     deletePasswordResetTokensByUserID(user_id: string): Promise<DeleteResult>;
+
+    insertEmailVerificationToken(entry: NewPasswordResetToken): Promise<EmailVerificationToken>;
+    selectEmailVerificationTokenByHash(tokenHash: string): Promise<EmailVerificationToken>;
+    deleteEmailVerificationTokenByID(id: string): Promise<DeleteResult>;
+    deleteEmailVerificationTokensByUserID(user_id: string): Promise<DeleteResult>;
 }
 
 export interface IAuthService {
     registerNewUser(user: AuthCredentials): Promise<User>;
+    verifyAccountEmail(token: string): Promise<boolean>;
     verifyUserCredentials(credentials: Credentials): Promise<UserJWTPayload>;
     issueLoginToken(user: Express.User & { public_id: string }): Promise<string>;
     issuePasswordResetToken(email: string): Promise<string>;

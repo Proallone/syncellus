@@ -10,6 +10,6 @@ export interface IMailProvider {
 }
 
 export interface IMailService {
-    sendWelcome(to: string, username: string): Promise<void>;
+    sendWelcome(to: string, username: string, verificationLink: string): Promise<void>;
     sendPasswordReset(to: string, resetLink: string): Promise<void>;
 }

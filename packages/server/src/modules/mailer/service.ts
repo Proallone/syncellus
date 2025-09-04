@@ -4,12 +4,13 @@ import { compileTemplate } from "@syncellus/modules/mailer/utils/compileTemplate
 export class MailService implements IMailService {
     constructor(private readonly mailer: IMailProvider) {}
 
-    async sendWelcome(to: string, username: string) {
+    async sendWelcome(to: string, username: string, verificationLink: string) {
         const template = compileTemplate("welcome");
         const data = {
             appName: "Syncellus",
-            username: username,
-            currentYear: new Date().getFullYear().toString()
+            username,
+            currentYear: new Date().getFullYear().toString(),
+            verificationLink
         };
         const html = template(data);
         const subject = "Welcome to Syncellus";
@@ -19,7 +20,8 @@ export class MailService implements IMailService {
 
     async sendPasswordReset(to: string, resetLink: string) {
         const template = compileTemplate("passwordReset");
-        const html = template({ resetLink });
+        const expiration_minutes = 15; // TODO move to a config and unify with other places?
+        const html = template({ resetLink, expiration_minutes });
         const subject = "Reset your password";
 
         await this.mailer.send({ to, subject, html });

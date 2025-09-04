@@ -7,6 +7,7 @@ export interface Database {
     auth_role_scopes: RoleScopesTable;
     auth_user_roles: UserRolesTable;
     auth_password_reset_tokens: PasswordResetTokensTable;
+    auth_email_verification_tokens: EmailVerificationTokensTable;
     accounts_profiles: ProfilesTable;
     timesheets_entries: TimesheetTable;
 }
@@ -18,6 +19,7 @@ export interface UsersTable {
     password: string;
     createdAt: ColumnType<Date, string | undefined, never>;
     modifiedAt: ColumnType<Date, string | undefined, never>;
+    verified: Generated<number>;
     active: Generated<number>;
 }
 
@@ -78,6 +80,18 @@ export interface PasswordResetTokensTable {
 export type PasswordResetToken = Selectable<PasswordResetTokensTable>;
 export type NewPasswordResetToken = Insertable<PasswordResetTokensTable>;
 export type PasswordResetTokenUpdate = Updateable<PasswordResetTokensTable>;
+
+export interface EmailVerificationTokensTable {
+    id: Generated<string>;
+    user_id: string;
+    token_hash: string;
+    expires_at: ColumnType<string | undefined, never>;
+    createdAt: ColumnType<Date, string | undefined, never>;
+}
+
+export type EmailVerificationToken = Selectable<EmailVerificationTokensTable>;
+export type NewEmailVerificationToken = Insertable<EmailVerificationTokensTable>;
+export type EmailVerificationTokenUpdate = Updateable<EmailVerificationTokensTable>;
 
 export interface ProfilesTable {
     id: Generated<string>;

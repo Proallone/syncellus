@@ -1,4 +1,4 @@
-import type { Database, NewPasswordResetToken, NewUser, User } from "@syncellus/types/database.js";
+import type { Database, NewEmailVerificationToken, NewPasswordResetToken, NewUser, User } from "@syncellus/types/database.js";
 import type { IAuthRepository } from "@syncellus/modules/auth/types.js";
 import { DeleteResult, Kysely } from "kysely";
 
@@ -7,6 +7,10 @@ export class AuthRepository implements IAuthRepository {
 
     public insertNewUser = async (user: NewUser) => {
         return await this.db.insertInto("auth_users").values(user).returningAll().executeTakeFirst();
+    };
+
+    public verifyUserEmail = async (id: string) => {
+        return await this.db.updateTable("auth_users").set({ verified: 1 }).where("id", "=", id).executeTakeFirst();
     };
 
     public selectUserByEmail = async (email: string) => {
@@ -65,5 +69,21 @@ export class AuthRepository implements IAuthRepository {
 
     public deletePasswordResetTokensByUserID = async (user_id: string): Promise<DeleteResult> => {
         return await this.db.deleteFrom("auth_password_reset_tokens").where("auth_password_reset_tokens.user_id", "=", user_id).executeTakeFirst();
+    };
+
+    public insertEmailVerificationToken = async (entry: NewEmailVerificationToken) => {
+        return await this.db.insertInto("auth_email_verification_tokens").values(entry).returningAll().executeTakeFirst();
+    };
+
+    public selectEmailVerificationTokenByHash = async (tokenHash: string) => {
+        return await this.db.selectFrom("auth_email_verification_tokens").selectAll().where("auth_email_verification_tokens.token_hash", "=", tokenHash).executeTakeFirst();
+    };
+
+    public deleteEmailVerificationTokenByID = async (id: string): Promise<DeleteResult> => {
+        return await this.db.deleteFrom("auth_email_verification_tokens").where("auth_email_verification_tokens.id", "=", id).executeTakeFirst();
+    };
+
+    public deleteEmailVerificationTokensByUserID = async (user_id: string): Promise<DeleteResult> => {
+        return await this.db.deleteFrom("auth_email_verification_tokens").where("auth_email_verification_tokens.user_id", "=", user_id).executeTakeFirst();
     };
 }

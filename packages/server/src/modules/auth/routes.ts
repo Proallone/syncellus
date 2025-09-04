@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { validate } from "@syncellus/middlewares/validator.middleware.js";
-import { AuthSchema, ForgotPasswordSchema, ResetPasswordSchema } from "@syncellus/modules/auth/schemas/request.js";
+import { AuthSchema, ForgotPasswordSchema, ResetPasswordSchema, VerifyEmailSchema } from "@syncellus/modules/auth/schemas/request.js";
 import { AuthRepository } from "./repository.js";
 import { AuthService } from "./service.js";
 import { AuthController } from "./controller.js";
@@ -24,6 +24,7 @@ const service = new AuthService(repo, mailService);
 const controller = new AuthController(service, logger);
 
 router.post("/register", validate(AuthSchema), hw(controller.register));
+router.post("/verify-email", validate(VerifyEmailSchema), hw(controller.verifyEmail));
 router.post("/forgot-password", validate(ForgotPasswordSchema), hw(controller.forgotPassword));
 router.post("/reset-password", validate(ResetPasswordSchema), hw(controller.resetPassword));
 router.post("/login", validate(AuthSchema), authenticate("local"), hw(controller.login));

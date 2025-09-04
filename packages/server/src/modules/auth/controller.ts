@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import type { AuthRequestBody, ForgotPasswordRequestBody, ResetPasswordRequestBody } from "@syncellus/types/index.js";
+import type { AuthRequestBody, ForgotPasswordRequestBody, ResetPasswordRequestBody, VerifyEmailRequestBody } from "@syncellus/types/index.js";
 import type { AuthService } from "@syncellus/modules/auth/service.js";
 import type { Logger } from "pino";
 import type { TypedRequest } from "@syncellus/types/express.js";
@@ -19,6 +19,14 @@ export class AuthController {
         this.logger.info({ email: registerData.email }, `User ${registerData.email} registration attempt`);
 
         return sendResponse(res, HttpStatus.CREATED, { message: "Registration successful", data: newUser, schema: UserInformationResponse });
+    };
+
+    public verifyEmail = async (req: TypedRequest<VerifyEmailRequestBody>, res: Response) => {
+        const { token } = req.body;
+        this.logger.info("User email verification attempt");
+        this.service.verifyAccountEmail(token);
+
+        return sendResponse(res, HttpStatus.OK, { message: "Email verified successfully" });
     };
 
     public login = async (req: TypedRequest<AuthRequestBody>, res: Response) => {
