@@ -148,11 +148,12 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("user_id", "text", (col) =>
             col
                 .notNull()
+                .unique()
                 .check(sql`LENGTH(user_id) = 36`)
                 .references("auth_users.id")
         )
         .addColumn("token_hash", "text", (col) => col.notNull().check(sql`LENGTH(token_hash) = 64`))
-        .addColumn("expires_at", "datetime", (col) => col.defaultTo(sql`(datetime('now', '+1 minutes'))`).notNull())
+        .addColumn("expires_at", "datetime", (col) => col.defaultTo(sql`(datetime('now', '+15 minutes'))`).notNull())
         .addColumn("createdAt", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .execute();
 }

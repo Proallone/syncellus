@@ -9,3 +9,4 @@ Planned features:
 1. [x]  - registration for users
 2. [ ]  - team creation and management
 3. [ ]  - timesheets reporting
+4. [ ]  - Job scheduling module

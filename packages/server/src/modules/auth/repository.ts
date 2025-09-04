@@ -62,4 +62,8 @@ export class AuthRepository implements IAuthRepository {
     public deletePasswordResetTokenByID = async (id: string): Promise<DeleteResult> => {
         return await this.db.deleteFrom("auth_password_reset_tokens").where("auth_password_reset_tokens.id", "=", id).executeTakeFirst();
     };
+
+    public deletePasswordResetTokensByUserID = async (user_id: string): Promise<DeleteResult> => {
+        return await this.db.deleteFrom("auth_password_reset_tokens").where("auth_password_reset_tokens.user_id", "=", user_id).executeTakeFirst();
+    };
 }

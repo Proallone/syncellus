@@ -70,6 +70,7 @@ export class AuthService implements IAuthService {
         const resetToken = randomBytes(32).toString("hex");
         const tokenHash = createHash("sha256").update(resetToken).digest("hex");
 
+        await this.repo.deletePasswordResetTokensByUserID(user.id);
         await this.repo.insertPasswordResetToken({ id: uuidv7(), user_id: user.id, token_hash: tokenHash });
 
         const resetLink = `http://localhost:5137/reset-password?token=${resetToken}`; //TODO fix

@@ -12,6 +12,7 @@ export interface IAuthRepository {
     insertPasswordResetToken(entry: NewPasswordResetToken): Promise<PasswordResetToken>;
     selectPasswordResetTokenByHash(tokenHash: string): Promise<PasswordResetToken>;
     deletePasswordResetTokenByID(id: string): Promise<DeleteResult>;
+    deletePasswordResetTokensByUserID(user_id: string): Promise<DeleteResult>;
 }
 
 export interface IAuthService {
