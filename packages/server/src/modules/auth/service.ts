@@ -17,10 +17,8 @@ export class AuthService implements IAuthService {
     ) {}
 
     public registerNewUser = async (user: AuthCredentials) => {
-        const userExists = await this.repo.selectUserByEmail(user.email);
-        if (userExists) {
-            throw new ConflictError(`User ${user.email} already exists!`);
-        }
+        const existing = await this.repo.selectUserByEmail(user.email);
+        if (existing) throw new ConflictError(`User ${user.email} already exists`);
 
         const newUser = await this.repo.insertNewUser({
             id: uuidv7(),
@@ -33,34 +31,31 @@ export class AuthService implements IAuthService {
 
         const verificationToken = generateToken();
         const tokenHash = sha256(verificationToken);
+
         await this.repo.deleteEmailVerificationTokensByUserID(newUser.id);
         await this.repo.insertEmailVerificationToken({ id: uuidv7(), user_id: newUser.id, token_hash: tokenHash });
 
-        const verificationLink = `http://127.0.0.1:5173/auth/verify-email?token=${tokenHash}`; //TODO fix
+        const config = AppConfig.getInstance();
+        const verificationLink = `${config.APP_URL}/auth/verify-email?token=${verificationToken}`;
         await this.mailService.sendWelcome(user.email, newUser.email, verificationLink);
 
         return newUser;
     };
 
-    public verifyAccountEmail = async (tokenHash: string) => {
+    public verifyAccountEmail = async (token: string) => {
+        const tokenHash = sha256(token);
         const tokenRecord = await this.repo.selectEmailVerificationTokenByHash(tokenHash);
 
-        if (!tokenRecord) {
-            //TODO add handling for expired tokens
-            throw new NotFoundError("Invalid email verification token");
-        }
-        const expires_at = new Date(tokenRecord.expires_at.replace(" ", "T") + "Z").toISOString();
+        if (!tokenRecord) throw new NotFoundError("Invalid email verification token");
+        const expires_at = new Date(tokenRecord.expires_at.replace(" ", "T") + "Z").toISOString(); //TODO move this out
 
         if (expires_at < new Date().toISOString()) {
-            //TODO add handling for expired tokens
             await this.repo.deleteEmailVerificationTokenByID(tokenRecord.id); //TODO what if fails?
             throw new NotFoundError("Expired email verification token");
         }
 
         const user = await this.repo.selectUserByID(tokenRecord.user_id);
-        if (!user) {
-            throw new NotFoundError("User not found for this email verification token");
-        }
+        if (!user) throw new NotFoundError("User not found for this email verification token");
 
         await this.repo.verifyUserEmail(user.id); //TODO what if fails?
         await this.repo.deleteEmailVerificationTokensByUserID(user.id); //TODO what if fails? maybe add delete all user tokens?
@@ -89,7 +84,7 @@ export class AuthService implements IAuthService {
             scopes
         };
         const config = AppConfig.getInstance();
-        return Jwt.sign(payload, config.JWT_TOKEN_SECRET, { expiresIn: "30m" });
+        return Jwt.sign(payload, config.JWT_TOKEN_SECRET, { expiresIn: "30m" }); //TODO move to config
     };
 
     public issuePasswordResetToken = async (email: string) => {
@@ -103,7 +98,9 @@ export class AuthService implements IAuthService {
         await this.repo.deletePasswordResetTokensByUserID(user.id);
         await this.repo.insertPasswordResetToken({ id: uuidv7(), user_id: user.id, token_hash: tokenHash });
 
-        const resetLink = `http://127.0.0.1:5173/auth/reset-password?token=${resetToken}`; //TODO fix
+        const config = AppConfig.getInstance();
+        const resetLink = `${config.APP_URL}/auth/reset-password?token=${resetToken}`;
+
         await this.mailService.sendPasswordReset(user.email, resetLink);
 
         return resetLink;
@@ -111,35 +108,24 @@ export class AuthService implements IAuthService {
 
     public performPasswordReset = async (token: string, newPassword: string) => {
         const tokenHash = sha256(token);
-
         const tokenRecord = await this.repo.selectPasswordResetTokenByHash(tokenHash);
-        if (!tokenRecord) {
-            //TODO add handling for expired tokens
-            throw new NotFoundError("Invalid password reset token");
-        }
-        const expires_at = new Date(tokenRecord.expires_at.replace(" ", "T") + "Z").toISOString();
+
+        if (!tokenRecord) throw new NotFoundError("Invalid password reset token");
+
+        const expires_at = new Date(tokenRecord.expires_at.replace(" ", "T") + "Z").toISOString(); //TODO move this out
 
         if (expires_at < new Date().toISOString()) {
-            //TODO add handling for expired tokens
-            await this.repo.deletePasswordResetTokenByID(tokenRecord.id); //TODO what if fails?
+            await this.repo.deletePasswordResetTokenByID(tokenRecord.id);
             throw new NotFoundError("Expired password reset token");
         }
 
         const user = await this.repo.selectUserByID(tokenRecord.user_id);
-        if (!user) {
-            throw new NotFoundError("User not found for this reset token");
-        }
+        if (!user) throw new NotFoundError("User not found for this reset token");
 
         const hashedPassword = await hashPassword(newPassword);
 
-        await this.repo.updateUserPassword(user.id, hashedPassword); //TODO what if fails?
-        await this.repo.deletePasswordResetTokenByID(tokenRecord.id); //TODO what if fails? maybe add delete all user tokens?
-    };
-
-    public findUserById = async (id: string) => {
-        const user = await this.repo.selectUserByID(id);
-        if (!user) throw new UnauthorizedError(`User with id ${id} not found`);
-        return user;
+        await this.repo.updateUserPassword(user.id, hashedPassword);
+        await this.repo.deleteEmailVerificationTokensByUserID(user.id);
     };
 
     public findUserByPublicID = async (public_id: string) => {

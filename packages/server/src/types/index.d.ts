@@ -11,6 +11,7 @@ export interface Config {
     CRYPTO_HMAC_KEY: string;
     SMTP_HOST: string;
     SMTP_PORT: number;
+    APP_URL: string;
 }
 
 export type AuthCredentials = z.infer<typeof AuthBasePayload>;
