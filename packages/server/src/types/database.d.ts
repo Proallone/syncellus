@@ -10,6 +10,8 @@ export interface Database {
     auth_email_verification_tokens: EmailVerificationTokensTable;
     accounts_profiles: ProfilesTable;
     timesheets_entries: TimesheetTable;
+    workspaces_teams: TeamsTable;
+    workspaces_team_members: TeamMembersTable;
 }
 
 export interface UsersTable {
@@ -121,3 +123,28 @@ export interface TimesheetTable {
 export type Timesheet = Selectable<TimesheetTable>;
 export type NewTimesheet = Insertable<TimesheetTable>;
 export type TimesheetUpdate = Updateable<TimesheetTable>;
+
+export interface TeamsTable {
+    id: Generated<string>;
+    public_id: Generated<string>;
+    owner_id: string;
+    name: string;
+    createdAt: ColumnType<Date, string | undefined, never>;
+    modifiedAt: ColumnType<Date, string | undefined, never>;
+}
+
+export type Team = Selectable<TeamsTable>;
+export type NewTeam = Insertable<TeamsTable>;
+export type TeamUpdate = Updateable<TeamsTable>;
+
+export interface TeamMembersTable {
+    team_id: Generated<string>;
+    user_id: Generated<string>;
+    role: Generated<string>;
+    createdAt: ColumnType<Date, string | undefined, never>;
+    modifiedAt: ColumnType<Date, string | undefined, never>;
+}
+
+export type TeamMember = Selectable<TeamMembersTable>;
+export type NewTeamMember = Insertable<TeamMembersTable>;
+export type TeamMemberUpdate = Updateable<TeamMembersTable>;
