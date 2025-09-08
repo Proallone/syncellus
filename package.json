@@ -36,7 +36,7 @@
         "preserveUnused": true
     },
     "lint-staged": {
-        "!(*.lock)": [
+        "!(*.lock|.gitignore)": [
             "yarn lint",
             "yarn format"
         ]
