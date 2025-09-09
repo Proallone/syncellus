@@ -1,7 +1,8 @@
 import type { Database, NewTeam, TeamUpdate } from "@syncellus/types/database.js";
 import type { Kysely } from "kysely";
+import type { IWorkspacesRepository } from "./types.js";
 
-export class WorkspacesRepository {
+export class WorkspacesRepository implements IWorkspacesRepository {
     constructor(private readonly db: Kysely<Database>) {}
 
     public selectAllTeamsFromDB = async () => {
@@ -9,15 +10,15 @@ export class WorkspacesRepository {
     };
 
     public selectTeamByIDFromDB = async (id: string) => {
-        return await this.db.selectFrom("workspaces_teams").selectAll().where("id", "=", id).execute();
+        return await this.db.selectFrom("workspaces_teams").selectAll().where("id", "=", id).executeTakeFirst();
     };
 
     public selectTeamByPublicIDFromDB = async (public_id: string) => {
-        return await this.db.selectFrom("workspaces_teams").selectAll().where("public_id", "=", public_id).execute();
+        return await this.db.selectFrom("workspaces_teams").selectAll().where("public_id", "=", public_id).executeTakeFirst();
     };
 
-    public insertTeamToDB = async (team: NewTeam) => {
-        return await this.db.insertInto("workspaces_teams").values(team).returningAll().executeTakeFirstOrThrow();
+    public insertTeamToDB = async (teams: NewTeam[]) => {
+        return await this.db.insertInto("workspaces_teams").values(teams).returningAll().executeTakeFirstOrThrow();
     };
 
     public updateTeamByIDInDB = async (id: string, data: TeamUpdate) => {

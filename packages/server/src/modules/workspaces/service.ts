@@ -1,13 +1,17 @@
+import type { IWorkspacesService } from "./types.js";
 import type { NewTeam } from "@syncellus/types/database.js";
 import { WorkspacesRepository } from "./repository.js";
 import { uuidv7 } from "uuidv7";
 import { nanoid } from "@syncellus/utils/nanoid.js";
 
-export class WorkspacesService {
+export class WorkspacesService implements IWorkspacesService {
     constructor(private readonly repo: WorkspacesRepository) {}
 
-    public insertNewTeam = async (team: NewTeam) => {
-        return await this.repo.insertTeamToDB({ id: uuidv7(), public_id: nanoid(), ...team });
+    public insertNewTeams = async (owner_id: string, teams: NewTeam[]) => {
+        const p = teams.map((team) => {
+            return { id: uuidv7(), public_id: nanoid(), owner_id: owner_id, ...team };
+        });
+        return await this.repo.insertTeamToDB(p); //TODO add owner_id
     };
 
     public selectAllTeams = async () => {

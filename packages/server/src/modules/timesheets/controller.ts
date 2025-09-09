@@ -33,8 +33,10 @@ export class TimesheetController {
     };
 
     public patchTimesheet = async (req: Request, res: Response) => {
-        const { id } = req.params;
-        const { body } = req;
+        const {
+            body,
+            params: { id }
+        } = req;
         const data: TimesheetUpdate = {
             id,
             ...body

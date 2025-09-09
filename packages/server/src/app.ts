@@ -3,6 +3,7 @@ import { errorHandler } from "@syncellus/middlewares/error.middleware.js";
 import healthRoutes from "@syncellus/modules/health/routes.js";
 import userRoutes from "@syncellus/modules/accounts/routes.js";
 import authRoutes from "@syncellus/modules/auth/routes.js";
+import workspacesRoutes from "@syncellus/modules/workspaces/routes.js";
 import timesheetsRoutes from "@syncellus/modules/timesheets/routes.js";
 import { pinoHttp } from "pino-http";
 import helmet from "helmet";
@@ -30,6 +31,7 @@ const apiRouter = Router();
 apiRouter.use("/health", healthRoutes);
 apiRouter.use("/auth", authRoutes);
 apiRouter.use("/employees", userRoutes);
+apiRouter.use("/workspaces", workspacesRoutes);
 apiRouter.use("/timesheets", timesheetsRoutes);
 
 app.use("/api/v1", apiRouter);

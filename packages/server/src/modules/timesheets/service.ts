@@ -16,8 +16,8 @@ export class TimesheetService {
         return await this.repo.selectTimesheetByIdFromDb(id);
     };
 
-    public updateTimesheetById = async (timeshet: TimesheetUpdate) => {
-        return await this.repo.updateTimesheetByIdInDb(timeshet);
+    public updateTimesheetById = async (timesheet: TimesheetUpdate) => {
+        return await this.repo.updateTimesheetByIdInDb(timesheet);
     };
 
     public deleteTimesheetById = async (id: string) => {
