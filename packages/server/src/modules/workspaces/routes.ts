@@ -19,7 +19,7 @@ const controller = new WorkspacesController(service);
 router.use(authenticate("jwt"));
 
 router.get("/teams", hw(controller.getTeams));
-router.post("/teams", validate(WorkspaceTeamPostSchema), hw(controller.createTeams)); //TODO add schema validation
+router.post("/teams", validate(WorkspaceTeamPostSchema), hw(controller.createTeams));
 router.get("/teams/:id", hw(controller.getTeamByID));
 router.patch("/teams/:id", validate(WorkspaceTeamUpdateSchema), hw(controller.patchTeam));
 router.delete("/teams/:id", hw(controller.deleteTeam));

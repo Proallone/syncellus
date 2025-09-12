@@ -5,7 +5,7 @@ import type { TimesheetService } from "@syncellus/modules/timesheets/service.js"
 import { uuidv7 } from "uuidv7";
 import { sendResponse } from "@syncellus/utils/responseBuilder.js";
 import { HttpStatus } from "@syncellus/core/http.js";
-import { NotFoundError } from "@syncellus/errors/errors.js";
+import { NotFoundError } from "@syncellus/errors/http.js";
 import { TypedRequest } from "@syncellus/types/express.js";
 import { NewAccountBody } from "@syncellus/types/index.js";
 

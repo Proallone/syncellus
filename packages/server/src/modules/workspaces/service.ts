@@ -8,10 +8,10 @@ export class WorkspacesService implements IWorkspacesService {
     constructor(private readonly repo: WorkspacesRepository) {}
 
     public insertNewTeams = async (owner_id: string, teams: NewTeam[]) => {
-        const p = teams.map((team) => {
+        const values = teams.map((team) => {
             return { id: uuidv7(), public_id: nanoid(), owner_id: owner_id, ...team };
         });
-        return await this.repo.insertTeamToDB(p); //TODO add owner_id
+        return await this.repo.insertTeamToDB(values);
     };
 
     public selectAllTeams = async () => {

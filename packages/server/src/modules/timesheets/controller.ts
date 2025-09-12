@@ -1,9 +1,9 @@
 import type { Request, Response } from "express";
-import type { NewTimesheet, TimesheetUpdate } from "@syncellus/types/database.js";
+import type { NewTimesheet } from "@syncellus/types/database.js";
 import type { TimesheetService } from "@syncellus/modules/timesheets/service.js";
 import type { NewTimesheetBody } from "@syncellus/types/index.js";
 import { sendResponse } from "@syncellus/utils/responseBuilder.js";
-import { NotFoundError } from "@syncellus/errors/errors.js";
+import { NotFoundError } from "@syncellus/errors/http.js";
 import { HttpStatus } from "@syncellus/core/http.js";
 import { TypedRequest } from "@syncellus/types/express.js";
 
@@ -37,11 +37,7 @@ export class TimesheetController {
             body,
             params: { id }
         } = req;
-        const data: TimesheetUpdate = {
-            id,
-            ...body
-        };
-        const patched = await this.service.updateTimesheetById(data);
+        const patched = await this.service.updateTimesheetById({ id, ...body });
         if (!patched) throw new NotFoundError(`Timesheet with ID ${id} not found!`);
 
         return sendResponse(res, HttpStatus.OK, { message: `Timesheed ${id} updated`, data: patched });

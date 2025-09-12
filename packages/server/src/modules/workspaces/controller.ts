@@ -3,7 +3,7 @@ import type { Request, Response } from "express";
 import type { NewTeam } from "@syncellus/types/database.js";
 import { sendResponse } from "@syncellus/utils/responseBuilder.js";
 import { HttpStatus } from "@syncellus/core/http.js";
-import { NotFoundError } from "@syncellus/errors/errors.js";
+import { NotFoundError } from "@syncellus/errors/http.js";
 
 export class WorkspacesController {
     constructor(private readonly service: WorkspacesService) {}
@@ -14,7 +14,7 @@ export class WorkspacesController {
         const { user } = req;
         const newTeams = await this.service.insertNewTeams(user.id, teams);
 
-        return sendResponse(res, HttpStatus.CREATED, { message: `Team creation successful`, data: newTeams }); //TODO add response sanitization to omit ID
+        return sendResponse(res, HttpStatus.CREATED, { message: `Team creation successful`, data: newTeams });
     };
 
     public getTeams = async (_req: Request, res: Response) => {

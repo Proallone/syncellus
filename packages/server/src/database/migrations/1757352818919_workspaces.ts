@@ -51,8 +51,18 @@ export async function up(db: Kysely<any>): Promise<void> {
                 .check(sql`LENGTH(team_id) = 36`)
                 .references("workspaces_teams.id")
         )
-        .addColumn("user_id", "text", (col) => col.check(sql`LENGTH(user_id) = 36`).references("auth_users.id"))
-        .addColumn("role", "text", (col) => col.notNull().defaultTo("member")) //TODO add enum or roles entity?
+        .addColumn("user_id", "text", (col) =>
+            col
+                .notNull()
+                .check(sql`LENGTH(user_id) = 36`)
+                .references("auth_users.id")
+        )
+        .addColumn("role_id", "text", (col) =>
+            col
+                .notNull()
+                .check(sql`LENGTH(role_id) = 36`)
+                .references("workspaces_team_roles.id")
+        )
         .addColumn("createdAt", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .addColumn("modifiedAt", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .addForeignKeyConstraint("workspaces_team_members_team_id_fk", ["team_id"], "workspaces_teams", ["id"], (cb) => cb.onDelete("cascade"))
@@ -68,6 +78,30 @@ export async function up(db: Kysely<any>): Promise<void> {
 			WHERE
 			id = OLD.id;
 		END;`.execute(db);
+
+    await db.schema
+        .createTable("workspaces_team_roles")
+        .addColumn("id", "text", (col) => col.primaryKey().check(sql`LENGTH(id) = 36`))
+        .addColumn("name", "text", (col) =>
+            col
+                .unique()
+                .check(sql`LENGTH(description) < 256`)
+                .notNull()
+        )
+        .addColumn("description", "text", (col) => col.check(sql`LENGTH(description) < 256`))
+        .addColumn("createdAt", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("modifiedAt", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .execute();
+
+    await sql`
+		CREATE TRIGGER IF NOT EXISTS update_workspaces_team_roles_modifiedAt BEFORE
+		UPDATE ON workspaces_team_roles FOR EACH ROW BEGIN
+			UPDATE workspaces_team_roles
+			SET
+			modifiedAT = datetime ('now')
+			WHERE
+			id = OLD.id;
+		END;`.execute(db);
 }
 
 // `any` is required here since migrations should be frozen in time. alternatively, keep a "snapshot" db interface.
@@ -76,7 +110,7 @@ export async function down(db: Kysely<any>): Promise<void> {
     // down migration code goes here...
     // note: down migrations are optional. you can safely delete this function.
     // For more info, see: https://kysely.dev/docs/migrations
-
+    await db.schema.dropTable("workspaces_team_roles").execute();
     await db.schema.dropTable("workspaces_team_members").execute();
     await db.schema.dropTable("workspaces_teams").execute();
 }

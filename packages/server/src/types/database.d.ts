@@ -12,6 +12,7 @@ export interface Database {
     timesheets_entries: TimesheetTable;
     workspaces_teams: TeamsTable;
     workspaces_team_members: TeamMembersTable;
+    workspaces_team_roles: TeamRolesTable;
 }
 
 export interface UsersTable {
@@ -140,7 +141,7 @@ export type TeamUpdate = Updateable<TeamsTable>;
 export interface TeamMembersTable {
     team_id: Generated<string>;
     user_id: Generated<string>;
-    role: Generated<string>;
+    role_id: Generated<string>;
     createdAt: ColumnType<Date, string | undefined, never>;
     modifiedAt: ColumnType<Date, string | undefined, never>;
 }
@@ -148,3 +149,15 @@ export interface TeamMembersTable {
 export type TeamMember = Selectable<TeamMembersTable>;
 export type NewTeamMember = Insertable<TeamMembersTable>;
 export type TeamMemberUpdate = Updateable<TeamMembersTable>;
+
+export interface TeamRolesTable {
+    id: Generated<string>;
+    name: string;
+    description: string;
+    createdAt: ColumnType<Date, string | undefined, never>;
+    modifiedAt: ColumnType<Date, string | undefined, never>;
+}
+
+export type TeamRole = Selectable<TeamRolesTable>;
+export type NewTeamRole = Insertable<TeamRolesTable>;
+export type TeamRoleUpdate = Updateable<TeamRolesTable>;
