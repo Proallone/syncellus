@@ -28,17 +28,17 @@ export async function up(db: Kysely<any>): Promise<void> {
                 .check(sql`LENGTH(name) < 256`)
                 .notNull()
         )
-        .addColumn("createdAt", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
-        .addColumn("modifiedAt", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("created_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("modified_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .addForeignKeyConstraint("workspaces_teams_user_id_fk", ["owner_id"], "auth_users", ["id"], (cb) => cb.onDelete("cascade"))
         .execute();
 
     await sql`
-		CREATE TRIGGER IF NOT EXISTS update_workspaces_teams_modifiedAt BEFORE
+		CREATE TRIGGER IF NOT EXISTS update_workspaces_teams_modified_at BEFORE
 		UPDATE ON workspaces_teams FOR EACH ROW BEGIN
 			UPDATE workspaces_teams
 			SET
-			modifiedAT = datetime ('now')
+			modified_at = datetime ('now')
 			WHERE
 			id = OLD.id;
 		END;`.execute(db);
@@ -63,18 +63,18 @@ export async function up(db: Kysely<any>): Promise<void> {
                 .check(sql`LENGTH(role_id) = 36`)
                 .references("workspaces_team_roles.id")
         )
-        .addColumn("createdAt", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
-        .addColumn("modifiedAt", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("created_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("modified_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .addForeignKeyConstraint("workspaces_team_members_team_id_fk", ["team_id"], "workspaces_teams", ["id"], (cb) => cb.onDelete("cascade"))
         .addForeignKeyConstraint("workspaces_team_members_auth_users_id_fk", ["user_id"], "auth_users", ["id"], (cb) => cb.onDelete("cascade"))
         .execute();
 
     await sql`
-		CREATE TRIGGER IF NOT EXISTS update_workspaces_team_members_modifiedAt BEFORE
+		CREATE TRIGGER IF NOT EXISTS update_workspaces_team_members_modified_at BEFORE
 		UPDATE ON workspaces_team_members FOR EACH ROW BEGIN
 			UPDATE workspaces_team_members
 			SET
-			modifiedAT = datetime ('now')
+			modified_at = datetime ('now')
 			WHERE
 			id = OLD.id;
 		END;`.execute(db);
@@ -89,16 +89,16 @@ export async function up(db: Kysely<any>): Promise<void> {
                 .notNull()
         )
         .addColumn("description", "text", (col) => col.check(sql`LENGTH(description) < 256`))
-        .addColumn("createdAt", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
-        .addColumn("modifiedAt", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("created_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("modified_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .execute();
 
     await sql`
-		CREATE TRIGGER IF NOT EXISTS update_workspaces_team_roles_modifiedAt BEFORE
+		CREATE TRIGGER IF NOT EXISTS update_workspaces_team_roles_modified_at BEFORE
 		UPDATE ON workspaces_team_roles FOR EACH ROW BEGIN
 			UPDATE workspaces_team_roles
 			SET
-			modifiedAT = datetime ('now')
+			modified_at = datetime ('now')
 			WHERE
 			id = OLD.id;
 		END;`.execute(db);

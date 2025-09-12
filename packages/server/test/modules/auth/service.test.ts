@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { AuthService } from "@syncellus/modules/auth/service.js";
 import { eventBus } from "@syncellus/core/eventBus.js";
-import { HttpError } from "@syncellus/errors/errors.js";
+import { HttpError } from "@syncellus/errors/http.js";
 import Jwt from "jsonwebtoken";
 import { customAlphabet } from "nanoid";
 import { uuidv7 } from "uuidv7";

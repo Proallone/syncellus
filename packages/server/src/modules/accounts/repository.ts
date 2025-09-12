@@ -13,7 +13,7 @@ export class AccountsRepository {
         const q = this.db
             .selectFrom("accounts_profiles")
             .leftJoin("auth_users", "accounts_profiles.user_id", "auth_users.id")
-            .select(["accounts_profiles.id", "name", "surname", "email", "active", "auth_users.createdAt", "auth_users.modifiedAt"]);
+            .select(["accounts_profiles.id", "name", "surname", "email", "active", "auth_users.created_at", "auth_users.modified_at"]);
 
         // if (query.active) q = q.where("active", "=", query.active); //? no boolean in sqlite...
 
@@ -24,7 +24,7 @@ export class AccountsRepository {
         return await this.db
             .selectFrom("accounts_profiles")
             .leftJoin("auth_users", "accounts_profiles.user_id", "auth_users.id")
-            .select(["accounts_profiles.id", "name", "surname", "email", "active", "auth_users.createdAt", "auth_users.modifiedAt"])
+            .select(["accounts_profiles.id", "name", "surname", "email", "active", "auth_users.created_at", "auth_users.modified_at"])
             .where("auth_users.id", "=", id)
             .executeTakeFirst();
     };

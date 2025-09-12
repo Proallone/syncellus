@@ -15,8 +15,8 @@ export async function up(db: Kysely<any>): Promise<void> {
                 .notNull()
                 .check(sql`LENGTH(employee_id) = 36`)
         )
-        .addColumn("createdAt", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
-        .addColumn("modifiedAt", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("created_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("modified_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .addColumn("date", "text", (col) => col.notNull())
         .addColumn("start_hour", "text", (col) => col.notNull())
         .addColumn("end_hour", "text", (col) => col.notNull().check(sql`end_hour > start_hour`))
@@ -35,11 +35,11 @@ export async function up(db: Kysely<any>): Promise<void> {
     await db.schema.createIndex("timesheets_entries_employee_id").on("timesheets_entries").column("employee_id").execute();
 
     await sql`
-		CREATE TRIGGER IF NOT EXISTS update_timesheets_entries_modifiedAt BEFORE
+		CREATE TRIGGER IF NOT EXISTS update_timesheets_entries_modified_at BEFORE
 		UPDATE ON timesheets_entries FOR EACH ROW BEGIN
 			UPDATE timesheets_entries
 			SET
-			modifiedAT = datetime ('now')
+			modified_at = datetime ('now')
 			WHERE
 			id = OLD.id;
 		END;`.execute(db);
@@ -51,7 +51,7 @@ export async function down(db: Kysely<any>): Promise<void> {
     // down migration code goes here...
     // note: down migrations are optional. you can safely delete this function.
     // For more info, see: https://kysely.dev/docs/migrations
-    await sql`DROP TRIGGER IF EXISTS update_timesheets_entries_modifiedAt;`.execute(db);
+    await sql`DROP TRIGGER IF EXISTS update_timesheets_entries_modified_at;`.execute(db);
     await db.schema.dropIndex("timesheets_entries_employee_id").execute();
     await db.schema.dropTable("timesheets_entries").execute();
 }

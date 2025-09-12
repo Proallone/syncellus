@@ -20,8 +20,8 @@ export interface UsersTable {
     public_id: Generated<string>;
     email: string;
     password: string;
-    createdAt: ColumnType<Date, string | undefined, never>;
-    modifiedAt: ColumnType<Date, string | undefined, never>;
+    created_at: ColumnType<Date, string | undefined, never>;
+    modified_at: ColumnType<Date, string | undefined, never>;
     verified: Generated<number>;
     active: Generated<number>;
 }
@@ -34,8 +34,8 @@ export interface RolesTable {
     id: Generated<string>;
     name: string;
     description: string;
-    createdAt: ColumnType<Date, string | undefined, never>;
-    modifiedAt: ColumnType<Date, string | undefined, never>;
+    created_at: ColumnType<Date, string | undefined, never>;
+    modified_at: ColumnType<Date, string | undefined, never>;
 }
 
 export type Role = Selectable<RolesTable>;
@@ -46,8 +46,8 @@ export interface ScopesTable {
     id: Generated<string>;
     scope: string;
     description: string;
-    createdAt: ColumnType<Date, string | undefined, never>;
-    modifiedAt: ColumnType<Date, string | undefined, never>;
+    created_at: ColumnType<Date, string | undefined, never>;
+    modified_at: ColumnType<Date, string | undefined, never>;
 }
 
 export type Scope = Selectable<ScopesTable>;
@@ -77,7 +77,7 @@ export interface PasswordResetTokensTable {
     user_id: string;
     token_hash: string;
     expires_at: ColumnType<string | undefined, never>;
-    createdAt: ColumnType<Date, string | undefined, never>;
+    created_at: ColumnType<Date, string | undefined, never>;
 }
 
 export type PasswordResetToken = Selectable<PasswordResetTokensTable>;
@@ -89,7 +89,7 @@ export interface EmailVerificationTokensTable {
     user_id: string;
     token_hash: string;
     expires_at: ColumnType<string | undefined, never>;
-    createdAt: ColumnType<Date, string | undefined, never>;
+    created_at: ColumnType<Date, string | undefined, never>;
 }
 
 export type EmailVerificationToken = Selectable<EmailVerificationTokensTable>;
@@ -101,8 +101,8 @@ export interface ProfilesTable {
     user_id: string;
     name: string | undefined;
     surname: string | undefined;
-    createdAt: ColumnType<Date, string | undefined, never>;
-    modifiedAt: ColumnType<Date, string | undefined, never>;
+    created_at: ColumnType<Date, string | undefined, never>;
+    modified_at: ColumnType<Date, string | undefined, never>;
 }
 
 export type Employee = Selectable<ProfilesTable>;
@@ -112,8 +112,8 @@ export type EmployeeUpdate = Updateable<ProfilesTable>;
 export interface TimesheetTable {
     id: Generated<string>;
     employee_id: string;
-    createdAt: ColumnType<Date, string | undefined, never>;
-    modifiedAt: ColumnType<Date, string | undefined, never>;
+    created_at: ColumnType<Date, string | undefined, never>;
+    modified_at: ColumnType<Date, string | undefined, never>;
     date: ColumnType<Date, string>;
     start_hour: ColumnType<Date, string>;
     end_hour: ColumnType<Date, string>;
@@ -130,8 +130,8 @@ export interface TeamsTable {
     public_id: Generated<string>;
     owner_id: string;
     name: string;
-    createdAt: ColumnType<Date, string | undefined, never>;
-    modifiedAt: ColumnType<Date, string | undefined, never>;
+    created_at: ColumnType<Date, string | undefined, never>;
+    modified_at: ColumnType<Date, string | undefined, never>;
 }
 
 export type Team = Selectable<TeamsTable>;
@@ -142,8 +142,8 @@ export interface TeamMembersTable {
     team_id: Generated<string>;
     user_id: Generated<string>;
     role_id: Generated<string>;
-    createdAt: ColumnType<Date, string | undefined, never>;
-    modifiedAt: ColumnType<Date, string | undefined, never>;
+    created_at: ColumnType<Date, string | undefined, never>;
+    modified_at: ColumnType<Date, string | undefined, never>;
 }
 
 export type TeamMember = Selectable<TeamMembersTable>;
@@ -154,8 +154,8 @@ export interface TeamRolesTable {
     id: Generated<string>;
     name: string;
     description: string;
-    createdAt: ColumnType<Date, string | undefined, never>;
-    modifiedAt: ColumnType<Date, string | undefined, never>;
+    created_at: ColumnType<Date, string | undefined, never>;
+    modified_at: ColumnType<Date, string | undefined, never>;
 }
 
 export type TeamRole = Selectable<TeamRolesTable>;

@@ -12,17 +12,17 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("user_id", "text", (col) => col.unique().notNull().references("auth_users.id"))
         .addColumn("name", "text", (col) => col.check(sql`LENGTH(name) >= 3 AND LENGTH(name) <= 255`))
         .addColumn("surname", "text", (col) => col.check(sql`LENGTH(surname) >= 3 AND LENGTH(surname) <= 255`))
-        .addColumn("createdAt", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
-        .addColumn("modifiedAt", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("created_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("modified_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .addForeignKeyConstraint("employees_auth_users_id_fk", ["user_id"], "auth_users", ["id"], (cb) => cb.onDelete("cascade"))
         .execute();
 
     await sql`
-		CREATE TRIGGER IF NOT EXISTS update_account_profiles_modifiedAt BEFORE
+		CREATE TRIGGER IF NOT EXISTS update_account_profiles_modified_at BEFORE
 		UPDATE ON accounts_profiles FOR EACH ROW BEGIN
 			UPDATE accounts_profiles
 			SET
-			modifiedAT = datetime ('now')
+			modified_at = datetime ('now')
 			WHERE
 			id = OLD.id;
 		END;`.execute(db);
@@ -35,6 +35,6 @@ export async function down(db: Kysely<any>): Promise<void> {
     // note: down migrations are optional. you can safely delete this function.
     // For more info, see: https://kysely.dev/docs/migrations
 
-    await sql`DROP TRIGGER IF EXISTS update_account_profiles_modifiedAt;`.execute(db);
+    await sql`DROP TRIGGER IF EXISTS update_account_profiles_modified_at;`.execute(db);
     await db.schema.dropTable("accounts_profiles").execute();
 }

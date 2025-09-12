@@ -55,8 +55,8 @@ describe("Auth Controller", () => {
                 public_id: "nixdm4t01d",
                 email: "test@mail.com",
                 password: "password",
-                createdAt: new Date(),
-                modifiedAt: new Date(),
+                created_at: new Date(),
+                modified_at: new Date(),
                 active: 1
             };
             vi.mocked(mockService.registerNewUser).mockResolvedValue(mockedUser);

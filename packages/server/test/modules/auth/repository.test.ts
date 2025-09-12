@@ -66,8 +66,8 @@ describe("Auth Repository", () => {
         expect(result).toBeInstanceOf(Object);
         expect(result).toHaveProperty("id");
         expect(result).toHaveProperty("email", user.email);
-        expect(result).toHaveProperty("createdAt");
-        expect(result).toHaveProperty("modifiedAt");
+        expect(result).toHaveProperty("created_at");
+        expect(result).toHaveProperty("modified_at");
     });
     it("should throw for user payload with missing email", async () => {
         // Arrange
