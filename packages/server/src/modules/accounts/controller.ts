@@ -54,20 +54,20 @@ export class AccountsController {
     };
 
     public getTimesheetsByAccount = async (req: Request, res: Response) => {
-        const { employeeId } = req.params;
-        const timesheets = await this.timesheetService.selectAllTimesheetsByEmployeeId(employeeId);
+        const { accountId } = req.params;
+        const timesheets = await this.timesheetService.selectAllTimesheetsByEmployeeId(accountId);
 
         if (!timesheets || timesheets.length === 0) throw new NotFoundError(`No timesheets found for this account with the given criteria.`);
-        return sendResponse(res, HttpStatus.OK, { message: `Timesheets for account ${employeeId} fetched`, data: timesheets });
+        return sendResponse(res, HttpStatus.OK, { message: `Timesheets for account ${accountId} fetched`, data: timesheets });
     };
 
     public createTimesheetForAccount = async (req: Request, res: Response) => {
-        const { employeeId } = req.params;
+        const { accountId } = req.params;
         const body = Array.isArray(req.body) ? req.body : [req.body];
 
-        const timesheets: NewTimesheet[] = body.map((timesheet) => ({ id: uuidv7(), employee_id: employeeId, ...timesheet }));
+        const timesheets: NewTimesheet[] = body.map((timesheet) => ({ id: uuidv7(), employee_id: accountId, ...timesheet }));
 
         const newTimesheet = await this.timesheetService.insertNewTimesheets(timesheets);
-        return sendResponse(res, HttpStatus.CREATED, { message: `New timesheet for account ${employeeId} created`, data: newTimesheet });
+        return sendResponse(res, HttpStatus.CREATED, { message: `New timesheet for account ${accountId} created`, data: newTimesheet });
     };
 }
