@@ -1,4 +1,4 @@
-import type { Database, NewTeam, NewTeamMember, NewTeamRole } from "@syncellus/types/database.js";
+import type { Database, NewTeam, NewTeamMember, NewTeamRole, NewTeamTask } from "@syncellus/types/database.js";
 import type { Kysely } from "kysely";
 
 // replace `any` with your database interface.
@@ -67,7 +67,29 @@ export async function seed(db: Kysely<Database>): Promise<void> {
         }
     ];
 
+    const tasks: NewTeamTask[] = [
+        {
+            id: "01994771-49cc-7459-a52d-375358c173f5",
+            team_id: "01992aed-cc90-71a0-b867-1d86fae1028a",
+            name: "Default task",
+            description: "Default task for a team"
+        },
+        {
+            id: "01992aee-637a-72a6-a0f8-3f493d5e5a0b",
+            team_id: "01992aed-cc90-71a0-b867-1d86fae1028a",
+            name: "Default task",
+            description: "Default task for a team"
+        },
+        {
+            id: "01992aee-dbfe-7035-82b2-d5859e3e315f",
+            team_id: "01992aed-cc90-71a0-b867-1d86fae1028a",
+            name: "Default task",
+            description: "Default task for a team"
+        }
+    ];
+
     await db.insertInto("workspaces_team_roles").values(roles).execute();
     await db.insertInto("workspaces_teams").values(teams).execute();
     await db.insertInto("workspaces_team_members").values(members).execute();
+    await db.insertInto("workspaces_team_tasks").values(tasks).execute();
 }

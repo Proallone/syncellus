@@ -13,6 +13,7 @@ export interface Database {
     workspaces_teams: TeamsTable;
     workspaces_team_members: TeamMembersTable;
     workspaces_team_roles: TeamRolesTable;
+    workspaces_team_tasks: TeamTasksTable;
 }
 
 export interface UsersTable {
@@ -161,3 +162,16 @@ export interface TeamRolesTable {
 export type TeamRole = Selectable<TeamRolesTable>;
 export type NewTeamRole = Insertable<TeamRolesTable>;
 export type TeamRoleUpdate = Updateable<TeamRolesTable>;
+
+export interface TeamTasksTable {
+    id: Generated<string>;
+    team_id: Generated<string>;
+    name: string;
+    description: string;
+    created_at: ColumnType<Date, string | undefined, never>;
+    modified_at: ColumnType<Date, string | undefined, never>;
+}
+
+export type TeamTask = Selectable<TeamTasksTable>;
+export type NewTeamTask = Insertable<TeamTasksTable>;
+export type TeamTaskUpdate = Updateable<TeamTasksTable>;

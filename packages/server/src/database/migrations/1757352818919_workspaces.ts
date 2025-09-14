@@ -10,12 +10,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     await db.schema
         .createTable("workspaces_teams")
         .addColumn("id", "text", (col) => col.primaryKey().check(sql`LENGTH(id) = 36`))
-        .addColumn("public_id", "text", (col) =>
-            col
-                .unique()
-                .notNull()
-                .check(sql`LENGTH(public_id) = 10`)
-        )
+        .addColumn("public_id", "text", (col) => col.notNull().check(sql`LENGTH(public_id) = 10`))
         .addColumn("owner_id", "text", (col) =>
             col
                 .references("auth_users.id")
@@ -100,6 +95,32 @@ export async function up(db: Kysely<any>): Promise<void> {
 			SET
 			modified_at = datetime ('now')
 			WHERE
+			team_id = OLD.team_id AND user_id = OLD.user_id;
+		END;`.execute(db);
+
+    await db.schema
+        .createTable("workspaces_team_tasks")
+        .addColumn("id", "text", (col) => col.primaryKey().check(sql`LENGTH(id) = 36`))
+        .addColumn("team_id", "text", (col) =>
+            col
+                .notNull()
+                .check(sql`LENGTH(team_id) = 36`)
+                .references("workspaces_teams.id")
+        )
+        .addColumn("name", "text", (col) => col.check(sql`LENGTH(description) < 256`).notNull())
+        .addColumn("description", "text", (col) => col.check(sql`LENGTH(description) < 256`))
+        .addColumn("created_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("modified_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        //TODO add valid_to column, max hours?
+        .execute();
+
+    await sql`
+		CREATE TRIGGER IF NOT EXISTS workspaces_team_tasks_modified_at BEFORE
+		UPDATE ON workspaces_team_tasks FOR EACH ROW BEGIN
+			UPDATE workspaces_team_tasks
+			SET
+			modified_at = datetime ('now')
+			WHERE
 			id = OLD.id;
 		END;`.execute(db);
 }
@@ -110,6 +131,7 @@ export async function down(db: Kysely<any>): Promise<void> {
     // down migration code goes here...
     // note: down migrations are optional. you can safely delete this function.
     // For more info, see: https://kysely.dev/docs/migrations
+    await db.schema.dropTable("workspaces_team_tasks").execute();
     await db.schema.dropTable("workspaces_team_members").execute();
     await db.schema.dropTable("workspaces_team_roles").execute();
     await db.schema.dropTable("workspaces_teams").execute();
