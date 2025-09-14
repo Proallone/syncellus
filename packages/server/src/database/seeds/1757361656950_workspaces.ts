@@ -1,4 +1,4 @@
-import type { Database, NewTeam, NewTeamMember, NewTeamRole, NewTeamTask, NewTimesheet } from "@syncellus/types/database.js";
+import type { Database, NewTeam, NewTeamMember, NewTeamRole, NewTask, NewTimesheet } from "@syncellus/types/database.js";
 import type { Kysely } from "kysely";
 
 // replace `any` with your database interface.
@@ -67,7 +67,7 @@ export async function seed(db: Kysely<Database>): Promise<void> {
         }
     ];
 
-    const tasks: NewTeamTask[] = [
+    const tasks: NewTask[] = [
         {
             id: "01994771-49cc-7459-a52d-375358c173f5",
             team_id: "01992aed-cc90-71a0-b867-1d86fae1028a",
@@ -130,6 +130,6 @@ export async function seed(db: Kysely<Database>): Promise<void> {
     await db.insertInto("workspaces_team_roles").values(roles).execute();
     await db.insertInto("workspaces_teams").values(teams).execute();
     await db.insertInto("workspaces_team_members").values(members).execute();
-    await db.insertInto("workspaces_team_tasks").values(tasks).execute();
+    await db.insertInto("workspaces_tasks").values(tasks).execute();
     await db.insertInto("workspaces_timesheets").values(timesheets).execute();
 }

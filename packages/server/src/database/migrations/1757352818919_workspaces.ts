@@ -62,6 +62,39 @@ export async function up(db: Kysely<any>): Promise<void> {
 			id = OLD.id;
 		END;`.execute(db);
 
+    //TODO add invited_by email?
+    await db.schema
+        .createTable("workspaces_team_invitations")
+        .addColumn("id", "text", (col) => col.primaryKey().check(sql`LENGTH(id) = 36`))
+        .addColumn("team_id", "text", (col) =>
+            col
+                .notNull()
+                .check(sql`LENGTH(team_id) = 36`)
+                .references("workspaces_teams.id")
+        )
+        .addColumn("invited_email", "text", (col) =>
+            col
+                .unique()
+                .notNull()
+                .check(sql`LENGTH(invited_email) >= 3 AND LENGTH(invited_email) <= 255`)
+        )
+        .addColumn("status", "text", (col) => col.notNull().defaultTo("pending")) //todo handle better
+        .addColumn("invitation_token", "text", (col) => col.notNull().check(sql`LENGTH(invitation_token) = 64`))
+        .addColumn("expires_at", "datetime", (col) => col.defaultTo(sql`(datetime('now', '+7 days'))`).notNull()) //TODO time from config
+        .addColumn("created_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("modified_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .execute();
+
+    await sql`
+		CREATE TRIGGER IF NOT EXISTS workspaces_team_invitations_modified_at BEFORE
+		UPDATE ON workspaces_team_invitations FOR EACH ROW BEGIN
+			UPDATE workspaces_team_invitations
+			SET
+			modified_at = datetime ('now')
+			WHERE
+			id = OLD.id;
+		END;`.execute(db);
+
     await db.schema
         .createTable("workspaces_team_members")
         .addColumn("team_id", "text", (col) =>
@@ -99,7 +132,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 		END;`.execute(db);
 
     await db.schema
-        .createTable("workspaces_team_tasks")
+        .createTable("workspaces_tasks")
         .addColumn("id", "text", (col) => col.primaryKey().check(sql`LENGTH(id) = 36`))
         .addColumn("team_id", "text", (col) =>
             col
@@ -115,9 +148,9 @@ export async function up(db: Kysely<any>): Promise<void> {
         .execute();
 
     await sql`
-		CREATE TRIGGER IF NOT EXISTS workspaces_team_tasks_modified_at BEFORE
-		UPDATE ON workspaces_team_tasks FOR EACH ROW BEGIN
-			UPDATE workspaces_team_tasks
+		CREATE TRIGGER IF NOT EXISTS workspaces_tasks_modified_at BEFORE
+		UPDATE ON workspaces_tasks FOR EACH ROW BEGIN
+			UPDATE workspaces_tasks
 			SET
 			modified_at = datetime ('now')
 			WHERE
@@ -135,7 +168,7 @@ export async function up(db: Kysely<any>): Promise<void> {
         )
         .addColumn("task_id", "text", (col) =>
             col
-                .references("workspaces_team_tasks.id")
+                .references("workspaces_tasks.id")
                 .notNull()
                 .check(sql`LENGTH(task_id) = 36`)
         )
@@ -177,8 +210,9 @@ export async function down(db: Kysely<any>): Promise<void> {
     // For more info, see: https://kysely.dev/docs/migrations
 
     await db.schema.dropTable("workspaces_timesheets").execute();
-    await db.schema.dropTable("workspaces_team_tasks").execute();
+    await db.schema.dropTable("workspaces_tasks").execute();
     await db.schema.dropTable("workspaces_team_members").execute();
+    await db.schema.dropTable("workspaces_team_invitations").execute();
     await db.schema.dropTable("workspaces_team_roles").execute();
     await db.schema.dropTable("workspaces_teams").execute();
 }

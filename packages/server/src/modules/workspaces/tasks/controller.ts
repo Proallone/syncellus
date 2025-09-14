@@ -11,23 +11,23 @@ export class TasksController {
     public createTasks = async (req: Request, res: Response) => {
         const body = Array.isArray(req.body) ? req.body : [req.body];
         const tasks: NewTeam[] = body.map((team) => ({ ...team }));
-        const newTasks = await this.service.insertNewTeamTasks(tasks);
+        const newTasks = await this.service.insertNewTasks(tasks);
 
-        return sendResponse(res, HttpStatus.CREATED, { message: `Team task creation successful`, data: newTasks });
+        return sendResponse(res, HttpStatus.CREATED, { message: `Task creation successful`, data: newTasks });
     };
 
     public getTasks = async (_req: Request, res: Response) => {
         const tasks = await this.service.selectAllTasks();
 
-        return sendResponse(res, HttpStatus.OK, { message: "Teams tasks fetched", data: tasks });
+        return sendResponse(res, HttpStatus.OK, { message: "TGasks fetched", data: tasks });
     };
 
     public getTaskByID = async (req: Request, res: Response) => {
         const { id } = req.params;
         const task = await this.service.selectTaskByID(id);
-        if (!task) throw new NotFoundError(`Team task with ID ${id} not found!`);
+        if (!task) throw new NotFoundError(`Task with ID ${id} not found!`);
 
-        return sendResponse(res, HttpStatus.OK, { message: `Team task with ID ${id} fetched`, data: task });
+        return sendResponse(res, HttpStatus.OK, { message: `Task with ID ${id} fetched`, data: task });
     };
 
     public patchTask = async (req: Request, res: Response) => {
@@ -36,16 +36,16 @@ export class TasksController {
             params: { id }
         } = req;
         const patched = await this.service.updateTaskByID(id, body);
-        if (!patched) throw new NotFoundError(`Team task with ID ${id} not found!`);
+        if (!patched) throw new NotFoundError(`Task with ID ${id} not found!`);
 
-        return sendResponse(res, HttpStatus.OK, { message: `Team task with ID ${id} updated`, data: patched });
+        return sendResponse(res, HttpStatus.OK, { message: `Task with ID ${id} updated`, data: patched });
     };
 
     public deleteTask = async (req: Request, res: Response) => {
         const { id } = req.params;
         const deletion = await this.service.deleteTaskByID(id);
-        if (!deletion) throw new NotFoundError(`Team task with ID ${id} not fount!`);
+        if (!deletion) throw new NotFoundError(`Task with ID ${id} not fount!`);
 
-        return sendResponse(res, HttpStatus.OK, { message: `Team task with ID ${id} deleted` });
+        return sendResponse(res, HttpStatus.OK, { message: `Task with ID ${id} deleted` });
     };
 }

@@ -1,12 +1,12 @@
 import type { ITasksService } from "./types.js";
-import type { NewTeamTask, TeamTaskUpdate } from "@syncellus/types/database.js";
+import type { NewTask, TaskUpdate } from "@syncellus/types/database.js";
 import { TasksRepository } from "@syncellus/modules/workspaces/tasks/repository.js";
 import { uuidv7 } from "uuidv7";
 
 export class TasksService implements ITasksService {
     constructor(private readonly repo: TasksRepository) {}
 
-    public insertNewTeamTasks = async (tasks: NewTeamTask[]) => {
+    public insertNewTasks = async (tasks: NewTask[]) => {
         const values = tasks.map((task) => {
             return { id: uuidv7(), ...task };
         });
@@ -21,7 +21,7 @@ export class TasksService implements ITasksService {
         return await this.repo.selectTaskByIDFromDB(id);
     };
 
-    public updateTaskByID = async (id: string, task: TeamTaskUpdate) => {
+    public updateTaskByID = async (id: string, task: TaskUpdate) => {
         return await this.repo.updateTaskByIDInDB(id, task);
     };
 

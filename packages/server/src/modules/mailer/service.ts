@@ -31,4 +31,19 @@ export class MailService implements IMailService {
 
         await this.mailer.send({ to, subject, html });
     }
+
+    async sendTeamInvitation(to: string, teamName: string, inviterName: string) {
+        const template = compileTemplate("workspaces_team_invitation");
+        const data = {
+            appName: "Syncellus",
+            teamName,
+            currentYear: new Date().getFullYear().toString(),
+            inviterName,
+            invitedEmail: to
+        };
+        const html = template(data);
+        const subject = "Syncellus team invitation";
+
+        await this.mailer.send({ to, subject, html });
+    }
 }

@@ -1,18 +1,18 @@
 import { z } from "zod";
 
-const WorkspaceTeamTaskBasePayload = z.strictObject({
+const WorkspaceTaskBasePayload = z.strictObject({
     team_id: z.uuidv7(),
     name: z.string().max(256),
     description: z.string().max(256)
 });
 
-export const SingleWorkspaceTeamTaskPostPayload = WorkspaceTeamTaskBasePayload.required();
-export const WorkspaceTeamTaskUpdatePayload = WorkspaceTeamTaskBasePayload.partial();
+export const SingleWorkspaceTaskPostPayload = WorkspaceTaskBasePayload.required();
+export const WorkspaceTaskUpdatePayload = WorkspaceTaskBasePayload.partial();
 
-export const WorkspaceTeamTaskPostSchema = z.object({
-    body: WorkspaceTeamTaskBasePayload
+export const WorkspaceTaskPostSchema = z.object({
+    body: WorkspaceTaskBasePayload
 });
 
-export const WorkspaceTeamTaskUpdateSchema = z.object({
-    body: SingleWorkspaceTeamTaskPostPayload
+export const WorkspaceTaskUpdateSchema = z.object({
+    body: SingleWorkspaceTaskPostPayload
 });

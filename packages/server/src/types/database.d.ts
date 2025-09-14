@@ -11,9 +11,10 @@ export interface Database {
     accounts_profiles: ProfilesTable;
     workspaces_timesheets: TimesheetTable;
     workspaces_teams: TeamsTable;
+    workspaces_team_invitations: TeamInvitationsTable;
     workspaces_team_members: TeamMembersTable;
     workspaces_team_roles: TeamRolesTable;
-    workspaces_team_tasks: TeamTasksTable;
+    workspaces_tasks: TasksTable;
 }
 
 export interface UsersTable {
@@ -164,7 +165,7 @@ export type TeamRole = Selectable<TeamRolesTable>;
 export type NewTeamRole = Insertable<TeamRolesTable>;
 export type TeamRoleUpdate = Updateable<TeamRolesTable>;
 
-export interface TeamTasksTable {
+export interface TasksTable {
     id: Generated<string>;
     team_id: Generated<string>;
     name: string;
@@ -173,6 +174,22 @@ export interface TeamTasksTable {
     modified_at: ColumnType<Date, string | undefined, never>;
 }
 
-export type TeamTask = Selectable<TeamTasksTable>;
-export type NewTeamTask = Insertable<TeamTasksTable>;
-export type TeamTaskUpdate = Updateable<TeamTasksTable>;
+export type Task = Selectable<TasksTable>;
+export type NewTask = Insertable<TasksTable>;
+export type TaskUpdate = Updateable<TasksTable>;
+
+export interface TeamInvitationsTable {
+    id: Generated<string>;
+    team_id: string;
+    invited_email: string;
+    token_hash: string;
+    status: string;
+    invitation_token: string;
+    expires_at: ColumnType<string | undefined, never>;
+    created_at: ColumnType<Date, string | undefined, never>;
+    modified_at: ColumnType<Date, string | undefined, never>;
+}
+
+export type TeamInvitation = Selectable<TeamInvitationsTable>;
+export type NewTeamInvitation = Insertable<TeamInvitationsTable>;
+export type TeamInvitationUpdate = Updateable<TeamInvitationsTable>;
