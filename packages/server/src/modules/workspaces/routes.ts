@@ -2,25 +2,28 @@ import { Router } from "express";
 import { hw } from "@syncellus/utils/handlerWrapper.js";
 import { authenticate } from "@syncellus/middlewares/auth.middleware.js";
 import { validate } from "@syncellus/middlewares/validator.middleware.js";
-import { WorkspaceTeamPostSchema, WorkspaceTeamTaskPostSchema, WorkspaceTeamTaskUpdateSchema, WorkspaceTeamUpdateSchema } from "./schema.js";
-import { buildWorkspacesModule } from "./module.js";
+import { WorkspaceTeamPostSchema, WorkspaceTeamUpdateSchema } from "@syncellus/modules/workspaces/teams/schema.js";
+import { buildTeamsModule } from "@syncellus/modules/workspaces/teams/module.js";
+import { buildTasksModule } from "@syncellus/modules/workspaces/tasks/module.js";
+import { WorkspaceTeamTaskPostSchema, WorkspaceTeamTaskUpdateSchema } from "@syncellus/modules/workspaces/tasks/schema.js";
 
 const router = Router();
-const { controller } = buildWorkspacesModule();
 
 router.use(authenticate("jwt"));
 
-router.get("/teams", hw(controller.getTeams));
-router.post("/teams", validate(WorkspaceTeamPostSchema), hw(controller.createTeams));
-router.get("/teams/:id", hw(controller.getTeamByID));
-router.patch("/teams/:id", validate(WorkspaceTeamUpdateSchema), hw(controller.patchTeam));
-router.delete("/teams/:id", hw(controller.deleteTeam));
+const teamsController = buildTeamsModule();
+router.get("/teams", hw(teamsController.getTeams));
+router.post("/teams", validate(WorkspaceTeamPostSchema), hw(teamsController.createTeams));
+router.get("/teams/:id", hw(teamsController.getTeamByID));
+router.patch("/teams/:id", validate(WorkspaceTeamUpdateSchema), hw(teamsController.patchTeam));
+router.delete("/teams/:id", hw(teamsController.deleteTeam));
 
-router.get("/tasks", hw(controller.getTasks));
-router.post("/tasks", validate(WorkspaceTeamTaskPostSchema), hw(controller.createTasks));
-router.get("/tasks/:id", hw(controller.getTaskByID));
-router.patch("/tasks/:id", validate(WorkspaceTeamTaskUpdateSchema), hw(controller.patchTask));
-router.delete("/tasks/:id", hw(controller.deleteTask));
+const tasksController = buildTasksModule();
+router.get("/tasks", hw(tasksController.getTasks));
+router.post("/tasks", validate(WorkspaceTeamTaskPostSchema), hw(tasksController.createTasks));
+router.get("/tasks/:id", hw(tasksController.getTaskByID));
+router.patch("/tasks/:id", validate(WorkspaceTeamTaskUpdateSchema), hw(tasksController.patchTask));
+router.delete("/tasks/:id", hw(tasksController.deleteTask));
 
 //TODO later
 // router.get("/team/:teamID/tasks")
