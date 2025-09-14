@@ -9,7 +9,7 @@ export interface Database {
     auth_password_reset_tokens: PasswordResetTokensTable;
     auth_email_verification_tokens: EmailVerificationTokensTable;
     accounts_profiles: ProfilesTable;
-    timesheets_entries: TimesheetTable;
+    workspaces_timesheets: TimesheetTable;
     workspaces_teams: TeamsTable;
     workspaces_team_members: TeamMembersTable;
     workspaces_team_roles: TeamRolesTable;
