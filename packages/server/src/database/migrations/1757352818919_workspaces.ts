@@ -133,6 +133,12 @@ export async function up(db: Kysely<any>): Promise<void> {
                 .notNull()
                 .check(sql`LENGTH(employee_id) = 36`)
         )
+        .addColumn("task_id", "text", (col) =>
+            col
+                .references("workspaces_team_tasks.id")
+                .notNull()
+                .check(sql`LENGTH(task_id) = 36`)
+        )
         .addColumn("created_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .addColumn("modified_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .addColumn("date", "text", (col) => col.notNull())

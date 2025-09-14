@@ -3831,10 +3831,10 @@ kysely-ctl@^0.19.0:
     std-env "^3.9.0"
     tsconfck "^3.1.6"
 
-kysely@^0.28.5:
-  version "0.28.6"
-  resolved "https://registry.yarnpkg.com/kysely/-/kysely-0.28.6.tgz#312db95acf50072a989613e6cd6c9209b166e1d5"
-  integrity sha512-QQlpW/Db5yhhY9+c1jiCBCUCJqZoWLw6c1rE+H+FqGujMuIAxerCSdQNvyP3zyhQUO913J9Ank1NsQEb5a15mA==
+kysely@^0.28.7:
+  version "0.28.7"
+  resolved "https://registry.yarnpkg.com/kysely/-/kysely-0.28.7.tgz#461d160865825f89173a7f814489e92a91b13864"
+  integrity sha512-u/cAuTL4DRIiO2/g4vNGRgklEKNIj5Q3CG7RoUB5DV5SfEC2hMvPxKi0GWPmnzwL2ryIeud2VTcEEmqzTzEPNw==
 
 levn@^0.4.1:
   version "0.4.1"

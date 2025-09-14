@@ -1,11 +1,16 @@
 import type { IMailService, IMailProvider } from "@syncellus/modules/mailer/types.js";
 import { compileTemplate } from "@syncellus/modules/mailer/utils/compileTemplate.js";
+
 //TODO fix 500 if mailer provider is not available
 export class MailService implements IMailService {
     constructor(private readonly mailer: IMailProvider) {}
 
+    async verify() {
+        return this.mailer.verify();
+    }
+
     async sendWelcome(to: string, username: string, verificationLink: string) {
-        const template = compileTemplate("welcome");
+        const template = compileTemplate("auth_welcome");
         const data = {
             appName: "Syncellus",
             username,
@@ -19,7 +24,7 @@ export class MailService implements IMailService {
     }
 
     async sendPasswordReset(to: string, resetLink: string) {
-        const template = compileTemplate("passwordReset");
+        const template = compileTemplate("auth_password_reset");
         const expiration_minutes = 15; // TODO move to a config and unify with other places?
         const html = template({ resetLink, expiration_minutes });
         const subject = "Reset your password";

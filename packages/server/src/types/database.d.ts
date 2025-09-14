@@ -113,6 +113,7 @@ export type EmployeeUpdate = Updateable<ProfilesTable>;
 export interface TimesheetTable {
     id: Generated<string>;
     employee_id: string;
+    task_id: string;
     created_at: ColumnType<Date, string | undefined, never>;
     modified_at: ColumnType<Date, string | undefined, never>;
     date: ColumnType<Date, string>;
