@@ -1,8 +1,9 @@
 import type { NewTimesheet, TimesheetUpdate } from "@syncellus/types/database.js";
-import type { TimesheetRepository } from "@syncellus/modules/workspaces/timesheets/repository.js";
+import type { TimesheetsRepository } from "@syncellus/modules/workspaces/timesheets/repository.js";
+import { ITimesheetsService } from "@syncellus/modules/workspaces/timesheets/types.js";
 
-export class TimesheetService {
-    constructor(private readonly repo: TimesheetRepository) {}
+export class TimesheetsService implements ITimesheetsService {
+    constructor(private readonly repo: TimesheetsRepository) {}
 
     public insertNewTimesheets = async (timesheets: NewTimesheet[]) => {
         return await this.repo.insertTimesheetsInDb(timesheets);

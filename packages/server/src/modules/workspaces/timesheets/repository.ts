@@ -1,7 +1,8 @@
 import type { Database, NewTimesheet, TimesheetUpdate } from "@syncellus/types/database.js";
 import type { Kysely } from "kysely";
+import { ITimesheetsRepository } from "@syncellus/modules/workspaces/timesheets/types.js";
 
-export class TimesheetRepository {
+export class TimesheetsRepository implements ITimesheetsRepository {
     constructor(private readonly db: Kysely<Database>) {}
 
     public insertTimesheetsInDb = async (timesheets: NewTimesheet[]) => {
