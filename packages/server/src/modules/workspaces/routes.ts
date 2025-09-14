@@ -5,7 +5,9 @@ import { validate } from "@syncellus/middlewares/validator.middleware.js";
 import { WorkspaceTeamPostSchema, WorkspaceTeamUpdateSchema } from "@syncellus/modules/workspaces/teams/schema.js";
 import { buildTeamsModule } from "@syncellus/modules/workspaces/teams/module.js";
 import { buildTasksModule } from "@syncellus/modules/workspaces/tasks/module.js";
+import { buildTimesheetsModule } from "@syncellus/modules/workspaces/timesheets/module.js";
 import { WorkspaceTeamTaskPostSchema, WorkspaceTeamTaskUpdateSchema } from "@syncellus/modules/workspaces/tasks/schema.js";
+import { TimesheetPostSchema, TimesheetUpdateSchema } from "@syncellus/modules/workspaces/timesheets/schema.js";
 
 const router = Router();
 
@@ -31,5 +33,12 @@ router.delete("/tasks/:id", hw(tasksController.deleteTask));
 // router.get("/team/:teamID/tasks/:taskID")
 // router.patch("/team/:teamID/tasks/:taskID")
 // router.delete("/team/:teamID/tasks/:taskID")
+
+const timesheetsController = buildTimesheetsModule();
+router.get("/timesheets", hw(timesheetsController.getTimesheets));
+router.get("/timesheets/:id", hw(timesheetsController.getTimesheetById));
+router.post("/timesheets", validate(TimesheetPostSchema), hw(timesheetsController.createTimesheets));
+router.patch("/timesheets/:id", validate(TimesheetUpdateSchema), hw(timesheetsController.patchTimesheet));
+router.delete("/timesheets/:id", hw(timesheetsController.deleteTimesheet));
 
 export default router;

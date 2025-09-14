@@ -1,5 +1,5 @@
 import type { NewTimesheet, TimesheetUpdate } from "@syncellus/types/database.js";
-import type { TimesheetRepository } from "@syncellus/modules/timesheets/repository.js";
+import type { TimesheetRepository } from "@syncellus/modules/workspaces/timesheets/repository.js";
 
 export class TimesheetService {
     constructor(private readonly repo: TimesheetRepository) {}

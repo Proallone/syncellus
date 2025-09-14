@@ -12,7 +12,6 @@ import healthRoutes from "@syncellus/modules/health/routes.js";
 import accountsRoutes from "@syncellus/modules/accounts/routes.js";
 import authRoutes from "@syncellus/modules/auth/routes.js";
 import workspacesRoutes from "@syncellus/modules/workspaces/routes.js";
-import timesheetsRoutes from "@syncellus/modules/timesheets/routes.js";
 
 const app = express();
 app.use(express.json({ limit: "1mb" }));
@@ -32,7 +31,6 @@ apiRouter.use("/health", healthRoutes);
 apiRouter.use("/auth", authRoutes);
 apiRouter.use("/accounts", accountsRoutes);
 apiRouter.use("/workspaces", workspacesRoutes);
-apiRouter.use("/timesheets", timesheetsRoutes);
 
 app.use("/api/v1", apiRouter);
 

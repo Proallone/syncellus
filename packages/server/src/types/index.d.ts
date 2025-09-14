@@ -2,7 +2,7 @@ import z from "zod";
 import type { AuthBasePayload, ForgotPasswordPayload, ResetPasswordPayload, VerifyEmailPayload } from "@syncellus/modules/auth/schemas/request.ts";
 import type { AccountsGetQuery, AccountsPostPayload, AccountsUpdatePayload } from "@syncellus/modules/accounts/schema.ts";
 import type { Request } from "express";
-import { TimesheetPostPayload } from "@syncellus/modules/timesheets/schema.ts";
+import { TimesheetPostPayload } from "@syncellus/modules/workspaces/timesheets/schema.ts";
 export interface Config {
     PORT: number;
     NODE_ENV: string;
