@@ -23,20 +23,20 @@ export async function up(db: Kysely<any>): Promise<void> {
                 .check(sql`LENGTH(name) < 256`)
                 .notNull()
         )
-        .addColumn("created_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
-        .addColumn("modified_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
+        .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
         .addForeignKeyConstraint("workspaces_teams_user_id_fk", ["owner_id"], "auth_users", ["id"], (cb) => cb.onDelete("cascade"))
         .execute();
 
-    await sql`
-		CREATE TRIGGER IF NOT EXISTS update_workspaces_teams_modified_at BEFORE
-		UPDATE ON workspaces_teams FOR EACH ROW BEGIN
-			UPDATE workspaces_teams
-			SET
-			modified_at = datetime ('now')
-			WHERE
-			id = OLD.id;
-		END;`.execute(db);
+    // await sql`
+    // 	CREATE TRIGGER IF NOT EXISTS update_workspaces_teams_modified_at BEFORE
+    // 	UPDATE ON workspaces_teams FOR EACH ROW BEGIN
+    // 		UPDATE workspaces_teams
+    // 		SET
+    // 		modified_at = timestamp ('now')
+    // 		WHERE
+    // 		id = OLD.id;
+    // 	END;`.execute(db);
 
     await db.schema
         .createTable("workspaces_team_roles")
@@ -48,19 +48,19 @@ export async function up(db: Kysely<any>): Promise<void> {
                 .notNull()
         )
         .addColumn("description", "text", (col) => col.check(sql`LENGTH(description) < 256`))
-        .addColumn("created_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
-        .addColumn("modified_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
+        .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
         .execute();
 
-    await sql`
-		CREATE TRIGGER IF NOT EXISTS update_workspaces_team_roles_modified_at BEFORE
-		UPDATE ON workspaces_team_roles FOR EACH ROW BEGIN
-			UPDATE workspaces_team_roles
-			SET
-			modified_at = datetime ('now')
-			WHERE
-			id = OLD.id;
-		END;`.execute(db);
+    // await sql`
+    // 	CREATE TRIGGER IF NOT EXISTS update_workspaces_team_roles_modified_at BEFORE
+    // 	UPDATE ON workspaces_team_roles FOR EACH ROW BEGIN
+    // 		UPDATE workspaces_team_roles
+    // 		SET
+    // 		modified_at = timestamp ('now')
+    // 		WHERE
+    // 		id = OLD.id;
+    // 	END;`.execute(db);
 
     //TODO add invited_by email?
     await db.schema
@@ -80,20 +80,20 @@ export async function up(db: Kysely<any>): Promise<void> {
         )
         .addColumn("status", "text", (col) => col.notNull().defaultTo("pending")) //todo handle better
         .addColumn("invitation_token", "text", (col) => col.notNull().check(sql`LENGTH(invitation_token) = 64`))
-        .addColumn("expires_at", "datetime", (col) => col.defaultTo(sql`(datetime('now', '+7 days'))`).notNull()) //TODO time from config
-        .addColumn("created_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
-        .addColumn("modified_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("expires_at", "timestamp", (col) => col.defaultTo(sql`now() + interval '7 days'`).notNull()) //TODO time from config
+        .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
+        .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
         .execute();
 
-    await sql`
-		CREATE TRIGGER IF NOT EXISTS workspaces_team_invitations_modified_at BEFORE
-		UPDATE ON workspaces_team_invitations FOR EACH ROW BEGIN
-			UPDATE workspaces_team_invitations
-			SET
-			modified_at = datetime ('now')
-			WHERE
-			id = OLD.id;
-		END;`.execute(db);
+    // await sql`
+    // 	CREATE TRIGGER IF NOT EXISTS workspaces_team_invitations_modified_at BEFORE
+    // 	UPDATE ON workspaces_team_invitations FOR EACH ROW BEGIN
+    // 		UPDATE workspaces_team_invitations
+    // 		SET
+    // 		modified_at = timestamp ('now')
+    // 		WHERE
+    // 		id = OLD.id;
+    // 	END;`.execute(db);
 
     await db.schema
         .createTable("workspaces_team_members")
@@ -115,21 +115,21 @@ export async function up(db: Kysely<any>): Promise<void> {
                 .check(sql`LENGTH(role_id) = 36`)
                 .references("workspaces_team_roles.id")
         )
-        .addColumn("created_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
-        .addColumn("modified_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
+        .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
         .addForeignKeyConstraint("workspaces_team_members_team_id_fk", ["team_id"], "workspaces_teams", ["id"], (cb) => cb.onDelete("cascade"))
         .addForeignKeyConstraint("workspaces_team_members_auth_users_id_fk", ["user_id"], "auth_users", ["id"], (cb) => cb.onDelete("cascade"))
         .execute();
 
-    await sql`
-		CREATE TRIGGER IF NOT EXISTS update_workspaces_team_members_modified_at BEFORE
-		UPDATE ON workspaces_team_members FOR EACH ROW BEGIN
-			UPDATE workspaces_team_members
-			SET
-			modified_at = datetime ('now')
-			WHERE
-			team_id = OLD.team_id AND user_id = OLD.user_id;
-		END;`.execute(db);
+    // await sql`
+    // 	CREATE TRIGGER IF NOT EXISTS update_workspaces_team_members_modified_at BEFORE
+    // 	UPDATE ON workspaces_team_members FOR EACH ROW BEGIN
+    // 		UPDATE workspaces_team_members
+    // 		SET
+    // 		modified_at = timestamp ('now')
+    // 		WHERE
+    // 		team_id = OLD.team_id AND user_id = OLD.user_id;
+    // 	END;`.execute(db);
 
     await db.schema
         .createTable("workspaces_tasks")
@@ -142,20 +142,20 @@ export async function up(db: Kysely<any>): Promise<void> {
         )
         .addColumn("name", "text", (col) => col.check(sql`LENGTH(description) < 256`).notNull())
         .addColumn("description", "text", (col) => col.check(sql`LENGTH(description) < 256`))
-        .addColumn("created_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
-        .addColumn("modified_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
+        .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
         //TODO add valid_to column, max hours?
         .execute();
 
-    await sql`
-		CREATE TRIGGER IF NOT EXISTS workspaces_tasks_modified_at BEFORE
-		UPDATE ON workspaces_tasks FOR EACH ROW BEGIN
-			UPDATE workspaces_tasks
-			SET
-			modified_at = datetime ('now')
-			WHERE
-			id = OLD.id;
-		END;`.execute(db);
+    // await sql`
+    // 	CREATE TRIGGER IF NOT EXISTS workspaces_tasks_modified_at BEFORE
+    // 	UPDATE ON workspaces_tasks FOR EACH ROW BEGIN
+    // 		UPDATE workspaces_tasks
+    // 		SET
+    // 		modified_at = timestamp ('now')
+    // 		WHERE
+    // 		id = OLD.id;
+    // 	END;`.execute(db);
 
     await db.schema
         .createTable("workspaces_timesheets")
@@ -172,16 +172,19 @@ export async function up(db: Kysely<any>): Promise<void> {
                 .notNull()
                 .check(sql`LENGTH(task_id) = 36`)
         )
-        .addColumn("created_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
-        .addColumn("modified_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
+        .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
         .addColumn("date", "text", (col) => col.notNull())
-        .addColumn("start_hour", "text", (col) => col.notNull())
-        .addColumn("end_hour", "text", (col) => col.notNull().check(sql`end_hour > start_hour`))
+        .addColumn("start_hour", "time", (col) => col.notNull())
+        .addColumn("end_hour", "time", (col) => col.notNull().check(sql`end_hour > start_hour`))
         .addColumn("hours_worked", "text", (col) =>
             col
                 .generatedAlwaysAs(
-                    //? SQLite equivalent for timediff and formatting as HH:MM
-                    sql`strftime('%H:%M', (julianday('2000-01-01 ' || time(end_hour)) - julianday('2000-01-01 ' || time(start_hour))) * 86400, 'unixepoch')`
+                    sql`
+                    lpad(((extract(hour from end_hour::time - start_hour::time))::int)::text, 2, '0')
+                    || ':' ||
+                    lpad(((extract(minute from end_hour::time - start_hour::time))::int)::text, 2, '0')
+                    `
                 )
                 .stored()
         )
@@ -191,15 +194,15 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     await db.schema.createIndex("workspaces_timesheets_employee_id").on("workspaces_timesheets").column("employee_id").execute();
 
-    await sql`
-		CREATE TRIGGER IF NOT EXISTS update_workspaces_timesheets_modified_at BEFORE
-		UPDATE ON workspaces_timesheets FOR EACH ROW BEGIN
-			UPDATE workspaces_timesheets
-			SET
-			modified_at = datetime ('now')
-			WHERE
-			id = OLD.id;
-		END;`.execute(db);
+    // await sql`
+    // 	CREATE TRIGGER IF NOT EXISTS update_workspaces_timesheets_modified_at BEFORE
+    // 	UPDATE ON workspaces_timesheets FOR EACH ROW BEGIN
+    // 		UPDATE workspaces_timesheets
+    // 		SET
+    // 		modified_at = timestamp ('now')
+    // 		WHERE
+    // 		id = OLD.id;
+    // 	END;`.execute(db);
 }
 
 // `any` is required here since migrations should be frozen in time. alternatively, keep a "snapshot" db interface.

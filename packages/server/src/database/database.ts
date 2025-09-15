@@ -1,32 +1,22 @@
 import type { Database as DB } from "@syncellus/types/database.js";
-import { Kysely, SqliteDialect } from "kysely";
-import Database from "better-sqlite3-multiple-ciphers";
-// import { AppConfig } from "@syncellus/configs/config.js";
+import { Kysely, PostgresDialect } from "kysely";
+import { Pool } from "pg";
 
 export class DatabaseService {
     private static instance: Kysely<DB> | null = null;
 
     public static getInstance(): Kysely<DB> {
         if (!DatabaseService.instance) {
-            // const config = AppConfig.getInstance(); //TODO fix
-
-            const encryptionKey = process.env.DATABASE_KEY;
-            const isDev = ["dev", "development", "test"].includes(process.env.NODE_ENV);
-
-            if (!encryptionKey && !isDev) {
-                throw new Error("DATABASE_KEY environment variable is not set.");
-            }
-
-            const dbInstance = new Database("syncellus.sqlite");
-            if (!isDev) {
-                //encrypt database only if not in dev
-                dbInstance.pragma(`key='${encryptionKey}'`); //? this has to be executed first - otherwise throws
-            }
-
-            dbInstance.pragma(`journal_mode = WAL`);
-
-            const dialect = new SqliteDialect({
-                database: dbInstance
+            //TODO take from config
+            const dialect = new PostgresDialect({
+                pool: new Pool({
+                    database: "syncellus",
+                    host: "localhost",
+                    user: "admin",
+                    password: "password",
+                    port: 5432,
+                    max: 10
+                })
             });
 
             DatabaseService.instance = new Kysely<DB>({ dialect });

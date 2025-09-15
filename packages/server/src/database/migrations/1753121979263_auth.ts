@@ -6,8 +6,6 @@ export async function up(db: Kysely<any>): Promise<void> {
     // note: up migrations are mandatory. you must implement this function.
     // For more info, see: https://kysely.dev/docs/migrations
 
-    await sql`PRAGMA journal_mode=WAL;`.execute(db);
-
     await db.schema
         .createTable("auth_users")
         .addColumn("id", "text", (col) =>
@@ -29,8 +27,8 @@ export async function up(db: Kysely<any>): Promise<void> {
                 .check(sql`LENGTH(email) >= 3 AND LENGTH(email) <= 255`)
         )
         .addColumn("password", "text", (col) => col.notNull().check(sql`LENGTH(password) >= 3 AND LENGTH(password) <= 255`))
-        .addColumn("created_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
-        .addColumn("modified_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .addColumn("verified", "integer", (col) => col.defaultTo(0))
         .addColumn("active", "integer", (col) => col.defaultTo(0))
         .execute();
@@ -38,14 +36,18 @@ export async function up(db: Kysely<any>): Promise<void> {
     await db.schema.createIndex("auth_user_email").on("auth_users").column("email").execute();
 
     await sql`
-		CREATE TRIGGER IF NOT EXISTS update_auth_users_modified_at BEFORE
-		UPDATE ON auth_users FOR EACH ROW BEGIN
-			UPDATE auth_users
-			SET
-			modified_at = datetime ('now')
-			WHERE
-			id = OLD.id;
-		END;`.execute(db);
+        CREATE OR REPLACE FUNCTION update_auth_users_modified_at()
+        RETURNS TRIGGER AS $$
+        BEGIN
+            NEW.modified_at = NOW();
+            RETURN NEW;
+        END;
+        $$ LANGUAGE plpgsql;
+
+        CREATE OR REPLACE TRIGGER update_auth_users_modified_at_trigger
+        BEFORE UPDATE ON auth_users
+        FOR EACH ROW
+        EXECUTE FUNCTION update_auth_users_modified_at();`.execute(db);
 
     await db.schema
         .createTable("auth_roles")
@@ -57,19 +59,19 @@ export async function up(db: Kysely<any>): Promise<void> {
         )
         .addColumn("name", "text", (col) => col.notNull().check(sql`LENGTH(name) <= 40`))
         .addColumn("description", "text", (col) => col.check(sql`LENGTH(description) <= 256`))
-        .addColumn("created_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
-        .addColumn("modified_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .execute();
 
-    await sql`
-		CREATE TRIGGER IF NOT EXISTS update_auth_roles_modified_at BEFORE
-		UPDATE ON auth_roles FOR EACH ROW BEGIN
-			UPDATE auth_roles
-			SET
-			modified_at = datetime ('now')
-			WHERE
-			id = OLD.id;
-		END;`.execute(db);
+    // await sql`
+    // 	CREATE TRIGGER IF NOT EXISTS update_auth_roles_modified_at BEFORE
+    // 	UPDATE ON auth_roles FOR EACH ROW BEGIN
+    // 		UPDATE auth_roles
+    // 		SET
+    // 		modified_at = timestamp ('now')
+    // 		WHERE
+    // 		id = OLD.id;
+    // 	END;`.execute(db);
 
     await db.schema
         .createTable("auth_scopes")
@@ -86,19 +88,19 @@ export async function up(db: Kysely<any>): Promise<void> {
                 .check(sql`LENGTH(scope) <= 256`)
         )
         .addColumn("description", "text", (col) => col.check(sql`LENGTH(description) <= 256`))
-        .addColumn("created_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
-        .addColumn("modified_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .execute();
 
-    await sql`
-		CREATE TRIGGER IF NOT EXISTS update_auth_scopes_modified_at BEFORE
-		UPDATE ON auth_scopes FOR EACH ROW BEGIN
-			UPDATE auth_scopes
-			SET
-			modified_at = datetime ('now')
-			WHERE
-			id = OLD.id;
-		END;`.execute(db);
+    // await sql`
+    // 	CREATE TRIGGER IF NOT EXISTS update_auth_scopes_modified_at BEFORE
+    // 	UPDATE ON auth_scopes FOR EACH ROW BEGIN
+    // 		UPDATE auth_scopes
+    // 		SET
+    // 		modified_at = timestamp ('now')
+    // 		WHERE
+    // 		id = OLD.id;
+    // 	END;`.execute(db);
 
     await db.schema
         .createTable("auth_role_scopes")
@@ -114,7 +116,7 @@ export async function up(db: Kysely<any>): Promise<void> {
                 .check(sql`LENGTH(scope_id) = 36`)
                 .references("auth_scopes.id")
         )
-        .addPrimaryKeyConstraint("primary_key", ["role_id", "scope_id"])
+        // .addPrimaryKeyConstraint("primary_key", ["role_id", "scope_id"])
         .addForeignKeyConstraint("auth_role_scopes_role_id_fk", ["role_id"], "auth_roles", ["id"], (cb) => cb.onDelete("cascade"))
         .addForeignKeyConstraint("auth_role_scopes_scope_id_fk", ["scope_id"], "auth_scopes", ["id"], (cb) => cb.onDelete("cascade"))
         .execute();
@@ -154,8 +156,8 @@ export async function up(db: Kysely<any>): Promise<void> {
                 .references("auth_users.id")
         )
         .addColumn("token_hash", "text", (col) => col.notNull().check(sql`LENGTH(token_hash) = 64`))
-        .addColumn("expires_at", "datetime", (col) => col.defaultTo(sql`(datetime('now', '+15 minutes'))`).notNull()) //TODO minutes from config
-        .addColumn("created_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("expires_at", "timestamp", (col) => col.defaultTo(sql`now() + interval '15 minutes'`).notNull()) //TODO minutes from config
+        .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
         .execute();
 
     await db.schema
@@ -174,8 +176,8 @@ export async function up(db: Kysely<any>): Promise<void> {
                 .references("auth_users.id")
         )
         .addColumn("token_hash", "text", (col) => col.notNull().check(sql`LENGTH(token_hash) = 64`))
-        .addColumn("expires_at", "datetime", (col) => col.defaultTo(sql`(datetime('now', '+24 hours'))`).notNull()) //TODO minutes from config
-        .addColumn("created_at", "datetime", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("expires_at", "timestamp", (col) => col.defaultTo(sql`now() + interval '1 day'`).notNull()) //TODO minutes from config
+        .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
         .execute();
 }
 
@@ -193,14 +195,10 @@ export async function down(db: Kysely<any>): Promise<void> {
 
     await db.schema.dropTable("auth_role_scopes").execute();
 
-    await sql`DROP TRIGGER IF EXISTS update_auth_scopes_modified_at;`.execute(db);
     await db.schema.dropTable("auth_scopes").execute();
 
-    await sql`DROP TRIGGER IF EXISTS update_auth_roles_modified_at;`.execute(db);
     await db.schema.dropTable("auth_roles").execute();
 
-    await sql`DROP TRIGGER IF EXISTS update_auth_users_modified_at;`.execute(db);
     await db.schema.dropIndex("auth_user_email").execute();
     await db.schema.dropTable("auth_users").execute();
-    await sql`PRAGMA journal_mode=DELETE;`.execute(db);
 }
