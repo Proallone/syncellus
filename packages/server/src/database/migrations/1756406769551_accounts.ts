@@ -10,10 +10,10 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     await db.schema
         .createTable("accounts.profiles")
-        .addColumn("id", "text", (col) => col.primaryKey().check(sql`LENGTH(id) = 36`))
-        .addColumn("user_id", "text", (col) => col.unique().notNull().references("auth.users.id"))
-        .addColumn("name", "text", (col) => col.check(sql`LENGTH(name) >= 3 AND LENGTH(name) <= 255`))
-        .addColumn("surname", "text", (col) => col.check(sql`LENGTH(surname) >= 3 AND LENGTH(surname) <= 255`))
+        .addColumn("id", "varchar(36)", (col) => col.primaryKey())
+        .addColumn("user_id", "varchar(36)", (col) => col.unique().notNull().references("auth.users.id"))
+        .addColumn("name", "varchar(256)", (col) => col.check(sql`LENGTH(name) >= 3`))
+        .addColumn("surname", "varchar(256)", (col) => col.check(sql`LENGTH(surname) >= 3`))
         .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
         .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
         .addForeignKeyConstraint("employees_auth_users_id_fk", ["user_id"], "auth.users", ["id"], (cb) => cb.onDelete("cascade"))
