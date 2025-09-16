@@ -1,11 +1,11 @@
-import type { Database, NewEmailVerificationToken, NewPasswordResetToken, NewUser, User } from "@syncellus/types/database.js";
+import type { DB, AuthEmailVerificationTokens, AuthPasswordResetTokens, AuthUsers } from "@syncellus/types/database.js";
 import type { IAuthRepository } from "@syncellus/modules/auth/types.js";
-import { DeleteResult, Kysely } from "kysely";
+import { DeleteResult, Insertable, Kysely, Selectable } from "kysely";
 
 export class AuthRepository implements IAuthRepository {
-    constructor(private readonly db: Kysely<Database>) {}
+    constructor(private readonly db: Kysely<DB>) {}
 
-    public insertNewUser = async (user: NewUser): Promise<User> => {
+    public insertNewUser = async (user: Insertable<AuthUsers>): Promise<Selectable<AuthUsers>> => {
         return await this.db.insertInto("auth_users").values(user).returningAll().executeTakeFirstOrThrow();
     };
 
@@ -13,19 +13,19 @@ export class AuthRepository implements IAuthRepository {
         return await this.db.updateTable("auth_users").set({ verified: 1 }).where("id", "=", id).executeTakeFirst();
     };
 
-    public selectUserByEmail = async (email: string): Promise<User | undefined> => {
+    public selectUserByEmail = async (email: string): Promise<Selectable<AuthUsers> | undefined> => {
         return await this.db.selectFrom("auth_users").selectAll().where("email", "=", email).executeTakeFirst();
     };
 
-    public selectUserByID = async (id: string): Promise<User | undefined> => {
+    public selectUserByID = async (id: string): Promise<Selectable<AuthUsers> | undefined> => {
         return await this.db.selectFrom("auth_users").selectAll().where("id", "=", id).executeTakeFirst();
     };
 
-    public selectUserByPublicID = async (public_id: string): Promise<User | undefined> => {
+    public selectUserByPublicID = async (public_id: string): Promise<Selectable<AuthUsers> | undefined> => {
         return await this.db.selectFrom("auth_users").selectAll().where("public_id", "=", public_id).executeTakeFirst();
     };
 
-    public updateUserPassword = async (id: string, newPassword: string): Promise<User | undefined> => {
+    public updateUserPassword = async (id: string, newPassword: string): Promise<Selectable<AuthUsers> | undefined> => {
         return await this.db.updateTable("auth_users").set({ password: newPassword }).where("id", "=", id).returningAll().executeTakeFirst();
     };
 
@@ -58,7 +58,7 @@ export class AuthRepository implements IAuthRepository {
         return scopes.map((scope) => scope.scope);
     };
 
-    public insertPasswordResetToken = async (entry: NewPasswordResetToken) => {
+    public insertPasswordResetToken = async (entry: Insertable<AuthPasswordResetTokens>) => {
         return await this.db.insertInto("auth_password_reset_tokens").values(entry).returningAll().executeTakeFirstOrThrow();
     };
 
@@ -74,7 +74,7 @@ export class AuthRepository implements IAuthRepository {
         return await this.db.deleteFrom("auth_password_reset_tokens").where("auth_password_reset_tokens.user_id", "=", user_id).executeTakeFirst();
     };
 
-    public insertEmailVerificationToken = async (entry: NewEmailVerificationToken) => {
+    public insertEmailVerificationToken = async (entry: Insertable<AuthEmailVerificationTokens>) => {
         return await this.db.insertInto("auth_email_verification_tokens").values(entry).returningAll().executeTakeFirst();
     };
 

@@ -1,5 +1,6 @@
-import type { NewTeam, TeamUpdate } from "@syncellus/types/database.js";
+import type { WorkspacesTeams } from "@syncellus/types/database.js";
 import type { ITeamsService } from "@syncellus/modules/workspaces/teams/types.js";
+import type { Insertable, Updateable } from "kysely";
 import { WorkspacesRepository } from "@syncellus/modules/workspaces/teams/repository.js";
 import { uuidv7 } from "uuidv7";
 import { nanoid } from "@syncellus/utils/nanoid.js";
@@ -7,7 +8,7 @@ import { nanoid } from "@syncellus/utils/nanoid.js";
 export class TeamsService implements ITeamsService {
     constructor(private readonly repo: WorkspacesRepository) {}
 
-    public insertNewTeams = async (owner_id: string, teams: NewTeam[]) => {
+    public insertNewTeams = async (owner_id: string, teams: Insertable<WorkspacesTeams>[]) => {
         const values = teams.map((team) => {
             return { id: uuidv7(), public_id: nanoid(), owner_id: owner_id, ...team };
         });
@@ -26,7 +27,7 @@ export class TeamsService implements ITeamsService {
         return await this.repo.selectTeamByPublicIDFromDB(public_id);
     };
 
-    public updateTeamByID = async (id: string, team: TeamUpdate) => {
+    public updateTeamByID = async (id: string, team: Updateable<WorkspacesTeams>) => {
         return await this.repo.updateTeamByIDInDB(id, team);
     };
 

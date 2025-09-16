@@ -1,11 +1,11 @@
-import type { Database, EmployeeUpdate, NewEmployee } from "@syncellus/types/database.js";
+import type { DB, AccountsProfiles } from "@syncellus/types/database.js";
 import type { GetEmployeeQuery } from "@syncellus/types/index.js";
-import type { Kysely } from "kysely";
+import type { Insertable, Kysely, Updateable } from "kysely";
 
 export class AccountsRepository {
-    constructor(private readonly db: Kysely<Database>) {}
+    constructor(private readonly db: Kysely<DB>) {}
 
-    public insertNewAccountToDb = async (account: NewEmployee) => {
+    public insertNewAccountToDb = async (account: Insertable<AccountsProfiles>) => {
         return await this.db.insertInto("accounts_profiles").values(account).returningAll().executeTakeFirstOrThrow();
     };
 
@@ -29,7 +29,7 @@ export class AccountsRepository {
             .executeTakeFirst();
     };
 
-    public updateAccountByIdInDb = async (account: EmployeeUpdate) => {
+    public updateAccountByIdInDb = async (account: Updateable<AccountsProfiles>) => {
         return await this.db.updateTable("accounts_profiles").set(account).where("id", "=", account.id).returningAll().executeTakeFirst();
     };
 

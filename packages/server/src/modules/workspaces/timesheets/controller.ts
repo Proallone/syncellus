@@ -1,18 +1,19 @@
 import type { Request, Response } from "express";
-import type { NewTimesheet } from "@syncellus/types/database.js";
+import type { WorkspacesTimesheets } from "@syncellus/types/database.js";
 import type { TimesheetsService } from "@syncellus/modules/workspaces/timesheets/service.js";
 import type { NewTimesheetBody } from "@syncellus/types/index.js";
 import { sendResponse } from "@syncellus/utils/responseBuilder.js";
 import { NotFoundError } from "@syncellus/errors/http.js";
 import { HttpStatus } from "@syncellus/core/http.js";
 import { TypedRequest } from "@syncellus/types/express.js";
+import type { Insertable } from "kysely";
 
 export class TimesheetsController {
     constructor(private readonly service: TimesheetsService) {}
 
     public createTimesheets = async (req: TypedRequest<NewTimesheetBody>, res: Response) => {
         const body = Array.isArray(req.body) ? req.body : [req.body]; //TODO move this out of the controller
-        const timesheets: NewTimesheet[] = body.map((timesheet) => ({ ...timesheet }));
+        const timesheets: Insertable<WorkspacesTimesheets>[] = body.map((timesheet) => ({ ...timesheet }));
         const newTimesheet = await this.service.insertNewTimesheets(timesheets);
 
         return sendResponse(res, HttpStatus.CREATED, { message: "Timesheet creation successful", data: newTimesheet });

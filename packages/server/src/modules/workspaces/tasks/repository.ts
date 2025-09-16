@@ -1,9 +1,9 @@
-import type { Database, NewTask, TaskUpdate } from "@syncellus/types/database.js";
-import type { Kysely } from "kysely";
+import type { DB, WorkspacesTasks } from "@syncellus/types/database.js";
+import type { Insertable, Kysely, Updateable } from "kysely";
 import type { ITasksRepository } from "@syncellus/modules/workspaces/tasks/types.js";
 
 export class TasksRepository implements ITasksRepository {
-    constructor(private readonly db: Kysely<Database>) {}
+    constructor(private readonly db: Kysely<DB>) {}
 
     public selectAllTasksFromDB = async () => {
         return await this.db.selectFrom("workspaces_tasks").selectAll().execute();
@@ -13,11 +13,11 @@ export class TasksRepository implements ITasksRepository {
         return await this.db.selectFrom("workspaces_tasks").selectAll().where("id", "=", id).executeTakeFirst();
     };
 
-    public insertTasksToDB = async (tasks: NewTask[]) => {
+    public insertTasksToDB = async (tasks: Insertable<WorkspacesTasks>[]) => {
         return await this.db.insertInto("workspaces_tasks").values(tasks).returningAll().execute();
     };
 
-    public updateTaskByIDInDB = async (id: string, task: TaskUpdate) => {
+    public updateTaskByIDInDB = async (id: string, task: Updateable<WorkspacesTasks>) => {
         return await this.db.updateTable("workspaces_tasks").set(task).where("id", "=", id).returningAll().executeTakeFirstOrThrow();
     };
 

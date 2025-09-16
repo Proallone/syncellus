@@ -1,16 +1,17 @@
 import type { Request, Response } from "express";
-import type { NewTeam } from "@syncellus/types/database.js";
+import type { WorkspacesTeams } from "@syncellus/types/database.js";
+import type { TasksService } from "@syncellus/modules/workspaces/tasks/service.js";
+import type { Selectable } from "kysely";
 import { sendResponse } from "@syncellus/utils/responseBuilder.js";
 import { HttpStatus } from "@syncellus/core/http.js";
 import { NotFoundError } from "@syncellus/errors/http.js";
-import type { TasksService } from "@syncellus/modules/workspaces/tasks/service.js";
 
 export class TasksController {
     constructor(private readonly service: TasksService) {}
 
     public createTasks = async (req: Request, res: Response) => {
         const body = Array.isArray(req.body) ? req.body : [req.body];
-        const tasks: NewTeam[] = body.map((team) => ({ ...team }));
+        const tasks: Selectable<WorkspacesTeams>[] = body.map((team) => ({ ...team }));
         const newTasks = await this.service.insertNewTasks(tasks);
 
         return sendResponse(res, HttpStatus.CREATED, { message: `Task creation successful`, data: newTasks });

@@ -1,11 +1,12 @@
-import type { NewTimesheet, TimesheetUpdate } from "@syncellus/types/database.js";
+import type { WorkspacesTimesheets } from "@syncellus/types/database.js";
 import type { TimesheetsRepository } from "@syncellus/modules/workspaces/timesheets/repository.js";
 import { ITimesheetsService } from "@syncellus/modules/workspaces/timesheets/types.js";
+import { Insertable, Updateable } from "kysely";
 
 export class TimesheetsService implements ITimesheetsService {
     constructor(private readonly repo: TimesheetsRepository) {}
 
-    public insertNewTimesheets = async (timesheets: NewTimesheet[]) => {
+    public insertNewTimesheets = async (timesheets: Insertable<WorkspacesTimesheets>[]) => {
         return await this.repo.insertTimesheetsInDb(timesheets);
     };
 
@@ -17,7 +18,7 @@ export class TimesheetsService implements ITimesheetsService {
         return await this.repo.selectTimesheetByIdFromDb(id);
     };
 
-    public updateTimesheetById = async (timesheet: TimesheetUpdate) => {
+    public updateTimesheetById = async (timesheet: Updateable<WorkspacesTimesheets>) => {
         return await this.repo.updateTimesheetByIdInDb(timesheet);
     };
 
