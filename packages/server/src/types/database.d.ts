@@ -26,12 +26,28 @@ export interface AuthEmailVerificationTokens {
     user_id: string;
 }
 
+export interface AuthEmailVerificationTokensView {
+    created_at: Timestamp | null;
+    expires_at: Timestamp | null;
+    id: string | null;
+    token_hash: string | null;
+    user_id: string | null;
+}
+
 export interface AuthPasswordResetTokens {
     created_at: Generated<Timestamp>;
     expires_at: Generated<Timestamp>;
     id: string;
     token_hash: string;
     user_id: string;
+}
+
+export interface AuthPasswordResetTokensView {
+    created_at: Timestamp | null;
+    expires_at: Timestamp | null;
+    id: string | null;
+    token_hash: string | null;
+    user_id: string | null;
 }
 
 export interface AuthRoles {
@@ -47,6 +63,19 @@ export interface AuthRoleScopes {
     scope_id: string;
 }
 
+export interface AuthRoleScopesView {
+    role_id: string | null;
+    scope_id: string | null;
+}
+
+export interface AuthRolesView {
+    created_at: Timestamp | null;
+    description: string | null;
+    id: string | null;
+    modified_at: Timestamp | null;
+    name: string | null;
+}
+
 export interface AuthScopes {
     created_at: Generated<Timestamp>;
     description: string | null;
@@ -55,20 +84,44 @@ export interface AuthScopes {
     scope: string;
 }
 
+export interface AuthScopesView {
+    created_at: Timestamp | null;
+    description: string | null;
+    id: string | null;
+    modified_at: Timestamp | null;
+    scope: string | null;
+}
+
 export interface AuthUserRoles {
     role_id: string;
     user_id: string;
 }
 
+export interface AuthUserRolesView {
+    role_id: string | null;
+    user_id: string | null;
+}
+
 export interface AuthUsers {
-    active: Generated<number | null>;
+    active: Generated<boolean | null>;
     created_at: Generated<Timestamp>;
     email: string;
     id: string;
     modified_at: Generated<Timestamp>;
     password: string;
     public_id: string;
-    verified: Generated<number | null>;
+    verified: Generated<boolean | null>;
+}
+
+export interface AuthUsersView {
+    active: boolean | null;
+    created_at: Timestamp | null;
+    email: string | null;
+    id: string | null;
+    modified_at: Timestamp | null;
+    password: string | null;
+    public_id: string | null;
+    verified: boolean | null;
 }
 
 export interface WorkspacesTasks {
@@ -132,12 +185,19 @@ export interface WorkspacesTimesheets {
 export interface DB {
     "accounts.profiles": AccountsProfiles;
     "auth.email_verification_tokens": AuthEmailVerificationTokens;
+    "auth.email_verification_tokens_view": AuthEmailVerificationTokensView;
     "auth.password_reset_tokens": AuthPasswordResetTokens;
+    "auth.password_reset_tokens_view": AuthPasswordResetTokensView;
     "auth.role_scopes": AuthRoleScopes;
+    "auth.role_scopes_view": AuthRoleScopesView;
     "auth.roles": AuthRoles;
+    "auth.roles_view": AuthRolesView;
     "auth.scopes": AuthScopes;
+    "auth.scopes_view": AuthScopesView;
     "auth.user_roles": AuthUserRoles;
+    "auth.user_roles_view": AuthUserRolesView;
     "auth.users": AuthUsers;
+    "auth.users_view": AuthUsersView;
     "workspaces.tasks": WorkspacesTasks;
     "workspaces.team_invitations": WorkspacesTeamInvitations;
     "workspaces.team_members": WorkspacesTeamMembers;

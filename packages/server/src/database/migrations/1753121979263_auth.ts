@@ -19,11 +19,13 @@ export async function up(db: Kysely<any>): Promise<void> {
                 .check(sql`LENGTH(email) >= 3`)
         )
         .addColumn("password", "varchar(256)", (col) => col.notNull().check(sql`LENGTH(password) >= 3`))
-        .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
-        .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
-        .addColumn("verified", "integer", (col) => col.defaultTo(0))
-        .addColumn("active", "integer", (col) => col.defaultTo(0))
+        .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
+        .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
+        .addColumn("verified", "boolean", (col) => col.defaultTo(false))
+        .addColumn("active", "boolean", (col) => col.defaultTo(false))
         .execute();
+
+    await db.withSchema("auth").schema.createView("users_view").as(db.selectFrom("auth.users").selectAll()).execute();
 
     // await db.schema.createIndex("auth_user_email").on("auth.users").column("email").execute();
 
@@ -46,9 +48,11 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("id", "uuid", (col) => col.primaryKey().notNull())
         .addColumn("name", "varchar(40)", (col) => col.notNull())
         .addColumn("description", "varchar(256)")
-        .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
-        .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
+        .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
         .execute();
+
+    await db.withSchema("auth").schema.createView("roles_view").as(db.selectFrom("auth.roles").selectAll()).execute();
 
     // await sql`
     // 	CREATE TRIGGER IF NOT EXISTS update_auth_roles_modified_at BEFORE
@@ -65,9 +69,11 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("id", "uuid", (col) => col.primaryKey().notNull())
         .addColumn("scope", "varchar(256)", (col) => col.notNull().unique())
         .addColumn("description", "varchar(256)")
-        .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
-        .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+        .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
+        .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
         .execute();
+
+    await db.withSchema("auth").schema.createView("scopes_view").as(db.selectFrom("auth.scopes").selectAll()).execute();
 
     // await sql`
     // 	CREATE TRIGGER IF NOT EXISTS update_auth_scopes_modified_at BEFORE
@@ -88,6 +94,8 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addForeignKeyConstraint("auth_role_scopes_scope_id_fk", ["scope_id"], "auth.scopes", ["id"], (cb) => cb.onDelete("cascade"))
         .execute();
 
+    await db.withSchema("auth").schema.createView("role_scopes_view").as(db.selectFrom("auth.role_scopes").selectAll()).execute();
+
     await db.schema
         .createTable("auth.user_roles")
         .addColumn("user_id", "uuid", (col) => col.notNull().references("auth.users.id"))
@@ -96,6 +104,8 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addForeignKeyConstraint("auth_user_role_user_id_fk", ["user_id"], "auth.users", ["id"], (cb) => cb.onDelete("cascade"))
         .addForeignKeyConstraint("auth_user_roles_role_id_fk", ["role_id"], "auth.roles", ["id"], (cb) => cb.onDelete("cascade"))
         .execute();
+
+    await db.withSchema("auth").schema.createView("user_roles_view").as(db.selectFrom("auth.user_roles").selectAll()).execute();
 
     await db.schema
         .createTable("auth.password_reset_tokens")
@@ -106,6 +116,8 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
         .execute();
 
+    await db.withSchema("auth").schema.createView("password_reset_tokens_view").as(db.selectFrom("auth.password_reset_tokens").selectAll()).execute();
+
     await db.schema
         .createTable("auth.email_verification_tokens")
         .addColumn("id", "uuid", (col) => col.primaryKey().notNull())
@@ -114,6 +126,8 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("expires_at", "timestamp", (col) => col.defaultTo(sql`now() + interval '1 day'`).notNull()) //TODO minutes from config
         .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
         .execute();
+
+    await db.withSchema("auth").schema.createView("email_verification_tokens_view").as(db.selectFrom("auth.email_verification_tokens").selectAll()).execute();
 }
 
 // `any` is required here since migrations should be frozen in time. alternatively, keep a "snapshot" db interface.
@@ -122,19 +136,26 @@ export async function down(db: Kysely<any>): Promise<void> {
     // down migration code goes here...
     // note: down migrations are optional. you can safely delete this function.
     // For more info, see: https://kysely.dev/docs/migrations
+    await db.withSchema("auth").schema.dropView("email_verification_tokens_view").execute();
     await db.schema.dropTable("auth.email_verification_tokens").execute();
 
+    await db.withSchema("auth").schema.dropView("password_reset_tokens_view").execute();
     await db.schema.dropTable("auth.password_reset_tokens").execute();
 
+    await db.withSchema("auth").schema.dropView("user_roles_view").execute();
     await db.schema.dropTable("auth.user_roles").execute();
 
+    await db.withSchema("auth").schema.dropView("role_scopes_view").execute();
     await db.schema.dropTable("auth.role_scopes").execute();
 
+    await db.withSchema("auth").schema.dropView("scopes_view").execute();
     await db.schema.dropTable("auth.scopes").execute();
 
+    await db.withSchema("auth").schema.dropView("roles_view").execute();
     await db.schema.dropTable("auth.roles").execute();
 
     // await db.schema.dropIndex("auth_user_email").execute();
+    await db.withSchema("auth").schema.dropView("users_view").execute();
     await db.schema.dropTable("auth.users").execute();
 
     await db.schema.dropSchema("auth").execute();
