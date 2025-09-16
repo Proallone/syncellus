@@ -10,7 +10,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     await db.schema
         .createTable("auth.users")
-        .addColumn("id", "varchar(36)", (col) => col.primaryKey().notNull())
+        .addColumn("id", "uuid", (col) => col.primaryKey().notNull())
         .addColumn("public_id", "varchar(10)", (col) => col.unique().notNull())
         .addColumn("email", "varchar(256)", (col) =>
             col
@@ -43,7 +43,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     await db.schema
         .createTable("auth.roles")
-        .addColumn("id", "varchar(36)", (col) => col.primaryKey().notNull())
+        .addColumn("id", "uuid", (col) => col.primaryKey().notNull())
         .addColumn("name", "varchar(40)", (col) => col.notNull())
         .addColumn("description", "varchar(256)")
         .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
@@ -62,7 +62,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     await db.schema
         .createTable("auth.scopes")
-        .addColumn("id", "varchar(36)", (col) => col.primaryKey().notNull())
+        .addColumn("id", "uuid", (col) => col.primaryKey().notNull())
         .addColumn("scope", "varchar(256)", (col) => col.notNull().unique())
         .addColumn("description", "varchar(256)")
         .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
@@ -81,8 +81,8 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     await db.schema
         .createTable("auth.role_scopes")
-        .addColumn("role_id", "varchar(36)", (col) => col.notNull().references("auth.roles.id"))
-        .addColumn("scope_id", "varchar(36)", (col) => col.notNull().references("auth.scopes.id"))
+        .addColumn("role_id", "uuid", (col) => col.notNull().references("auth.roles.id"))
+        .addColumn("scope_id", "uuid", (col) => col.notNull().references("auth.scopes.id"))
         // .addPrimaryKeyConstraint("primary_key", ["role_id", "scope_id"])
         .addForeignKeyConstraint("auth_role_scopes_role_id_fk", ["role_id"], "auth.roles", ["id"], (cb) => cb.onDelete("cascade"))
         .addForeignKeyConstraint("auth_role_scopes_scope_id_fk", ["scope_id"], "auth.scopes", ["id"], (cb) => cb.onDelete("cascade"))
@@ -90,8 +90,8 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     await db.schema
         .createTable("auth.user_roles")
-        .addColumn("user_id", "varchar(36)", (col) => col.notNull().references("auth.users.id"))
-        .addColumn("role_id", "varchar(36)", (col) => col.notNull().references("auth.roles.id"))
+        .addColumn("user_id", "uuid", (col) => col.notNull().references("auth.users.id"))
+        .addColumn("role_id", "uuid", (col) => col.notNull().references("auth.roles.id"))
         .addPrimaryKeyConstraint("primary_key", ["user_id", "role_id"])
         .addForeignKeyConstraint("auth_user_role_user_id_fk", ["user_id"], "auth.users", ["id"], (cb) => cb.onDelete("cascade"))
         .addForeignKeyConstraint("auth_user_roles_role_id_fk", ["role_id"], "auth.roles", ["id"], (cb) => cb.onDelete("cascade"))
@@ -99,17 +99,17 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     await db.schema
         .createTable("auth.password_reset_tokens")
-        .addColumn("id", "varchar(36)", (col) => col.primaryKey().notNull())
-        .addColumn("user_id", "varchar(36)", (col) => col.notNull().unique().references("auth.users.id"))
-        .addColumn("token_hash", "varchar(36)", (col) => col.notNull())
+        .addColumn("id", "uuid", (col) => col.primaryKey().notNull())
+        .addColumn("user_id", "uuid", (col) => col.notNull().unique().references("auth.users.id"))
+        .addColumn("token_hash", "uuid", (col) => col.notNull())
         .addColumn("expires_at", "timestamp", (col) => col.defaultTo(sql`now() + interval '15 minutes'`).notNull()) //TODO minutes from config
         .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
         .execute();
 
     await db.schema
         .createTable("auth.email_verification_tokens")
-        .addColumn("id", "varchar(36)", (col) => col.primaryKey().notNull())
-        .addColumn("user_id", "varchar(36)", (col) => col.notNull().unique().references("auth.users.id"))
+        .addColumn("id", "uuid", (col) => col.primaryKey().notNull())
+        .addColumn("user_id", "uuid", (col) => col.notNull().unique().references("auth.users.id"))
         .addColumn("token_hash", "varchar(64)", (col) => col.notNull())
         .addColumn("expires_at", "timestamp", (col) => col.defaultTo(sql`now() + interval '1 day'`).notNull()) //TODO minutes from config
         .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())

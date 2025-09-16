@@ -11,9 +11,9 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     await db.schema
         .createTable("workspaces.teams")
-        .addColumn("id", "varchar(36)", (col) => col.primaryKey())
+        .addColumn("id", "uuid", (col) => col.primaryKey())
         .addColumn("public_id", "varchar(10)", (col) => col.notNull())
-        .addColumn("owner_id", "varchar(36)", (col) => col.references("auth.users.id").notNull())
+        .addColumn("owner_id", "uuid", (col) => col.references("auth.users.id").notNull())
         .addColumn("name", "varchar(256)", (col) => col.notNull())
         .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
         .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
@@ -32,7 +32,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     await db.schema
         .createTable("workspaces.team_roles")
-        .addColumn("id", "varchar(36)", (col) => col.primaryKey())
+        .addColumn("id", "uuid", (col) => col.primaryKey())
         .addColumn("name", "varchar(256)", (col) => col.unique().notNull())
         .addColumn("description", "varchar(256)")
         .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
@@ -52,8 +52,8 @@ export async function up(db: Kysely<any>): Promise<void> {
     //TODO add invited_by email?
     await db.schema
         .createTable("workspaces.team_invitations")
-        .addColumn("id", "varchar(36)", (col) => col.primaryKey())
-        .addColumn("team_id", "varchar(36)", (col) => col.notNull().references("workspaces.teams.id"))
+        .addColumn("id", "uuid", (col) => col.primaryKey())
+        .addColumn("team_id", "uuid", (col) => col.notNull().references("workspaces.teams.id"))
         .addColumn("invited_email", "varchar(256)", (col) =>
             col
                 .unique()
@@ -79,9 +79,9 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     await db.schema
         .createTable("workspaces.team_members")
-        .addColumn("team_id", "varchar(36)", (col) => col.notNull().references("workspaces.teams.id"))
-        .addColumn("user_id", "varchar(36)", (col) => col.notNull().references("auth.users.id"))
-        .addColumn("role_id", "varchar(36)", (col) => col.notNull().references("workspaces.team_roles.id"))
+        .addColumn("team_id", "uuid", (col) => col.notNull().references("workspaces.teams.id"))
+        .addColumn("user_id", "uuid", (col) => col.notNull().references("auth.users.id"))
+        .addColumn("role_id", "uuid", (col) => col.notNull().references("workspaces.team_roles.id"))
         .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
         .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
         .addForeignKeyConstraint("workspaces_team_members_team_id_fk", ["team_id"], "workspaces.teams", ["id"], (cb) => cb.onDelete("cascade"))
@@ -100,8 +100,8 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     await db.schema
         .createTable("workspaces.tasks")
-        .addColumn("id", "varchar(36)", (col) => col.primaryKey())
-        .addColumn("team_id", "varchar(36)", (col) => col.notNull().references("workspaces.teams.id"))
+        .addColumn("id", "uuid", (col) => col.primaryKey())
+        .addColumn("team_id", "uuid", (col) => col.notNull().references("workspaces.teams.id"))
         .addColumn("name", "varchar(256)", (col) => col.notNull())
         .addColumn("description", "varchar(256)")
         .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
@@ -121,9 +121,9 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     await db.schema
         .createTable("workspaces.timesheets")
-        .addColumn("id", "varchar(36)", (col) => col.primaryKey())
-        .addColumn("employee_id", "varchar(36)", (col) => col.references("accounts.profiles.id").notNull())
-        .addColumn("task_id", "varchar(36)", (col) => col.references("workspaces.tasks.id").notNull())
+        .addColumn("id", "uuid", (col) => col.primaryKey())
+        .addColumn("employee_id", "uuid", (col) => col.references("accounts.profiles.id").notNull())
+        .addColumn("task_id", "uuid", (col) => col.references("workspaces.tasks.id").notNull())
         .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
         .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
         .addColumn("date", "text", (col) => col.notNull())

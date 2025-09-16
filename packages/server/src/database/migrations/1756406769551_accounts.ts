@@ -10,13 +10,13 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     await db.schema
         .createTable("accounts.profiles")
-        .addColumn("id", "varchar(36)", (col) => col.primaryKey())
-        .addColumn("user_id", "varchar(36)", (col) => col.unique().notNull().references("auth.users.id"))
+        .addColumn("id", "uuid", (col) => col.primaryKey())
+        .addColumn("user_id", "uuid", (col) => col.unique().notNull().references("auth.users.id"))
         .addColumn("name", "varchar(256)", (col) => col.check(sql`LENGTH(name) >= 3`))
         .addColumn("surname", "varchar(256)", (col) => col.check(sql`LENGTH(surname) >= 3`))
         .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
         .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
-        .addForeignKeyConstraint("employees_auth_users_id_fk", ["user_id"], "auth.users", ["id"], (cb) => cb.onDelete("cascade"))
+        // .addForeignKeyConstraint("employees_auth_users_id_fk", ["user_id"], "auth.users", ["id"], (cb) => cb.onDelete("cascade")) //TODO get back to it
         .execute();
 
     // await sql`
