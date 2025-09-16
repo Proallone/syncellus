@@ -11,20 +11,10 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     await db.schema
         .createTable("workspaces.teams")
-        .addColumn("id", "text", (col) => col.primaryKey().check(sql`LENGTH(id) = 36`))
-        .addColumn("public_id", "text", (col) => col.notNull().check(sql`LENGTH(public_id) = 10`))
-        .addColumn("owner_id", "text", (col) =>
-            col
-                .references("auth.users.id")
-                .notNull()
-                .check(sql`LENGTH(owner_id) = 36`)
-        )
-        .addColumn("name", "text", (col) =>
-            col
-                .notNull()
-                .check(sql`LENGTH(name) < 256`)
-                .notNull()
-        )
+        .addColumn("id", "varchar(36)", (col) => col.primaryKey())
+        .addColumn("public_id", "varchar(10)", (col) => col.notNull())
+        .addColumn("owner_id", "varchar(36)", (col) => col.references("auth.users.id").notNull())
+        .addColumn("name", "varchar(256)", (col) => col.notNull())
         .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
         .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
         .addForeignKeyConstraint("workspaces_teams_user_id_fk", ["owner_id"], "auth.users", ["id"], (cb) => cb.onDelete("cascade"))
@@ -42,14 +32,9 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     await db.schema
         .createTable("workspaces.team_roles")
-        .addColumn("id", "text", (col) => col.primaryKey().check(sql`LENGTH(id) = 36`))
-        .addColumn("name", "text", (col) =>
-            col
-                .unique()
-                .check(sql`LENGTH(description) < 256`)
-                .notNull()
-        )
-        .addColumn("description", "text", (col) => col.check(sql`LENGTH(description) < 256`))
+        .addColumn("id", "varchar(36)", (col) => col.primaryKey())
+        .addColumn("name", "varchar(256)", (col) => col.unique().notNull())
+        .addColumn("description", "varchar(256)")
         .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
         .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
         .execute();
@@ -67,21 +52,16 @@ export async function up(db: Kysely<any>): Promise<void> {
     //TODO add invited_by email?
     await db.schema
         .createTable("workspaces.team_invitations")
-        .addColumn("id", "text", (col) => col.primaryKey().check(sql`LENGTH(id) = 36`))
-        .addColumn("team_id", "text", (col) =>
-            col
-                .notNull()
-                .check(sql`LENGTH(team_id) = 36`)
-                .references("workspaces.teams.id")
-        )
-        .addColumn("invited_email", "text", (col) =>
+        .addColumn("id", "varchar(36)", (col) => col.primaryKey())
+        .addColumn("team_id", "varchar(36)", (col) => col.notNull().references("workspaces.teams.id"))
+        .addColumn("invited_email", "varchar(256)", (col) =>
             col
                 .unique()
                 .notNull()
-                .check(sql`LENGTH(invited_email) >= 3 AND LENGTH(invited_email) <= 255`)
+                .check(sql`LENGTH(invited_email) >= 3`)
         )
-        .addColumn("status", "text", (col) => col.notNull().defaultTo("pending")) //todo handle better
-        .addColumn("invitation_token", "text", (col) => col.notNull().check(sql`LENGTH(invitation_token) = 64`))
+        .addColumn("status", "varchar(40)", (col) => col.notNull().defaultTo("pending")) //todo handle better
+        .addColumn("invitation_token", "varchar(64)", (col) => col.notNull())
         .addColumn("expires_at", "timestamp", (col) => col.defaultTo(sql`now() + interval '7 days'`).notNull()) //TODO time from config
         .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
         .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
@@ -99,24 +79,9 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     await db.schema
         .createTable("workspaces.team_members")
-        .addColumn("team_id", "text", (col) =>
-            col
-                .notNull()
-                .check(sql`LENGTH(team_id) = 36`)
-                .references("workspaces.teams.id")
-        )
-        .addColumn("user_id", "text", (col) =>
-            col
-                .notNull()
-                .check(sql`LENGTH(user_id) = 36`)
-                .references("auth.users.id")
-        )
-        .addColumn("role_id", "text", (col) =>
-            col
-                .notNull()
-                .check(sql`LENGTH(role_id) = 36`)
-                .references("workspaces.team_roles.id")
-        )
+        .addColumn("team_id", "varchar(36)", (col) => col.notNull().references("workspaces.teams.id"))
+        .addColumn("user_id", "varchar(36)", (col) => col.notNull().references("auth.users.id"))
+        .addColumn("role_id", "varchar(36)", (col) => col.notNull().references("workspaces.team_roles.id"))
         .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
         .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
         .addForeignKeyConstraint("workspaces_team_members_team_id_fk", ["team_id"], "workspaces.teams", ["id"], (cb) => cb.onDelete("cascade"))
@@ -135,15 +100,10 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     await db.schema
         .createTable("workspaces.tasks")
-        .addColumn("id", "text", (col) => col.primaryKey().check(sql`LENGTH(id) = 36`))
-        .addColumn("team_id", "text", (col) =>
-            col
-                .notNull()
-                .check(sql`LENGTH(team_id) = 36`)
-                .references("workspaces.teams.id")
-        )
-        .addColumn("name", "text", (col) => col.check(sql`LENGTH(description) < 256`).notNull())
-        .addColumn("description", "text", (col) => col.check(sql`LENGTH(description) < 256`))
+        .addColumn("id", "varchar(36)", (col) => col.primaryKey())
+        .addColumn("team_id", "varchar(36)", (col) => col.notNull().references("workspaces.teams.id"))
+        .addColumn("name", "varchar(256)", (col) => col.notNull())
+        .addColumn("description", "varchar(256)")
         .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
         .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
         //TODO add valid_to column, max hours?
@@ -161,19 +121,9 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     await db.schema
         .createTable("workspaces.timesheets")
-        .addColumn("id", "text", (col) => col.primaryKey().check(sql`LENGTH(id) = 36`))
-        .addColumn("employee_id", "text", (col) =>
-            col
-                .references("accounts.profiles.id")
-                .notNull()
-                .check(sql`LENGTH(employee_id) = 36`)
-        )
-        .addColumn("task_id", "text", (col) =>
-            col
-                .references("workspaces.tasks.id")
-                .notNull()
-                .check(sql`LENGTH(task_id) = 36`)
-        )
+        .addColumn("id", "varchar(36)", (col) => col.primaryKey())
+        .addColumn("employee_id", "varchar(36)", (col) => col.references("accounts.profiles.id").notNull())
+        .addColumn("task_id", "varchar(36)", (col) => col.references("workspaces.tasks.id").notNull())
         .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
         .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
         .addColumn("date", "text", (col) => col.notNull())
@@ -190,7 +140,7 @@ export async function up(db: Kysely<any>): Promise<void> {
                 )
                 .stored()
         )
-        .addColumn("status", "text", (col) => col.check(sql`status in ('draft', 'submitted', 'approved', 'rejected')`).defaultTo("draft"))
+        .addColumn("status", "varchar(40)", (col) => col.check(sql`status in ('draft', 'submitted', 'approved', 'rejected')`).defaultTo("draft"))
         .addForeignKeyConstraint("workspaces_timesheets_employee_id_fk", ["employee_id"], "accounts.profiles", ["id"], (cb) => cb.onDelete("cascade"))
         .execute();
 
