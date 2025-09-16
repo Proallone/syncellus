@@ -130,18 +130,18 @@ export interface WorkspacesTimesheets {
 }
 
 export interface DB {
-    accounts_profiles: AccountsProfiles;
-    auth_email_verification_tokens: AuthEmailVerificationTokens;
-    auth_password_reset_tokens: AuthPasswordResetTokens;
-    auth_role_scopes: AuthRoleScopes;
-    auth_roles: AuthRoles;
-    auth_scopes: AuthScopes;
-    auth_user_roles: AuthUserRoles;
-    auth_users: AuthUsers;
-    workspaces_tasks: WorkspacesTasks;
-    workspaces_team_invitations: WorkspacesTeamInvitations;
-    workspaces_team_members: WorkspacesTeamMembers;
-    workspaces_team_roles: WorkspacesTeamRoles;
-    workspaces_teams: WorkspacesTeams;
-    workspaces_timesheets: WorkspacesTimesheets;
+    "accounts.profiles": AccountsProfiles;
+    "auth.email_verification_tokens": AuthEmailVerificationTokens;
+    "auth.password_reset_tokens": AuthPasswordResetTokens;
+    "auth.role_scopes": AuthRoleScopes;
+    "auth.roles": AuthRoles;
+    "auth.scopes": AuthScopes;
+    "auth.user_roles": AuthUserRoles;
+    "auth.users": AuthUsers;
+    "workspaces.tasks": WorkspacesTasks;
+    "workspaces.team_invitations": WorkspacesTeamInvitations;
+    "workspaces.team_members": WorkspacesTeamMembers;
+    "workspaces.team_roles": WorkspacesTeamRoles;
+    "workspaces.teams": WorkspacesTeams;
+    "workspaces.timesheets": WorkspacesTimesheets;
 }

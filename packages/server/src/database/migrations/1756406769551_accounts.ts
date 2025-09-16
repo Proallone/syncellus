@@ -6,15 +6,17 @@ export async function up(db: Kysely<any>): Promise<void> {
     // note: up migrations are mandatory. you must implement this function.
     // For more info, see: https://kysely.dev/docs/migrations
 
+    await db.schema.createSchema("accounts").ifNotExists().execute();
+
     await db.schema
-        .createTable("accounts_profiles")
+        .createTable("accounts.profiles")
         .addColumn("id", "text", (col) => col.primaryKey().check(sql`LENGTH(id) = 36`))
-        .addColumn("user_id", "text", (col) => col.unique().notNull().references("auth_users.id"))
+        .addColumn("user_id", "text", (col) => col.unique().notNull().references("auth.users.id"))
         .addColumn("name", "text", (col) => col.check(sql`LENGTH(name) >= 3 AND LENGTH(name) <= 255`))
         .addColumn("surname", "text", (col) => col.check(sql`LENGTH(surname) >= 3 AND LENGTH(surname) <= 255`))
         .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
         .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
-        .addForeignKeyConstraint("employees_auth_users_id_fk", ["user_id"], "auth_users", ["id"], (cb) => cb.onDelete("cascade"))
+        .addForeignKeyConstraint("employees_auth_users_id_fk", ["user_id"], "auth.users", ["id"], (cb) => cb.onDelete("cascade"))
         .execute();
 
     // await sql`
@@ -36,5 +38,7 @@ export async function down(db: Kysely<any>): Promise<void> {
     // For more info, see: https://kysely.dev/docs/migrations
 
     // await sql`DROP TRIGGER IF EXISTS update_account_profiles_modified_at;`.execute(db);
-    await db.schema.dropTable("accounts_profiles").execute();
+    await db.schema.dropTable("accounts.profiles").execute();
+
+    await db.schema.dropSchema("accounts").execute();
 }

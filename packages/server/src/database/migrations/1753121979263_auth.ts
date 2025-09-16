@@ -6,8 +6,10 @@ export async function up(db: Kysely<any>): Promise<void> {
     // note: up migrations are mandatory. you must implement this function.
     // For more info, see: https://kysely.dev/docs/migrations
 
+    await db.schema.createSchema("auth").ifNotExists().execute();
+
     await db.schema
-        .createTable("auth_users")
+        .createTable("auth.users")
         .addColumn("id", "text", (col) =>
             col
                 .primaryKey()
@@ -33,24 +35,24 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("active", "integer", (col) => col.defaultTo(0))
         .execute();
 
-    await db.schema.createIndex("auth_user_email").on("auth_users").column("email").execute();
+    // await db.schema.createIndex("auth_user_email").on("auth.users").column("email").execute();
 
-    await sql`
-        CREATE OR REPLACE FUNCTION update_auth_users_modified_at()
-        RETURNS TRIGGER AS $$
-        BEGIN
-            NEW.modified_at = NOW();
-            RETURN NEW;
-        END;
-        $$ LANGUAGE plpgsql;
+    // await sql`
+    //     CREATE OR REPLACE FUNCTION update_auth_users_modified_at()
+    //     RETURNS TRIGGER AS $$
+    //     BEGIN
+    //         NEW.modified_at = NOW();
+    //         RETURN NEW;
+    //     END;
+    //     $$ LANGUAGE plpgsql;
 
-        CREATE OR REPLACE TRIGGER update_auth_users_modified_at_trigger
-        BEFORE UPDATE ON auth_users
-        FOR EACH ROW
-        EXECUTE FUNCTION update_auth_users_modified_at();`.execute(db);
+    //     CREATE OR REPLACE TRIGGER update_auth_users_modified_at_trigger
+    //     BEFORE UPDATE ON auth_users
+    //     FOR EACH ROW
+    //     EXECUTE FUNCTION update_auth_users_modified_at();`.execute(db);
 
     await db.schema
-        .createTable("auth_roles")
+        .createTable("auth.roles")
         .addColumn("id", "text", (col) =>
             col
                 .primaryKey()
@@ -74,7 +76,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     // 	END;`.execute(db);
 
     await db.schema
-        .createTable("auth_scopes")
+        .createTable("auth.scopes")
         .addColumn("id", "text", (col) =>
             col
                 .primaryKey()
@@ -103,45 +105,45 @@ export async function up(db: Kysely<any>): Promise<void> {
     // 	END;`.execute(db);
 
     await db.schema
-        .createTable("auth_role_scopes")
+        .createTable("auth.role_scopes")
         .addColumn("role_id", "text", (col) =>
             col
                 .notNull()
                 .check(sql`LENGTH(role_id) = 36`)
-                .references("auth_roles.id")
+                .references("auth.roles.id")
         )
         .addColumn("scope_id", "text", (col) =>
             col
                 .notNull()
                 .check(sql`LENGTH(scope_id) = 36`)
-                .references("auth_scopes.id")
+                .references("auth.scopes.id")
         )
         // .addPrimaryKeyConstraint("primary_key", ["role_id", "scope_id"])
-        .addForeignKeyConstraint("auth_role_scopes_role_id_fk", ["role_id"], "auth_roles", ["id"], (cb) => cb.onDelete("cascade"))
-        .addForeignKeyConstraint("auth_role_scopes_scope_id_fk", ["scope_id"], "auth_scopes", ["id"], (cb) => cb.onDelete("cascade"))
+        .addForeignKeyConstraint("auth_role_scopes_role_id_fk", ["role_id"], "auth.roles", ["id"], (cb) => cb.onDelete("cascade"))
+        .addForeignKeyConstraint("auth_role_scopes_scope_id_fk", ["scope_id"], "auth.scopes", ["id"], (cb) => cb.onDelete("cascade"))
         .execute();
 
     await db.schema
-        .createTable("auth_user_roles")
+        .createTable("auth.user_roles")
         .addColumn("user_id", "text", (col) =>
             col
                 .notNull()
                 .check(sql`LENGTH(user_id) = 36`)
-                .references("auth_users.id")
+                .references("auth.users.id")
         )
         .addColumn("role_id", "text", (col) =>
             col
                 .notNull()
                 .check(sql`LENGTH(role_id) = 36`)
-                .references("auth_roles.id")
+                .references("auth.roles.id")
         )
         .addPrimaryKeyConstraint("primary_key", ["user_id", "role_id"])
-        .addForeignKeyConstraint("auth_user_role_user_id_fk", ["user_id"], "auth_users", ["id"], (cb) => cb.onDelete("cascade"))
-        .addForeignKeyConstraint("auth_user_roles_role_id_fk", ["role_id"], "auth_roles", ["id"], (cb) => cb.onDelete("cascade"))
+        .addForeignKeyConstraint("auth_user_role_user_id_fk", ["user_id"], "auth.users", ["id"], (cb) => cb.onDelete("cascade"))
+        .addForeignKeyConstraint("auth_user_roles_role_id_fk", ["role_id"], "auth.roles", ["id"], (cb) => cb.onDelete("cascade"))
         .execute();
 
     await db.schema
-        .createTable("auth_password_reset_tokens")
+        .createTable("auth.password_reset_tokens")
         .addColumn("id", "text", (col) =>
             col
                 .primaryKey()
@@ -153,7 +155,7 @@ export async function up(db: Kysely<any>): Promise<void> {
                 .notNull()
                 .unique()
                 .check(sql`LENGTH(user_id) = 36`)
-                .references("auth_users.id")
+                .references("auth.users.id")
         )
         .addColumn("token_hash", "text", (col) => col.notNull().check(sql`LENGTH(token_hash) = 64`))
         .addColumn("expires_at", "timestamp", (col) => col.defaultTo(sql`now() + interval '15 minutes'`).notNull()) //TODO minutes from config
@@ -161,7 +163,7 @@ export async function up(db: Kysely<any>): Promise<void> {
         .execute();
 
     await db.schema
-        .createTable("auth_email_verification_tokens")
+        .createTable("auth.email_verification_tokens")
         .addColumn("id", "text", (col) =>
             col
                 .primaryKey()
@@ -173,7 +175,7 @@ export async function up(db: Kysely<any>): Promise<void> {
                 .notNull()
                 .unique()
                 .check(sql`LENGTH(user_id) = 36`)
-                .references("auth_users.id")
+                .references("auth.users.id")
         )
         .addColumn("token_hash", "text", (col) => col.notNull().check(sql`LENGTH(token_hash) = 64`))
         .addColumn("expires_at", "timestamp", (col) => col.defaultTo(sql`now() + interval '1 day'`).notNull()) //TODO minutes from config
@@ -187,18 +189,20 @@ export async function down(db: Kysely<any>): Promise<void> {
     // down migration code goes here...
     // note: down migrations are optional. you can safely delete this function.
     // For more info, see: https://kysely.dev/docs/migrations
-    await db.schema.dropTable("auth_email_verification_tokens").execute();
+    await db.schema.dropTable("auth.email_verification_tokens").execute();
 
-    await db.schema.dropTable("auth_password_reset_tokens").execute();
+    await db.schema.dropTable("auth.password_reset_tokens").execute();
 
-    await db.schema.dropTable("auth_user_roles").execute();
+    await db.schema.dropTable("auth.user_roles").execute();
 
-    await db.schema.dropTable("auth_role_scopes").execute();
+    await db.schema.dropTable("auth.role_scopes").execute();
 
-    await db.schema.dropTable("auth_scopes").execute();
+    await db.schema.dropTable("auth.scopes").execute();
 
-    await db.schema.dropTable("auth_roles").execute();
+    await db.schema.dropTable("auth.roles").execute();
 
-    await db.schema.dropIndex("auth_user_email").execute();
-    await db.schema.dropTable("auth_users").execute();
+    // await db.schema.dropIndex("auth_user_email").execute();
+    await db.schema.dropTable("auth.users").execute();
+
+    await db.schema.dropSchema("auth").execute();
 }

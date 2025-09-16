@@ -97,9 +97,9 @@ const user_roles: NewUserRole[] = [
 ];
 
 export async function seed(db: Kysely<Database>): Promise<void> {
-    await db.insertInto("auth_users").values(users).execute();
-    await db.insertInto("auth_roles").values(roles).execute();
-    await db.insertInto("auth_scopes").values(scopes).execute();
-    await db.insertInto("auth_role_scopes").values(role_scopes).execute();
-    await db.insertInto("auth_user_roles").values(user_roles).execute();
+    await db.insertInto("auth.users").values(users).execute();
+    await db.insertInto("auth.roles").values(roles).execute();
+    await db.insertInto("auth.scopes").values(scopes).execute();
+    await db.insertInto("auth.role_scopes").values(role_scopes).execute();
+    await db.insertInto("auth.user_roles").values(user_roles).execute();
 }
