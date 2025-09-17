@@ -106,6 +106,10 @@ export async function up(db: Kysely<any>): Promise<void> {
         .execute();
 
     await db.withSchema("auth").schema.createView("user_roles_view").as(db.selectFrom("auth.user_roles").selectAll()).execute();
+    // await db
+    //     .withSchema("auth")
+    //     .schema.createView("user_roles_names_view")
+    //     .as(db.selectFrom("auth.user_roles").innerJoin("auth.roles", "auth.user_roles.role_id", "auth.roles.id").innerJoin("auth.users", "auth.users.id", "auth.user_roles.user_id").select(["auth.roles.name", "auth.users.id"])).execute();
 
     await db.schema
         .createTable("auth.password_reset_tokens")
@@ -142,6 +146,7 @@ export async function down(db: Kysely<any>): Promise<void> {
     await db.withSchema("auth").schema.dropView("password_reset_tokens_view").execute();
     await db.schema.dropTable("auth.password_reset_tokens").execute();
 
+    await db.withSchema("auth").schema.dropView("user_roles_names_view").execute();
     await db.withSchema("auth").schema.dropView("user_roles_view").execute();
     await db.schema.dropTable("auth.user_roles").execute();
 
