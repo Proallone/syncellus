@@ -8,7 +8,7 @@ export type ServiceHealthResponse = {
 };
 
 export type DatabaseHealthResponse = {
-    sqlite_version: string;
+    postgres_version: string;
 } & ServiceHealthResponse;
 
 export interface IHealthService {

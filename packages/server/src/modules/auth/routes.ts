@@ -6,7 +6,7 @@ import { authenticate } from "@syncellus/middlewares/auth.middleware.js";
 import { buildAuthModule } from "@syncellus/modules/auth/module.js";
 
 const router = Router();
-const { controller } = buildAuthModule();
+const controller = buildAuthModule();
 
 router.post("/register", validate(AuthSchema), hw(controller.register));
 router.post("/verify-email", validate(VerifyEmailSchema), hw(controller.verifyEmail));

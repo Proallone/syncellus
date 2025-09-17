@@ -1,11 +1,11 @@
-import type { Database, NewTeam, NewTeamMember, NewTeamRole, NewTask, NewTimesheet } from "@syncellus/types/database.js";
-import type { Kysely } from "kysely";
+import type { DB, WorkspacesTasks, WorkspacesTeamMembers, WorkspacesTeamRoles, WorkspacesTeams, WorkspacesTimesheets } from "@syncellus/types/database.js";
+import type { Insertable, Kysely } from "kysely";
 
 // replace `any` with your database interface.
-export async function seed(db: Kysely<Database>): Promise<void> {
+export async function seed(db: Kysely<DB>): Promise<void> {
     // seed code goes here...
     // note: this function is mandatory. you must implement this function.
-    const teams: NewTeam[] = [
+    const teams: Insertable<WorkspacesTeams>[] = [
         {
             id: "01992aed-cc90-71a0-b867-1d86fae1028a",
             public_id: "pgz2er7wwv",
@@ -26,7 +26,7 @@ export async function seed(db: Kysely<Database>): Promise<void> {
         }
     ];
 
-    const members: NewTeamMember[] = [
+    const members: Insertable<WorkspacesTeamMembers>[] = [
         {
             team_id: "01992aed-cc90-71a0-b867-1d86fae1028a",
             user_id: "0189f7ea-ae2c-7809-8aeb-b819cf5e9e7f",
@@ -54,7 +54,7 @@ export async function seed(db: Kysely<Database>): Promise<void> {
         }
     ];
 
-    const roles: NewTeamRole[] = [
+    const roles: Insertable<WorkspacesTeamRoles>[] = [
         {
             id: "01993f74-e0f5-7325-936c-4c03d8789a1d",
             name: "Owner",
@@ -67,7 +67,7 @@ export async function seed(db: Kysely<Database>): Promise<void> {
         }
     ];
 
-    const tasks: NewTask[] = [
+    const tasks: Insertable<WorkspacesTasks>[] = [
         {
             id: "01994771-49cc-7459-a52d-375358c173f5",
             team_id: "01992aed-cc90-71a0-b867-1d86fae1028a",
@@ -88,7 +88,7 @@ export async function seed(db: Kysely<Database>): Promise<void> {
         }
     ];
 
-    const timesheets: NewTimesheet[] = [
+    const timesheets: Insertable<WorkspacesTimesheets>[] = [
         {
             id: "0198b9b5-233d-70c1-85c1-047614b54ffc",
             employee_id: "0198b988-0a22-71af-990a-7dce68a5114f",
@@ -127,9 +127,9 @@ export async function seed(db: Kysely<Database>): Promise<void> {
         }
     ];
 
-    await db.insertInto("workspaces_team_roles").values(roles).execute();
-    await db.insertInto("workspaces_teams").values(teams).execute();
-    await db.insertInto("workspaces_team_members").values(members).execute();
-    await db.insertInto("workspaces_tasks").values(tasks).execute();
-    await db.insertInto("workspaces_timesheets").values(timesheets).execute();
+    await db.insertInto("workspaces.team_roles").values(roles).execute();
+    await db.insertInto("workspaces.teams").values(teams).execute();
+    await db.insertInto("workspaces.team_members").values(members).execute();
+    await db.insertInto("workspaces.tasks").values(tasks).execute();
+    await db.insertInto("workspaces.timesheets").values(timesheets).execute();
 }

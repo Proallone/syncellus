@@ -1,7 +1,7 @@
-import type { Kysely } from "kysely";
-import type { Database, NewEmployee } from "@syncellus/types/database.js";
+import type { Insertable, Kysely } from "kysely";
+import type { DB, AccountsProfiles } from "@syncellus/types/database.js";
 
-const accounts: NewEmployee[] = [
+const accounts: Insertable<AccountsProfiles>[] = [
     {
         id: "0198b988-0a22-71af-990a-7dce68a5114f",
         user_id: "0189f7ea-ae2c-7809-8aeb-b819cf5e9e7f",
@@ -28,6 +28,6 @@ const accounts: NewEmployee[] = [
     }
 ];
 
-export async function seed(db: Kysely<Database>): Promise<void> {
-    await db.insertInto("accounts_profiles").values(accounts).execute();
+export async function seed(db: Kysely<DB>): Promise<void> {
+    await db.insertInto("accounts.profiles").values(accounts).execute();
 }

@@ -1,8 +1,8 @@
+import type { Logger } from "pino";
 import { EventHandler } from "@syncellus/core/eventHandler.js";
 import { AppEvents } from "@syncellus/core/eventBus.js";
 import { AccountsRepository } from "@syncellus/modules/accounts/repository.js";
 import { EventBus } from "@syncellus/core/eventBus.js";
-import type { Logger } from "pino";
 
 export class UserCreatedHandler extends EventHandler<"user.created"> {
     constructor(

@@ -1,13 +1,14 @@
 import type { Request, Response } from "express";
 import type { AccountsService } from "@syncellus/modules/accounts/service.js";
-import type { EmployeeUpdate, NewTimesheet } from "@syncellus/types/database.js";
+import type { AccountsProfiles, WorkspacesTimesheets } from "@syncellus/types/database.js";
 import type { TimesheetsService } from "@syncellus/modules/workspaces/timesheets/service.js";
+import type { TypedRequest } from "@syncellus/types/express.js";
+import type { NewAccountBody } from "@syncellus/types/index.js";
+import type { Insertable, Updateable } from "kysely";
 import { uuidv7 } from "uuidv7";
 import { sendResponse } from "@syncellus/utils/responseBuilder.js";
 import { HttpStatus } from "@syncellus/core/http.js";
 import { NotFoundError } from "@syncellus/errors/http.js";
-import { TypedRequest } from "@syncellus/types/express.js";
-import { NewAccountBody } from "@syncellus/types/index.js";
 
 export class AccountsController {
     constructor(
@@ -34,10 +35,10 @@ export class AccountsController {
         return sendResponse(res, HttpStatus.OK, { message: "Account data fetched", data: employee });
     };
 
-    public updateAccount = async (req: TypedRequest<EmployeeUpdate>, res: Response) => {
+    public updateAccount = async (req: TypedRequest<Updateable<AccountsProfiles>>, res: Response) => {
         const { id } = req.params;
         const data = req.body;
-        const update: EmployeeUpdate = {
+        const update: Updateable<AccountsProfiles> = {
             id,
             ...data
         };
@@ -65,7 +66,7 @@ export class AccountsController {
         const { accountId } = req.params;
         const body = Array.isArray(req.body) ? req.body : [req.body];
 
-        const timesheets: NewTimesheet[] = body.map((timesheet) => ({ id: uuidv7(), employee_id: accountId, ...timesheet }));
+        const timesheets: Insertable<WorkspacesTimesheets>[] = body.map((timesheet) => ({ id: uuidv7(), employee_id: accountId, ...timesheet }));
 
         const newTimesheet = await this.timesheetService.insertNewTimesheets(timesheets);
         return sendResponse(res, HttpStatus.CREATED, { message: `New timesheet for account ${accountId} created`, data: newTimesheet });

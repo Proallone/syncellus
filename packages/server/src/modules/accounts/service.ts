@@ -1,12 +1,13 @@
-import type { EmployeeUpdate, NewEmployee } from "@syncellus/types/database.js";
+import type { AccountsProfiles } from "@syncellus/types/database.js";
 import type { GetEmployeeQuery } from "@syncellus/types/index.js";
 import type { AccountsRepository } from "@syncellus/modules/accounts/repository.js";
+import type { Insertable, Updateable } from "kysely";
 import { uuidv7 } from "uuidv7";
 
 export class AccountsService {
     constructor(private readonly repo: AccountsRepository) {}
 
-    public insertNewAccount = async (account: NewEmployee) => {
+    public insertNewAccount = async (account: Insertable<AccountsProfiles>) => {
         return await this.repo.insertNewAccountToDb({ id: uuidv7(), ...account });
     };
 
@@ -18,7 +19,7 @@ export class AccountsService {
         return await this.repo.selectOneAccountByIdFromDb(id);
     };
 
-    public updateAccountById = async (account: EmployeeUpdate) => {
+    public updateAccountById = async (account: Updateable<AccountsProfiles>) => {
         return await this.repo.updateAccountByIdInDb(account);
     };
 
