@@ -19,8 +19,8 @@ export async function up(db: Kysely<any>): Promise<void> {
                 .check(sql`LENGTH(email) >= 3`)
         )
         .addColumn("password", "varchar(256)", (col) => col.notNull().check(sql`LENGTH(password) >= 3`))
-        .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
-        .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
+        .addColumn("created_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
+        .addColumn("modified_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
         .addColumn("verified", "boolean", (col) => col.defaultTo(false))
         .addColumn("active", "boolean", (col) => col.defaultTo(false))
         .execute();
@@ -48,8 +48,8 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("id", "uuid", (col) => col.primaryKey().notNull())
         .addColumn("name", "varchar(40)", (col) => col.notNull())
         .addColumn("description", "varchar(256)")
-        .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
-        .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
+        .addColumn("created_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
+        .addColumn("modified_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
         .execute();
 
     await db.withSchema("auth").schema.createView("roles_view").as(db.selectFrom("auth.roles").selectAll()).execute();
@@ -59,7 +59,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     // 	UPDATE ON auth_roles FOR EACH ROW BEGIN
     // 		UPDATE auth_roles
     // 		SET
-    // 		modified_at = timestamp ('now')
+    // 		modified_at = timestamptz ('now')
     // 		WHERE
     // 		id = OLD.id;
     // 	END;`.execute(db);
@@ -69,8 +69,8 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("id", "uuid", (col) => col.primaryKey().notNull())
         .addColumn("scope", "varchar(256)", (col) => col.notNull().unique())
         .addColumn("description", "varchar(256)")
-        .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
-        .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
+        .addColumn("created_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
+        .addColumn("modified_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
         .execute();
 
     await db.withSchema("auth").schema.createView("scopes_view").as(db.selectFrom("auth.scopes").selectAll()).execute();
@@ -80,7 +80,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     // 	UPDATE ON auth_scopes FOR EACH ROW BEGIN
     // 		UPDATE auth_scopes
     // 		SET
-    // 		modified_at = timestamp ('now')
+    // 		modified_at = timestamptz ('now')
     // 		WHERE
     // 		id = OLD.id;
     // 	END;`.execute(db);
@@ -116,8 +116,8 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("id", "uuid", (col) => col.primaryKey().notNull())
         .addColumn("user_id", "uuid", (col) => col.notNull().unique().references("auth.users.id"))
         .addColumn("token_hash", "uuid", (col) => col.notNull())
-        .addColumn("expires_at", "timestamp", (col) => col.defaultTo(sql`now() + interval '15 minutes'`).notNull()) //TODO minutes from config
-        .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
+        .addColumn("expires_at", "timestamptz", (col) => col.defaultTo(sql`now() + interval '15 minutes'`).notNull()) //TODO minutes from config
+        .addColumn("created_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
         .execute();
 
     await db.withSchema("auth").schema.createView("password_reset_tokens_view").as(db.selectFrom("auth.password_reset_tokens").selectAll()).execute();
@@ -127,8 +127,8 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("id", "uuid", (col) => col.primaryKey().notNull())
         .addColumn("user_id", "uuid", (col) => col.notNull().unique().references("auth.users.id"))
         .addColumn("token_hash", "varchar(64)", (col) => col.notNull())
-        .addColumn("expires_at", "timestamp", (col) => col.defaultTo(sql`now() + interval '1 day'`).notNull()) //TODO minutes from config
-        .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
+        .addColumn("expires_at", "timestamptz", (col) => col.defaultTo(sql`now() + interval '1 day'`).notNull()) //TODO minutes from config
+        .addColumn("created_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
         .execute();
 
     await db.withSchema("auth").schema.createView("email_verification_tokens_view").as(db.selectFrom("auth.email_verification_tokens").selectAll()).execute();
@@ -146,7 +146,7 @@ export async function down(db: Kysely<any>): Promise<void> {
     await db.withSchema("auth").schema.dropView("password_reset_tokens_view").execute();
     await db.schema.dropTable("auth.password_reset_tokens").execute();
 
-    await db.withSchema("auth").schema.dropView("user_roles_names_view").execute();
+    // await db.withSchema("auth").schema.dropView("user_roles_names_view").execute();
     await db.withSchema("auth").schema.dropView("user_roles_view").execute();
     await db.schema.dropTable("auth.user_roles").execute();
 

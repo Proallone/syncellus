@@ -17,5 +17,5 @@ export function buildAuthModule() {
     const service = new AuthService(repo, mailService);
     const controller = new AuthController(service, logger);
 
-    return { controller };
+    return controller;
 }
