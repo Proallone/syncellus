@@ -14,8 +14,8 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("user_id", "uuid", (col) => col.unique().notNull().references("auth.users.id"))
         .addColumn("name", "varchar(256)", (col) => col.check(sql`LENGTH(name) >= 3`))
         .addColumn("surname", "varchar(256)", (col) => col.check(sql`LENGTH(surname) >= 3`))
-        .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
-        .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
+        .addColumn("created_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
+        .addColumn("modified_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
         // .addForeignKeyConstraint("employees_auth_users_id_fk", ["user_id"], "auth.users", ["id"], (cb) => cb.onDelete("cascade")) //TODO get back to it
         .execute();
 
@@ -24,7 +24,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     // 	UPDATE ON accounts_profiles FOR EACH ROW BEGIN
     // 		UPDATE accounts_profiles
     // 		SET
-    // 		modified_at = timestamp ('now')
+    // 		modified_at = timestamptz ('now')
     // 		WHERE
     // 		id = OLD.id;
     // 	END;`.execute(db);

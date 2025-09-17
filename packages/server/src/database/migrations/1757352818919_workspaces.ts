@@ -15,8 +15,8 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("public_id", "varchar(10)", (col) => col.notNull())
         .addColumn("owner_id", "uuid", (col) => col.references("auth.users.id").notNull())
         .addColumn("name", "varchar(256)", (col) => col.notNull())
-        .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
-        .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
+        .addColumn("created_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
+        .addColumn("modified_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
         .addForeignKeyConstraint("workspaces_teams_user_id_fk", ["owner_id"], "auth.users", ["id"], (cb) => cb.onDelete("cascade"))
         .execute();
 
@@ -25,7 +25,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     // 	UPDATE ON workspaces_teams FOR EACH ROW BEGIN
     // 		UPDATE workspaces_teams
     // 		SET
-    // 		modified_at = timestamp ('now')
+    // 		modified_at = timestamptz ('now')
     // 		WHERE
     // 		id = OLD.id;
     // 	END;`.execute(db);
@@ -35,8 +35,8 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("id", "uuid", (col) => col.primaryKey())
         .addColumn("name", "varchar(256)", (col) => col.unique().notNull())
         .addColumn("description", "varchar(256)")
-        .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
-        .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
+        .addColumn("created_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
+        .addColumn("modified_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
         .execute();
 
     // await sql`
@@ -44,7 +44,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     // 	UPDATE ON workspaces_team_roles FOR EACH ROW BEGIN
     // 		UPDATE workspaces_team_roles
     // 		SET
-    // 		modified_at = timestamp ('now')
+    // 		modified_at = timestamptz ('now')
     // 		WHERE
     // 		id = OLD.id;
     // 	END;`.execute(db);
@@ -62,9 +62,9 @@ export async function up(db: Kysely<any>): Promise<void> {
         )
         .addColumn("status", "varchar(40)", (col) => col.notNull().defaultTo("pending")) //todo handle better
         .addColumn("invitation_token", "varchar(64)", (col) => col.notNull())
-        .addColumn("expires_at", "timestamp", (col) => col.defaultTo(sql`now() + interval '7 days'`).notNull()) //TODO time from config
-        .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
-        .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
+        .addColumn("expires_at", "timestamptz", (col) => col.defaultTo(sql`now() + interval '7 days'`).notNull()) //TODO time from config
+        .addColumn("created_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
+        .addColumn("modified_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
         .execute();
 
     // await sql`
@@ -72,7 +72,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     // 	UPDATE ON workspaces_team_invitations FOR EACH ROW BEGIN
     // 		UPDATE workspaces_team_invitations
     // 		SET
-    // 		modified_at = timestamp ('now')
+    // 		modified_at = timestamptz ('now')
     // 		WHERE
     // 		id = OLD.id;
     // 	END;`.execute(db);
@@ -82,8 +82,8 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("team_id", "uuid", (col) => col.notNull().references("workspaces.teams.id"))
         .addColumn("user_id", "uuid", (col) => col.notNull().references("auth.users.id"))
         .addColumn("role_id", "uuid", (col) => col.notNull().references("workspaces.team_roles.id"))
-        .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
-        .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
+        .addColumn("created_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
+        .addColumn("modified_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
         .addForeignKeyConstraint("workspaces_team_members_team_id_fk", ["team_id"], "workspaces.teams", ["id"], (cb) => cb.onDelete("cascade"))
         .addForeignKeyConstraint("workspaces_team_members_auth_users_id_fk", ["user_id"], "auth.users", ["id"], (cb) => cb.onDelete("cascade"))
         .execute();
@@ -93,7 +93,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     // 	UPDATE ON workspaces_team_members FOR EACH ROW BEGIN
     // 		UPDATE workspaces_team_members
     // 		SET
-    // 		modified_at = timestamp ('now')
+    // 		modified_at = timestamptz ('now')
     // 		WHERE
     // 		team_id = OLD.team_id AND user_id = OLD.user_id;
     // 	END;`.execute(db);
@@ -104,8 +104,8 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("team_id", "uuid", (col) => col.notNull().references("workspaces.teams.id"))
         .addColumn("name", "varchar(256)", (col) => col.notNull())
         .addColumn("description", "varchar(256)")
-        .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
-        .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
+        .addColumn("created_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
+        .addColumn("modified_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
         //TODO add valid_to column, max hours?
         .execute();
 
@@ -114,7 +114,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     // 	UPDATE ON workspaces_tasks FOR EACH ROW BEGIN
     // 		UPDATE workspaces_tasks
     // 		SET
-    // 		modified_at = timestamp ('now')
+    // 		modified_at = timestamptz ('now')
     // 		WHERE
     // 		id = OLD.id;
     // 	END;`.execute(db);
@@ -124,8 +124,8 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("id", "uuid", (col) => col.primaryKey())
         .addColumn("employee_id", "uuid", (col) => col.references("accounts.profiles.id").notNull())
         .addColumn("task_id", "uuid", (col) => col.references("workspaces.tasks.id").notNull())
-        .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
-        .addColumn("modified_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
+        .addColumn("created_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
+        .addColumn("modified_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
         .addColumn("date", "text", (col) => col.notNull())
         .addColumn("start_hour", "time", (col) => col.notNull())
         .addColumn("end_hour", "time", (col) => col.notNull().check(sql`end_hour > start_hour`))
@@ -151,7 +151,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     // 	UPDATE ON workspaces_timesheets FOR EACH ROW BEGIN
     // 		UPDATE workspaces_timesheets
     // 		SET
-    // 		modified_at = timestamp ('now')
+    // 		modified_at = timestamptz ('now')
     // 		WHERE
     // 		id = OLD.id;
     // 	END;`.execute(db);
