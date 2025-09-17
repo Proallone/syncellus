@@ -6,8 +6,9 @@ import { TimesheetPostPayload } from "@syncellus/modules/workspaces/timesheets/s
 export interface Config {
     PORT: number;
     NODE_ENV: string;
+    DEBUG: boolean;
+    DATABASE_URL: string;
     JWT_TOKEN_SECRET: string;
-    DATABASE_KEY: string;
     CRYPTO_HMAC_KEY: string;
     SMTP_HOST: string;
     SMTP_PORT: number;
