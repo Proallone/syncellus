@@ -1,6 +1,6 @@
 import type { DB, AuthEmailVerificationTokens, AuthPasswordResetTokens, AuthUsers } from "@syncellus/types/database.js";
 import type { IAuthRepository } from "@syncellus/modules/auth/types.js";
-import { DeleteResult, Insertable, Kysely, Selectable } from "kysely";
+import type { DeleteResult, Insertable, Kysely, Selectable } from "kysely";
 
 export class AuthRepository implements IAuthRepository {
     constructor(private readonly db: Kysely<DB>) {}

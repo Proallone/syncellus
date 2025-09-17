@@ -2,13 +2,13 @@ import type { Request, Response } from "express";
 import type { AccountsService } from "@syncellus/modules/accounts/service.js";
 import type { AccountsProfiles, WorkspacesTimesheets } from "@syncellus/types/database.js";
 import type { TimesheetsService } from "@syncellus/modules/workspaces/timesheets/service.js";
+import type { TypedRequest } from "@syncellus/types/express.js";
+import type { NewAccountBody } from "@syncellus/types/index.js";
+import type { Insertable, Updateable } from "kysely";
 import { uuidv7 } from "uuidv7";
 import { sendResponse } from "@syncellus/utils/responseBuilder.js";
 import { HttpStatus } from "@syncellus/core/http.js";
 import { NotFoundError } from "@syncellus/errors/http.js";
-import { TypedRequest } from "@syncellus/types/express.js";
-import { NewAccountBody } from "@syncellus/types/index.js";
-import { Insertable, Updateable } from "kysely";
 
 export class AccountsController {
     constructor(

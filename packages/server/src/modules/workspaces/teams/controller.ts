@@ -1,10 +1,10 @@
 import type { TeamsService } from "@syncellus/modules/workspaces/teams/service.js";
 import type { Request, Response } from "express";
 import type { WorkspacesTeams } from "@syncellus/types/database.js";
+import type { Selectable } from "kysely";
 import { sendResponse } from "@syncellus/utils/responseBuilder.js";
 import { HttpStatus } from "@syncellus/core/http.js";
 import { NotFoundError } from "@syncellus/errors/http.js";
-import type { Selectable } from "kysely";
 
 export class TeamsController {
     constructor(private readonly service: TeamsService) {}

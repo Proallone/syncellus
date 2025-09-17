@@ -22,11 +22,11 @@ export interface IAuthRepository {
 }
 
 export interface IAuthService {
-    registerNewUser(user: AuthCredentials): Promise<AuthUsers>;
+    registerNewUser(user: AuthCredentials): Promise<Selectable<AuthUsers>>;
     verifyAccountEmail(token: string): Promise<boolean>;
     verifyUserCredentials(credentials: Credentials): Promise<UserJWTPayload>;
     issueLoginToken(user: Express.User & { public_id: string }): Promise<string>;
     issuePasswordResetToken(email: string): Promise<string>;
     performPasswordReset(token: string, newPassword: string): Promise<void>;
-    findUserByPublicID(public_id: string): Promise<AuthUsers>;
+    findUserByPublicID(public_id: string): Promise<Selectable<AuthUsers>>;
 }

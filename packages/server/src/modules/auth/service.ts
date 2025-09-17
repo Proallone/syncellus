@@ -1,14 +1,14 @@
+import type { MailService } from "@syncellus/modules/mailer/service.js";
+import type { IAuthService } from "@syncellus/modules/auth/types.js";
+import type { AuthCredentials, Credentials, UserJWTPayload } from "@syncellus/types/index.js";
+import type { AuthRepository } from "@syncellus/modules/auth/repository.js";
 import { eventBus } from "@syncellus/core/eventBus.js";
 import { ConflictError, NotFoundError, UnauthorizedError } from "@syncellus/errors/http.js";
-import type { AuthCredentials, Credentials, UserJWTPayload } from "@syncellus/types/index.js";
 import { compareHash, generateToken, hashPassword, sha256 } from "@syncellus/utils/crypto.js";
-import type { AuthRepository } from "@syncellus/modules/auth/repository.js";
 import { nanoid } from "@syncellus/utils/nanoid.js";
 import { uuidv7 } from "uuidv7";
 import Jwt from "jsonwebtoken";
 import { AppConfig } from "@syncellus/configs/config.js";
-import type { MailService } from "@syncellus/modules/mailer/service.js";
-import type { IAuthService } from "@syncellus/modules/auth/types.js";
 
 export class AuthService implements IAuthService {
     constructor(
@@ -47,9 +47,8 @@ export class AuthService implements IAuthService {
         const tokenRecord = await this.repo.selectEmailVerificationTokenByHash(tokenHash);
 
         if (!tokenRecord) throw new NotFoundError("Invalid email verification token");
-        const expires_at = new Date(tokenRecord.expires_at.replace(" ", "T") + "Z").toISOString(); //TODO move this out
 
-        if (expires_at < new Date().toISOString()) {
+        if (tokenRecord.expires_at < new Date()) {
             await this.repo.deleteEmailVerificationTokenByID(tokenRecord.id); //TODO what if fails?
             throw new NotFoundError("Expired email verification token");
         }
@@ -112,9 +111,7 @@ export class AuthService implements IAuthService {
 
         if (!tokenRecord) throw new NotFoundError("Invalid password reset token");
 
-        const expires_at = new Date(tokenRecord.expires_at.replace(" ", "T") + "Z").toISOString(); //TODO move this out
-
-        if (expires_at < new Date().toISOString()) {
+        if (tokenRecord.expires_at < new Date()) {
             await this.repo.deletePasswordResetTokenByID(tokenRecord.id);
             throw new NotFoundError("Expired password reset token");
         }

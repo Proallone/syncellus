@@ -10,5 +10,5 @@ export function buildHealthModule() {
     const service = new HealthService(repo);
     const controller = new HealthController(service);
 
-    return { controller };
+    return controller;
 }
