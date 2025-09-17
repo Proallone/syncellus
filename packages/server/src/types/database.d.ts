@@ -171,15 +171,20 @@ export interface WorkspacesTeams {
 
 export interface WorkspacesTimesheets {
     created_at: Generated<Timestamp>;
-    date: string;
+    date: Timestamp;
     end_hour: string;
     hours_worked: Generated<string | null>;
     id: string;
     modified_at: Generated<Timestamp>;
     start_hour: string;
-    status: Generated<string | null>;
+    status_id: Generated<number>;
     task_id: string;
     user_id: string;
+}
+
+export interface WorkspacesTimesheetStatuses {
+    id: number;
+    name: string;
 }
 
 export interface DB {
@@ -203,5 +208,6 @@ export interface DB {
     "workspaces.team_members": WorkspacesTeamMembers;
     "workspaces.team_roles": WorkspacesTeamRoles;
     "workspaces.teams": WorkspacesTeams;
+    "workspaces.timesheet_statuses": WorkspacesTimesheetStatuses;
     "workspaces.timesheets": WorkspacesTimesheets;
 }

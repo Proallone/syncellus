@@ -120,27 +120,23 @@ export async function up(db: Kysely<any>): Promise<void> {
     // 	END;`.execute(db);
 
     await db.schema
+        .createTable("workspaces.timesheet_statuses")
+        .addColumn("id", "int2", (col) => col.primaryKey())
+        .addColumn("name", "varchar(40)", (col) => col.notNull())
+        .execute();
+
+    await db.schema
         .createTable("workspaces.timesheets")
         .addColumn("id", "uuid", (col) => col.primaryKey())
         .addColumn("user_id", "uuid", (col) => col.references("auth.users.id").notNull())
         .addColumn("task_id", "uuid", (col) => col.references("workspaces.tasks.id").notNull())
+        .addColumn("status_id", "int2", (col) => col.references("workspaces.timesheet_statuses.id").notNull().defaultTo(0))
         .addColumn("created_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
         .addColumn("modified_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
-        .addColumn("date", "text", (col) => col.notNull())
+        .addColumn("date", "date", (col) => col.notNull())
         .addColumn("start_hour", "time", (col) => col.notNull())
         .addColumn("end_hour", "time", (col) => col.notNull().check(sql`end_hour > start_hour`))
-        .addColumn("hours_worked", "text", (col) =>
-            col
-                .generatedAlwaysAs(
-                    sql`
-                    lpad(((extract(hour from end_hour::time - start_hour::time))::int)::text, 2, '0')
-                    || ':' ||
-                    lpad(((extract(minute from end_hour::time - start_hour::time))::int)::text, 2, '0')
-                    `
-                )
-                .stored()
-        )
-        .addColumn("status", "varchar(40)", (col) => col.check(sql`status in ('draft', 'submitted', 'approved', 'rejected')`).defaultTo("draft"))
+        .addColumn("hours_worked", "time", (col) => col.generatedAlwaysAs(sql`end_hour::time - start_hour::time`).stored())
         .addForeignKeyConstraint("workspaces_timesheets_employee_id_fk", ["user_id"], "auth.users", ["id"], (cb) => cb.onDelete("cascade"))
         .execute();
 
@@ -165,6 +161,7 @@ export async function down(db: Kysely<any>): Promise<void> {
     // For more info, see: https://kysely.dev/docs/migrations
 
     await db.schema.dropTable("workspaces.timesheets").execute();
+    await db.schema.dropTable("workspaces.timesheet_statuses").execute();
     await db.schema.dropTable("workspaces.tasks").execute();
     await db.schema.dropTable("workspaces.team_members").execute();
     await db.schema.dropTable("workspaces.team_invitations").execute();

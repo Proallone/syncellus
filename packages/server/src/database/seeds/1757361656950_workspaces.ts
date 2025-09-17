@@ -1,4 +1,4 @@
-import type { DB, WorkspacesTasks, WorkspacesTeamMembers, WorkspacesTeamRoles, WorkspacesTeams, WorkspacesTimesheets } from "@syncellus/types/database.js";
+import type { DB, WorkspacesTasks, WorkspacesTeamMembers, WorkspacesTeamRoles, WorkspacesTeams, WorkspacesTimesheets, WorkspacesTimesheetStatuses } from "@syncellus/types/database.js";
 import type { Insertable, Kysely } from "kysely";
 
 // replace `any` with your database interface.
@@ -96,7 +96,7 @@ export async function seed(db: Kysely<DB>): Promise<void> {
             date: "2025-05-20",
             start_hour: "08:40",
             end_hour: "16:20",
-            status: "submitted"
+            status_id: 0
         },
         {
             id: "0198b9b5-233d-7139-896b-098ca02e83a3",
@@ -105,7 +105,7 @@ export async function seed(db: Kysely<DB>): Promise<void> {
             date: "2025-05-20",
             start_hour: "09:00",
             end_hour: "17:00",
-            status: "approved"
+            status_id: 1
         },
         {
             id: "0198b9b5-233d-7780-9d94-0df6f1d7e92e",
@@ -114,7 +114,7 @@ export async function seed(db: Kysely<DB>): Promise<void> {
             date: "2025-05-20",
             start_hour: "08:00",
             end_hour: "16:30",
-            status: "draft"
+            status_id: 2
         },
         {
             id: "0198b9b5-233d-771d-b29a-76856073c97e",
@@ -123,10 +123,30 @@ export async function seed(db: Kysely<DB>): Promise<void> {
             date: "2025-05-21",
             start_hour: "09:15",
             end_hour: "17:30",
-            status: "rejected"
+            status_id: 3
         }
     ];
 
+    const timesheetStatuses: WorkspacesTimesheetStatuses[] = [
+        {
+            id: 0,
+            name: "draft"
+        },
+        {
+            id: 1,
+            name: "submitted"
+        },
+        {
+            id: 2,
+            name: "approved"
+        },
+        {
+            id: 3,
+            name: "rejected"
+        }
+    ];
+
+    await db.insertInto("workspaces.timesheet_statuses").values(timesheetStatuses).execute();
     await db.insertInto("workspaces.team_roles").values(roles).execute();
     await db.insertInto("workspaces.teams").values(teams).execute();
     await db.insertInto("workspaces.team_members").values(members).execute();
