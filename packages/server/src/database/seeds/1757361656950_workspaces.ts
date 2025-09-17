@@ -91,7 +91,7 @@ export async function seed(db: Kysely<DB>): Promise<void> {
     const timesheets: Insertable<WorkspacesTimesheets>[] = [
         {
             id: "0198b9b5-233d-70c1-85c1-047614b54ffc",
-            employee_id: "0198b988-0a22-71af-990a-7dce68a5114f",
+            user_id: "0189f7ea-ae2c-7809-8aeb-b819cf5e9e7f",
             task_id: "01994771-49cc-7459-a52d-375358c173f5",
             date: "2025-05-20",
             start_hour: "08:40",
@@ -100,7 +100,7 @@ export async function seed(db: Kysely<DB>): Promise<void> {
         },
         {
             id: "0198b9b5-233d-7139-896b-098ca02e83a3",
-            employee_id: "0198b988-4ae8-7270-9d2f-7d5ab175dd79",
+            user_id: "0189f7ea-ae2c-7809-8aeb-b819cf5e9e7f",
             task_id: "01992aee-637a-72a6-a0f8-3f493d5e5a0b",
             date: "2025-05-20",
             start_hour: "09:00",
@@ -109,7 +109,7 @@ export async function seed(db: Kysely<DB>): Promise<void> {
         },
         {
             id: "0198b9b5-233d-7780-9d94-0df6f1d7e92e",
-            employee_id: "0198b988-5f96-73a2-89b2-483cb2cd4e64",
+            user_id: "0189f7ea-ae2f-72b9-9be8-9c3c5a60214f",
             task_id: "01992aee-dbfe-7035-82b2-d5859e3e315f",
             date: "2025-05-20",
             start_hour: "08:00",
@@ -118,7 +118,7 @@ export async function seed(db: Kysely<DB>): Promise<void> {
         },
         {
             id: "0198b9b5-233d-771d-b29a-76856073c97e",
-            employee_id: "0198b988-0a22-71af-990a-7dce68a5114f",
+            user_id: "0189f7ea-ae2f-72b9-9be8-9c3d224082ef",
             task_id: "01992aee-dbfe-7035-82b2-d5859e3e315f",
             date: "2025-05-21",
             start_hour: "09:15",

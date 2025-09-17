@@ -1,6 +1,6 @@
 // import { AppConfig } from "@syncellus/configs/config.js";
 import type { DB } from "@syncellus/types/database.js";
-import { extractDbCredentials } from "@syncellus/utils/databaseUrlHelper.js";
+import { extractDbCredentials } from "../utils/databaseUrlHelper.js";
 import { Kysely, PostgresDialect } from "kysely";
 import { Pool } from "pg";
 

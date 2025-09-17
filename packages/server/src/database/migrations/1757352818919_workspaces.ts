@@ -122,7 +122,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     await db.schema
         .createTable("workspaces.timesheets")
         .addColumn("id", "uuid", (col) => col.primaryKey())
-        .addColumn("employee_id", "uuid", (col) => col.references("accounts.profiles.id").notNull())
+        .addColumn("user_id", "uuid", (col) => col.references("auth.users.id").notNull())
         .addColumn("task_id", "uuid", (col) => col.references("workspaces.tasks.id").notNull())
         .addColumn("created_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
         .addColumn("modified_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
@@ -141,7 +141,7 @@ export async function up(db: Kysely<any>): Promise<void> {
                 .stored()
         )
         .addColumn("status", "varchar(40)", (col) => col.check(sql`status in ('draft', 'submitted', 'approved', 'rejected')`).defaultTo("draft"))
-        .addForeignKeyConstraint("workspaces_timesheets_employee_id_fk", ["employee_id"], "accounts.profiles", ["id"], (cb) => cb.onDelete("cascade"))
+        .addForeignKeyConstraint("workspaces_timesheets_employee_id_fk", ["user_id"], "auth.users", ["id"], (cb) => cb.onDelete("cascade"))
         .execute();
 
     // await db.schema.createIndex("workspacestimesheets_employee_id").on("workspaces_timesheets").column("employee_id").execute();

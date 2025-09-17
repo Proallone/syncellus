@@ -1,7 +1,8 @@
 import { z } from "zod";
 
 const TimesheetBasePayload = z.strictObject({
-    employee_id: z.string(), //TODO move this to be server provisioned based on jwt
+    user_id: z.uuidv7(), //TODO move this to be server provisioned based on jwt
+    task_id: z.uuidv7(),
     date: z.iso.date(),
     start_hour: z.iso.time(),
     end_hour: z.iso.time()

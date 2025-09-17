@@ -18,7 +18,7 @@ export class TimesheetsRepository implements ITimesheetsRepository {
     };
 
     public selectTimesheetsByEmployeeIdFromDb = async (employeeId: string) => {
-        return await this.db.selectFrom("workspaces.timesheets").selectAll().where("employee_id", "=", employeeId).execute();
+        return await this.db.selectFrom("workspaces.timesheets").selectAll().where("user_id", "=", employeeId).execute();
     };
 
     public updateTimesheetByIdInDb = async (timesheet: Updateable<WorkspacesTimesheets>) => {

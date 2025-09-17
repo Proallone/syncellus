@@ -172,7 +172,6 @@ export interface WorkspacesTeams {
 export interface WorkspacesTimesheets {
     created_at: Generated<Timestamp>;
     date: string;
-    employee_id: string;
     end_hour: string;
     hours_worked: Generated<string | null>;
     id: string;
@@ -180,6 +179,7 @@ export interface WorkspacesTimesheets {
     start_hour: string;
     status: Generated<string | null>;
     task_id: string;
+    user_id: string;
 }
 
 export interface DB {

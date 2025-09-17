@@ -2,12 +2,16 @@ import type { WorkspacesTimesheets } from "@syncellus/types/database.js";
 import type { TimesheetsRepository } from "@syncellus/modules/workspaces/timesheets/repository.js";
 import { ITimesheetsService } from "@syncellus/modules/workspaces/timesheets/types.js";
 import { Insertable, Updateable } from "kysely";
+import { uuidv7 } from "uuidv7";
 
 export class TimesheetsService implements ITimesheetsService {
     constructor(private readonly repo: TimesheetsRepository) {}
 
     public insertNewTimesheets = async (timesheets: Insertable<WorkspacesTimesheets>[]) => {
-        return await this.repo.insertTimesheetsInDb(timesheets);
+        const values = timesheets.map((timesheet) => {
+            return { id: uuidv7(), ...timesheet };
+        });
+        return await this.repo.insertTimesheetsInDb(values);
     };
 
     public selectAllTimesheets = async () => {
