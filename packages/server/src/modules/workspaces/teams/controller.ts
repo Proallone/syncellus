@@ -1,6 +1,6 @@
 import type { TeamsService } from "@syncellus/modules/workspaces/teams/service.js";
 import type { Request, Response } from "express";
-import type { WorkspacesTeams } from "@syncellus/types/database.js";
+import type { AuthUsers, WorkspacesTeams } from "@syncellus/types/database.js";
 import type { Selectable } from "kysely";
 import { sendResponse } from "@syncellus/utils/responseBuilder.js";
 import { HttpStatus } from "@syncellus/core/http.js";
@@ -12,7 +12,7 @@ export class TeamsController {
     public createTeams = async (req: Request, res: Response) => {
         const body = Array.isArray(req.body) ? req.body : [req.body];
         const teams: Selectable<WorkspacesTeams>[] = body.map((team) => ({ ...team }));
-        const { user } = req;
+        const user = req.user as AuthUsers;
         const newTeams = await this.service.insertNewTeams(user.id, teams);
 
         return sendResponse(res, HttpStatus.CREATED, { message: `Team creation successful`, data: newTeams });
