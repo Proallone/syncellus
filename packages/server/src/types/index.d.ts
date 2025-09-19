@@ -19,7 +19,7 @@ export type AuthCredentials = z.infer<typeof AuthBasePayload>;
 export type GetEmployeeQuery = z.infer<typeof AccountsGetQuery>;
 
 export interface DbHealthResponse {
-    sqlite_version: string;
+    postgres_version: string;
 }
 
 export interface UserJWTPayload {

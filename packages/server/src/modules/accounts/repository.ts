@@ -6,14 +6,14 @@ export class AccountsRepository {
     constructor(private readonly db: Kysely<DB>) {}
 
     public insertNewAccountToDb = async (account: Insertable<AccountsProfiles>) => {
-        return await this.db.insertInto("accounts_profiles").values(account).returningAll().executeTakeFirstOrThrow();
+        return await this.db.insertInto("accounts.profiles").values(account).returningAll().executeTakeFirstOrThrow();
     };
 
     public selectAllAccountsFromDb = async (_query: GetEmployeeQuery) => {
         const q = this.db
-            .selectFrom("accounts_profiles")
-            .leftJoin("auth_users", "accounts_profiles.user_id", "auth_users.id")
-            .select(["accounts_profiles.id", "name", "surname", "email", "active", "auth_users.created_at", "auth_users.modified_at"]);
+            .selectFrom("accounts.profiles")
+            .leftJoin("auth.users", "accounts.profiles.user_id", "auth.users.id")
+            .select(["accounts.profiles.id", "name", "surname", "email", "active", "auth.users.created_at", "auth.users.modified_at"]);
 
         // if (query.active) q = q.where("active", "=", query.active); //? no boolean in sqlite...
 
@@ -22,18 +22,18 @@ export class AccountsRepository {
 
     public selectOneAccountByIdFromDb = async (id: string) => {
         return await this.db
-            .selectFrom("accounts_profiles")
-            .leftJoin("auth_users", "accounts_profiles.user_id", "auth_users.id")
-            .select(["accounts_profiles.id", "name", "surname", "email", "active", "auth_users.created_at", "auth_users.modified_at"])
-            .where("auth_users.id", "=", id)
+            .selectFrom("accounts.profiles")
+            .leftJoin("auth.users", "accounts.profiles.user_id", "auth.users.id")
+            .select(["accounts.profiles.id", "name", "surname", "email", "active", "auth.users.created_at", "auth.users.modified_at"])
+            .where("auth.users.id", "=", id)
             .executeTakeFirst();
     };
 
     public updateAccountByIdInDb = async (account: Updateable<AccountsProfiles>) => {
-        return await this.db.updateTable("accounts_profiles").set(account).where("id", "=", account.id).returningAll().executeTakeFirst();
+        return await this.db.updateTable("accounts.profiles").set(account).where("id", "=", account.id).returningAll().executeTakeFirst();
     };
 
     public deleteAccountByIdInDb = async (id: string) => {
-        return await this.db.deleteFrom("accounts_profiles").where("id", "=", id).executeTakeFirst();
+        return await this.db.deleteFrom("accounts.profiles").where("id", "=", id).executeTakeFirst();
     };
 }

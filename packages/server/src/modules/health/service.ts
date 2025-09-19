@@ -12,7 +12,7 @@ export class HealthService implements IHealthService {
         const version = await this.repo.getDatabaseVersionFromDb();
         return {
             status: "Healthy",
-            sqlite_version: version.sqlite_version
+            postgres_version: version.postgres_version
         };
     };
 }

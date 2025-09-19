@@ -1,20 +1,15 @@
 import type { Request, Response } from "express";
 import type { AccountsService } from "@syncellus/modules/accounts/service.js";
-import type { AccountsProfiles, WorkspacesTimesheets } from "@syncellus/types/database.js";
-import type { TimesheetsService } from "@syncellus/modules/workspaces/timesheets/service.js";
+import type { AccountsProfiles } from "@syncellus/types/database.js";
 import type { TypedRequest } from "@syncellus/types/express.js";
 import type { NewAccountBody } from "@syncellus/types/index.js";
-import type { Insertable, Updateable } from "kysely";
-import { uuidv7 } from "uuidv7";
+import type { Updateable } from "kysely";
 import { sendResponse } from "@syncellus/utils/responseBuilder.js";
 import { HttpStatus } from "@syncellus/core/http.js";
 import { NotFoundError } from "@syncellus/errors/http.js";
 
 export class AccountsController {
-    constructor(
-        private readonly service: AccountsService,
-        private readonly timesheetService: TimesheetsService
-    ) {}
+    constructor(private readonly service: AccountsService) {}
 
     public createAccount = async (req: TypedRequest<NewAccountBody>, res: Response) => {
         const employee = req.body;
@@ -52,23 +47,5 @@ export class AccountsController {
         const deletion = await this.service.deleteAccountById(id);
         if (!deletion.numDeletedRows) throw new NotFoundError(`Account with ID ${id} not found!`);
         return sendResponse(res, HttpStatus.OK, { message: `Account ${id} deleted successfully`, data: deletion });
-    };
-
-    public getTimesheetsByAccount = async (req: Request, res: Response) => {
-        const { accountId } = req.params;
-        const timesheets = await this.timesheetService.selectAllTimesheetsByEmployeeId(accountId);
-
-        if (!timesheets || timesheets.length === 0) throw new NotFoundError(`No timesheets found for this account with the given criteria.`);
-        return sendResponse(res, HttpStatus.OK, { message: `Timesheets for account ${accountId} fetched`, data: timesheets });
-    };
-
-    public createTimesheetForAccount = async (req: Request, res: Response) => {
-        const { accountId } = req.params;
-        const body = Array.isArray(req.body) ? req.body : [req.body];
-
-        const timesheets: Insertable<WorkspacesTimesheets>[] = body.map((timesheet) => ({ id: uuidv7(), employee_id: accountId, ...timesheet }));
-
-        const newTimesheet = await this.timesheetService.insertNewTimesheets(timesheets);
-        return sendResponse(res, HttpStatus.CREATED, { message: `New timesheet for account ${accountId} created`, data: newTimesheet });
     };
 }

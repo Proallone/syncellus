@@ -2,7 +2,7 @@ import type { MailService } from "@syncellus/modules/mailer/service.js";
 import type { IAuthService } from "@syncellus/modules/auth/types.js";
 import type { AuthCredentials, Credentials, UserJWTPayload } from "@syncellus/types/index.js";
 import type { AuthRepository } from "@syncellus/modules/auth/repository.js";
-import { eventBus } from "@syncellus/core/eventBus.js";
+// import { eventBus } from "@syncellus/core/eventBus.js";
 import { ConflictError, NotFoundError, UnauthorizedError } from "@syncellus/errors/http.js";
 import { compareHash, generateToken, hashPassword, sha256 } from "@syncellus/utils/crypto.js";
 import { nanoid } from "@syncellus/utils/nanoid.js";
@@ -27,7 +27,7 @@ export class AuthService implements IAuthService {
             password: await hashPassword(user.password)
         });
 
-        eventBus.emit("user.created", newUser); //TODO this might not be the best idea to use event for this in case of failure it would not insert employee for a user...
+        // eventBus.emit("user.created", newUser); //TODO this might not be the best idea to use event for this in case of failure it would not insert employee for a user...
 
         const verificationToken = generateToken();
         const tokenHash = sha256(verificationToken);
