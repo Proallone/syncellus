@@ -133,10 +133,9 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("status_id", "int2", (col) => col.references("workspaces.timesheet_statuses.id").notNull().defaultTo(0))
         .addColumn("created_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
         .addColumn("modified_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
-        .addColumn("date", "date", (col) => col.notNull())
-        .addColumn("start_hour", "time", (col) => col.notNull())
-        .addColumn("end_hour", "time", (col) => col.notNull().check(sql`end_hour > start_hour`))
-        .addColumn("hours_worked", "time", (col) => col.generatedAlwaysAs(sql`end_hour::time - start_hour::time`).stored())
+        .addColumn("start_time", "timestamptz", (col) => col.notNull())
+        .addColumn("end_time", "timestamptz", (col) => col.notNull().check(sql`end_time > start_time`))
+        .addColumn("hours_worked", "time", (col) => col.generatedAlwaysAs(sql`end_time - start_time`).stored())
         .addForeignKeyConstraint("workspaces_timesheets_employee_id_fk", ["user_id"], "auth.users", ["id"], (cb) => cb.onDelete("cascade"))
         .execute();
 

@@ -171,12 +171,11 @@ export interface WorkspacesTeams {
 
 export interface WorkspacesTimesheets {
     created_at: Generated<Timestamp>;
-    date: Timestamp;
-    end_hour: string;
+    end_time: Timestamp;
     hours_worked: Generated<string | null>;
     id: string;
     modified_at: Generated<Timestamp>;
-    start_hour: string;
+    start_time: Timestamp;
     status_id: Generated<number>;
     task_id: string;
     user_id: string;

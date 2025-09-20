@@ -12,9 +12,11 @@ export class TimesheetsController {
     constructor(private readonly service: TimesheetsService) {}
 
     public createTimesheets = async (req: TypedRequest<NewTimesheetBody>, res: Response) => {
-        const body = Array.isArray(req.body) ? req.body : [req.body]; //TODO move this out of the controller
-        const timesheets: Insertable<WorkspacesTimesheets>[] = body.map((timesheet) => ({ ...timesheet }));
-        const newTimesheet = await this.service.insertNewTimesheets(timesheets);
+        const { task_id, user_id, timesheets } = req.body;
+        const toInsert: Insertable<WorkspacesTimesheets>[] = timesheets.map((t) => {
+            return { ...t, task_id, user_id };
+        });
+        const newTimesheet = await this.service.insertNewTimesheets(toInsert);
 
         return sendResponse(res, HttpStatus.CREATED, { message: "Timesheet creation successful", data: newTimesheet });
     };

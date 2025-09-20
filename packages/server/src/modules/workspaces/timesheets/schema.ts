@@ -1,24 +1,44 @@
 import { z } from "zod";
 
-const TimesheetBasePayload = z.strictObject({
-    user_id: z.uuidv7(), //TODO move this to be server provisioned based on jwt
+/**
+ * Defines the schema for a single worksheet entry within the array.
+ * It uses `z.string().datetime()` to validate the ISO 8601 format for
+ * start and end times, ensuring both date and time are present.
+ */
+export const WorksheetBasePayload = z.strictObject({
+    start_time: z.iso.datetime(),
+    end_time: z.iso.datetime()
+});
+
+/**
+ * Defines the complete schema for a new Timesheets submission.
+ * It expects a top-level object with a user ID, a task ID, and an array of
+ * worksheet entries.
+ */
+export const TimesheetsPostPayload = z.strictObject({
+    user_id: z.uuidv7(),
     task_id: z.uuidv7(),
-    date: z.iso.date(),
-    start_hour: z.iso.time(),
-    end_hour: z.iso.time()
+    timesheets: z.array(WorksheetBasePayload).min(1, "The 'timesheets' array must not be empty.")
 });
 
-const SingleTimesheetPostPayload = TimesheetBasePayload.required();
-const TimesheetUpdatePayload = TimesheetBasePayload.partial();
+/**
+ * Defines the schema for a Timesheets update.
+ * Using `.partial()` makes all fields optional, allowing a user to update
+ * any combination of the top-level fields (like task_id) or the entire
+ * `Timesheets` array.
+ */
+export const TimesheetsUpdatePayload = TimesheetsPostPayload.partial();
 
-const TimesheetPostPayload = z.union([SingleTimesheetPostPayload, z.array(SingleTimesheetPostPayload)]);
-
-const TimesheetPostSchema = z.object({
-    body: TimesheetPostPayload
+/**
+ * The full schema for a POST request body, containing the new Timesheets payload.
+ */
+export const TimesheetsPostSchema = z.object({
+    body: TimesheetsPostPayload
 });
 
-const TimesheetUpdateSchema = z.object({
-    body: SingleTimesheetPostPayload
+/**
+ * The full schema for a PATCH/PUT request body, containing the update payload.
+ */
+export const TimesheetsUpdateSchema = z.object({
+    body: TimesheetsUpdatePayload
 });
-
-export { TimesheetPostPayload, TimesheetPostSchema, TimesheetUpdatePayload, TimesheetUpdateSchema };

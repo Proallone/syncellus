@@ -93,36 +93,32 @@ export async function seed(db: Kysely<DB>): Promise<void> {
             id: "0198b9b5-233d-70c1-85c1-047614b54ffc",
             user_id: "0189f7ea-ae2c-7809-8aeb-b819cf5e9e7f",
             task_id: "01994771-49cc-7459-a52d-375358c173f5",
-            date: "2025-05-20",
-            start_hour: "08:40",
-            end_hour: "16:20",
+            start_time: "2025-07-20T07:30:00Z",
+            end_time: "2025-07-20T17:00:00Z",
             status_id: 0
         },
         {
             id: "0198b9b5-233d-7139-896b-098ca02e83a3",
             user_id: "0189f7ea-ae2c-7809-8aeb-b819cf5e9e7f",
             task_id: "01992aee-637a-72a6-a0f8-3f493d5e5a0b",
-            date: "2025-05-20",
-            start_hour: "09:00",
-            end_hour: "17:00",
+            start_time: "2025-07-20T07:30:00Z",
+            end_time: "2025-07-20T17:00:00Z",
             status_id: 1
         },
         {
             id: "0198b9b5-233d-7780-9d94-0df6f1d7e92e",
             user_id: "0189f7ea-ae2f-72b9-9be8-9c3c5a60214f",
             task_id: "01992aee-dbfe-7035-82b2-d5859e3e315f",
-            date: "2025-05-20",
-            start_hour: "08:00",
-            end_hour: "16:30",
+            start_time: "2025-07-20T07:30:00Z",
+            end_time: "2025-07-20T17:00:00Z",
             status_id: 2
         },
         {
             id: "0198b9b5-233d-771d-b29a-76856073c97e",
             user_id: "0189f7ea-ae2f-72b9-9be8-9c3d224082ef",
             task_id: "01992aee-dbfe-7035-82b2-d5859e3e315f",
-            date: "2025-05-21",
-            start_hour: "09:15",
-            end_hour: "17:30",
+            start_time: "2025-07-20T07:30:00Z",
+            end_time: "2025-07-20T17:00:00Z",
             status_id: 3
         }
     ];

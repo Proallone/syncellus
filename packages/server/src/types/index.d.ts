@@ -2,7 +2,7 @@ import z from "zod";
 import type { AuthBasePayload, ForgotPasswordPayload, ResetPasswordPayload, VerifyEmailPayload } from "@syncellus/modules/auth/schemas/request.ts";
 import type { AccountsGetQuery, AccountsPostPayload, AccountsUpdatePayload } from "@syncellus/modules/accounts/schema.ts";
 import type { Request } from "express";
-import { TimesheetPostPayload } from "@syncellus/modules/workspaces/timesheets/schema.ts";
+import { TimesheetsPostPayload } from "@syncellus/modules/workspaces/timesheets/schema.ts";
 export interface Config {
     PORT: number;
     NODE_ENV: string;
@@ -42,7 +42,7 @@ export interface Credentials {
 }
 
 export type AuthRequestBody = z.infer<typeof AuthBasePayload>;
-export type NewTimesheetBody = z.infer<typeof TimesheetPostPayload>;
+export type NewTimesheetBody = z.infer<typeof TimesheetsPostPayload>;
 export type NewAccountBody = z.infer<typeof AccountsPostPayload>;
 export type UpdateAccoundBody = z.infer<typeof AccountsUpdatePayload>;
 
