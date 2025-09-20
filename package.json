@@ -35,9 +35,10 @@
         "preserveUnused": true
     },
     "lint-staged": {
-        "!(*.lock|.gitignore)": [
+        "!(*.lock|.gitignore|.gitattributes)": [
             "yarn lint",
             "yarn format"
         ]
-    }
+    },
+    "packageManager": "yarn@4.10.2"
 }
