@@ -122,7 +122,7 @@ export class AuthService implements IAuthService {
         const hashedPassword = await hashPassword(newPassword);
 
         await this.repo.updateUserPassword(user.id, hashedPassword);
-        await this.repo.deleteEmailVerificationTokensByUserID(user.id);
+        await this.repo.deletePasswordResetTokensByUserID(user.id);
     };
 
     public findUserByPublicID = async (public_id: string) => {

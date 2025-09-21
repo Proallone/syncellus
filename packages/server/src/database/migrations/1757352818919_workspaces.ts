@@ -1,5 +1,6 @@
 import { sql, type Kysely } from "kysely";
 import { schema as auth_schema } from "./1753121979263_auth.js";
+import { createUpdateTimestampTrigger } from "../utils/triggers.js";
 
 export const schema = "workspaces";
 // `any` is required here since migrations should be frozen in time. alternatively, keep a "snapshot" db interface.
@@ -23,15 +24,7 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addForeignKeyConstraint("workspaces_teams_user_id_fk", ["owner_id"], `${auth_schema}.users`, ["id"], (cb) => cb.onDelete("cascade"))
         .execute();
 
-    // await sql`
-    // 	CREATE TRIGGER IF NOT EXISTS update_workspaces_teams_modified_at BEFORE
-    // 	UPDATE ON workspaces_teams FOR EACH ROW BEGIN
-    // 		UPDATE workspaces_teams
-    // 		SET
-    // 		modified_at = timestamptz ('now')
-    // 		WHERE
-    // 		id = OLD.id;
-    // 	END;`.execute(db);
+    await createUpdateTimestampTrigger(schema, "teams").execute(db);
 
     await db
         .withSchema(schema)
@@ -43,15 +36,7 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("modified_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
         .execute();
 
-    // await sql`
-    // 	CREATE TRIGGER IF NOT EXISTS update_workspaces_team_roles_modified_at BEFORE
-    // 	UPDATE ON workspaces_team_roles FOR EACH ROW BEGIN
-    // 		UPDATE workspaces_team_roles
-    // 		SET
-    // 		modified_at = timestamptz ('now')
-    // 		WHERE
-    // 		id = OLD.id;
-    // 	END;`.execute(db);
+    await createUpdateTimestampTrigger(schema, "team_roles").execute(db);
 
     //TODO add invited_by email?
     await db
@@ -72,15 +57,7 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("modified_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
         .execute();
 
-    // await sql`
-    // 	CREATE TRIGGER IF NOT EXISTS workspaces_team_invitations_modified_at BEFORE
-    // 	UPDATE ON workspaces_team_invitations FOR EACH ROW BEGIN
-    // 		UPDATE workspaces_team_invitations
-    // 		SET
-    // 		modified_at = timestamptz ('now')
-    // 		WHERE
-    // 		id = OLD.id;
-    // 	END;`.execute(db);
+    await createUpdateTimestampTrigger(schema, "team_invitations").execute(db);
 
     await db
         .withSchema(schema)
@@ -94,15 +71,7 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addForeignKeyConstraint("workspaces_team_members_auth_users_id_fk", ["user_id"], `${auth_schema}.users`, ["id"], (cb) => cb.onDelete("cascade"))
         .execute();
 
-    // await sql`
-    // 	CREATE TRIGGER IF NOT EXISTS update_workspaces_team_members_modified_at BEFORE
-    // 	UPDATE ON workspaces_team_members FOR EACH ROW BEGIN
-    // 		UPDATE workspaces_team_members
-    // 		SET
-    // 		modified_at = timestamptz ('now')
-    // 		WHERE
-    // 		team_id = OLD.team_id AND user_id = OLD.user_id;
-    // 	END;`.execute(db);
+    await createUpdateTimestampTrigger(schema, "team_members").execute(db);
 
     await db
         .withSchema(schema)
@@ -116,15 +85,7 @@ export async function up(db: Kysely<any>): Promise<void> {
         //TODO add valid_to column, max hours?
         .execute();
 
-    // await sql`
-    // 	CREATE TRIGGER IF NOT EXISTS workspaces_tasks_modified_at BEFORE
-    // 	UPDATE ON workspaces_tasks FOR EACH ROW BEGIN
-    // 		UPDATE workspaces_tasks
-    // 		SET
-    // 		modified_at = timestamptz ('now')
-    // 		WHERE
-    // 		id = OLD.id;
-    // 	END;`.execute(db);
+    await createUpdateTimestampTrigger(schema, "tasks").execute(db);
 
     await db
         .withSchema(schema)
@@ -148,17 +109,7 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addForeignKeyConstraint("workspaces_timesheets_employee_id_fk", ["user_id"], `${auth_schema}.users`, ["id"], (cb) => cb.onDelete("cascade"))
         .execute();
 
-    // await db.schema.createIndex("workspacestimesheets_employee_id").on("workspaces_timesheets").column("employee_id").execute();
-
-    // await sql`
-    // 	CREATE TRIGGER IF NOT EXISTS update_workspaces_timesheets_modified_at BEFORE
-    // 	UPDATE ON workspaces_timesheets FOR EACH ROW BEGIN
-    // 		UPDATE workspaces_timesheets
-    // 		SET
-    // 		modified_at = timestamptz ('now')
-    // 		WHERE
-    // 		id = OLD.id;
-    // 	END;`.execute(db);
+    await createUpdateTimestampTrigger(schema, "timesheets").execute(db);
 }
 
 // `any` is required here since migrations should be frozen in time. alternatively, keep a "snapshot" db interface.

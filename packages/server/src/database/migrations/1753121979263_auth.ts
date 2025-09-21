@@ -1,4 +1,5 @@
 import { sql, type Kysely } from "kysely";
+import { createUpdateTimestampTrigger } from "../utils/triggers.js";
 
 export const schema = "auth";
 // `any` is required here since migrations should be frozen in time. alternatively, keep a "snapshot" db interface.\
@@ -34,19 +35,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     // await db.schema.createIndex("auth_user_email").on("auth.users").column("email").execute();
 
-    // await sql`
-    //     CREATE OR REPLACE FUNCTION update_auth_users_modified_at()
-    //     RETURNS TRIGGER AS $$
-    //     BEGIN
-    //         NEW.modified_at = NOW();
-    //         RETURN NEW;
-    //     END;
-    //     $$ LANGUAGE plpgsql;
-
-    //     CREATE OR REPLACE TRIGGER update_auth_users_modified_at_trigger
-    //     BEFORE UPDATE ON auth_users
-    //     FOR EACH ROW
-    //     EXECUTE FUNCTION update_auth_users_modified_at();`.execute(db);
+    await createUpdateTimestampTrigger(schema, "users").execute(db);
 
     await db
         .withSchema(schema)
@@ -57,6 +46,8 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("created_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
         .addColumn("modified_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
         .execute();
+
+    await createUpdateTimestampTrigger(schema, "roles").execute(db);
 
     await db
         .withSchema(schema)
@@ -83,6 +74,8 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("created_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
         .addColumn("modified_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
         .execute();
+
+    await createUpdateTimestampTrigger(schema, "scopes").execute(db);
 
     await db
         .withSchema(schema)
@@ -161,6 +154,8 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("expires_at", "timestamptz", (col) => col.defaultTo(sql`now() + interval '1 day'`).notNull()) //TODO minutes from config
         .addColumn("created_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
         .execute();
+
+    await createUpdateTimestampTrigger(schema, "email_verification_tokens").execute(db);
 
     await db
         .withSchema(schema)

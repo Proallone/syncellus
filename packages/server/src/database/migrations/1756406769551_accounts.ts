@@ -1,5 +1,6 @@
 import { sql, type Kysely } from "kysely";
 import { schema as auth_schema } from "./1753121979263_auth.js";
+import { createUpdateTimestampTrigger } from "../utils/triggers.js";
 
 export const schema = "accounts";
 // `any` is required here since migrations should be frozen in time. alternatively, keep a "snapshot" db interface.\
@@ -21,6 +22,8 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("modified_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
         // .addForeignKeyConstraint("employees_auth_users_id_fk", ["user_id"], "auth.users", ["id"], (cb) => cb.onDelete("cascade")) //TODO get back to it
         .execute();
+
+    await createUpdateTimestampTrigger(schema, "profiles").execute(db);
 
     // await sql`
     // 	CREATE TRIGGER IF NOT EXISTS update_account_profiles_modified_at BEFORE
