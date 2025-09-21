@@ -1,5 +1,7 @@
 import { sql, type Kysely } from "kysely";
+import { schema as auth_schema } from "./1753121979263_auth.js";
 
+export const schema = "workspaces";
 // `any` is required here since migrations should be frozen in time. alternatively, keep a "snapshot" db interface.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function up(db: Kysely<any>): Promise<void> {
@@ -9,15 +11,16 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     await db.schema.createSchema("workspaces").ifNotExists().execute();
 
-    await db.schema
-        .createTable("workspaces.teams")
+    await db
+        .withSchema(schema)
+        .schema.createTable("teams")
         .addColumn("id", "uuid", (col) => col.primaryKey())
         .addColumn("public_id", "varchar(10)", (col) => col.notNull())
-        .addColumn("owner_id", "uuid", (col) => col.references("auth.users.id").notNull())
+        .addColumn("owner_id", "uuid", (col) => col.references(`${auth_schema}.users.id`).notNull())
         .addColumn("name", "varchar(256)", (col) => col.notNull())
         .addColumn("created_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
         .addColumn("modified_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
-        .addForeignKeyConstraint("workspaces_teams_user_id_fk", ["owner_id"], "auth.users", ["id"], (cb) => cb.onDelete("cascade"))
+        .addForeignKeyConstraint("workspaces_teams_user_id_fk", ["owner_id"], `${auth_schema}.users`, ["id"], (cb) => cb.onDelete("cascade"))
         .execute();
 
     // await sql`
@@ -30,8 +33,9 @@ export async function up(db: Kysely<any>): Promise<void> {
     // 		id = OLD.id;
     // 	END;`.execute(db);
 
-    await db.schema
-        .createTable("workspaces.team_roles")
+    await db
+        .withSchema(schema)
+        .schema.createTable("team_roles")
         .addColumn("id", "uuid", (col) => col.primaryKey())
         .addColumn("name", "varchar(256)", (col) => col.unique().notNull())
         .addColumn("description", "varchar(256)")
@@ -50,10 +54,11 @@ export async function up(db: Kysely<any>): Promise<void> {
     // 	END;`.execute(db);
 
     //TODO add invited_by email?
-    await db.schema
-        .createTable("workspaces.team_invitations")
+    await db
+        .withSchema(schema)
+        .schema.createTable("team_invitations")
         .addColumn("id", "uuid", (col) => col.primaryKey())
-        .addColumn("team_id", "uuid", (col) => col.notNull().references("workspaces.teams.id"))
+        .addColumn("team_id", "uuid", (col) => col.notNull().references(`${schema}.teams.id`))
         .addColumn("invited_email", "varchar(256)", (col) =>
             col
                 .unique()
@@ -77,15 +82,16 @@ export async function up(db: Kysely<any>): Promise<void> {
     // 		id = OLD.id;
     // 	END;`.execute(db);
 
-    await db.schema
-        .createTable("workspaces.team_members")
-        .addColumn("team_id", "uuid", (col) => col.notNull().references("workspaces.teams.id"))
-        .addColumn("user_id", "uuid", (col) => col.notNull().references("auth.users.id"))
-        .addColumn("role_id", "uuid", (col) => col.notNull().references("workspaces.team_roles.id"))
+    await db
+        .withSchema(schema)
+        .schema.createTable("team_members")
+        .addColumn("team_id", "uuid", (col) => col.notNull().references(`${schema}.teams.id`))
+        .addColumn("user_id", "uuid", (col) => col.notNull().references(`${auth_schema}.users.id`))
+        .addColumn("role_id", "uuid", (col) => col.notNull().references(`${schema}.team_roles.id`))
         .addColumn("created_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
         .addColumn("modified_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
-        .addForeignKeyConstraint("workspaces_team_members_team_id_fk", ["team_id"], "workspaces.teams", ["id"], (cb) => cb.onDelete("cascade"))
-        .addForeignKeyConstraint("workspaces_team_members_auth_users_id_fk", ["user_id"], "auth.users", ["id"], (cb) => cb.onDelete("cascade"))
+        .addForeignKeyConstraint("workspaces_team_members_team_id_fk", ["team_id"], `${schema}.teams`, ["id"], (cb) => cb.onDelete("cascade"))
+        .addForeignKeyConstraint("workspaces_team_members_auth_users_id_fk", ["user_id"], `${auth_schema}.users`, ["id"], (cb) => cb.onDelete("cascade"))
         .execute();
 
     // await sql`
@@ -98,10 +104,11 @@ export async function up(db: Kysely<any>): Promise<void> {
     // 		team_id = OLD.team_id AND user_id = OLD.user_id;
     // 	END;`.execute(db);
 
-    await db.schema
-        .createTable("workspaces.tasks")
+    await db
+        .withSchema(schema)
+        .schema.createTable("tasks")
         .addColumn("id", "uuid", (col) => col.primaryKey())
-        .addColumn("team_id", "uuid", (col) => col.notNull().references("workspaces.teams.id"))
+        .addColumn("team_id", "uuid", (col) => col.notNull().references(`${schema}.teams.id`))
         .addColumn("name", "varchar(256)", (col) => col.notNull())
         .addColumn("description", "varchar(256)")
         .addColumn("created_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
@@ -119,24 +126,26 @@ export async function up(db: Kysely<any>): Promise<void> {
     // 		id = OLD.id;
     // 	END;`.execute(db);
 
-    await db.schema
-        .createTable("workspaces.timesheet_statuses")
+    await db
+        .withSchema(schema)
+        .schema.createTable("timesheet_statuses")
         .addColumn("id", "int2", (col) => col.primaryKey())
         .addColumn("name", "varchar(40)", (col) => col.notNull())
         .execute();
 
-    await db.schema
-        .createTable("workspaces.timesheets")
+    await db
+        .withSchema(schema)
+        .schema.createTable("timesheets")
         .addColumn("id", "uuid", (col) => col.primaryKey())
-        .addColumn("user_id", "uuid", (col) => col.references("auth.users.id").notNull())
-        .addColumn("task_id", "uuid", (col) => col.references("workspaces.tasks.id").notNull())
-        .addColumn("status_id", "int2", (col) => col.references("workspaces.timesheet_statuses.id").notNull().defaultTo(0))
+        .addColumn("user_id", "uuid", (col) => col.references(`${auth_schema}.users.id`).notNull())
+        .addColumn("task_id", "uuid", (col) => col.references(`${schema}.tasks.id`).notNull())
+        .addColumn("status_id", "int2", (col) => col.references(`${schema}.timesheet_statuses.id`).notNull().defaultTo(0))
         .addColumn("created_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
         .addColumn("modified_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
         .addColumn("start_time", "timestamptz", (col) => col.notNull())
         .addColumn("end_time", "timestamptz", (col) => col.notNull().check(sql`end_time > start_time`))
         .addColumn("hours_worked", "time", (col) => col.generatedAlwaysAs(sql`end_time - start_time`).stored())
-        .addForeignKeyConstraint("workspaces_timesheets_employee_id_fk", ["user_id"], "auth.users", ["id"], (cb) => cb.onDelete("cascade"))
+        .addForeignKeyConstraint("workspaces_timesheets_employee_id_fk", ["user_id"], `${auth_schema}.users`, ["id"], (cb) => cb.onDelete("cascade"))
         .execute();
 
     // await db.schema.createIndex("workspacestimesheets_employee_id").on("workspaces_timesheets").column("employee_id").execute();
@@ -159,12 +168,12 @@ export async function down(db: Kysely<any>): Promise<void> {
     // note: down migrations are optional. you can safely delete this function.
     // For more info, see: https://kysely.dev/docs/migrations
 
-    await db.schema.dropTable("workspaces.timesheets").execute();
-    await db.schema.dropTable("workspaces.timesheet_statuses").execute();
-    await db.schema.dropTable("workspaces.tasks").execute();
-    await db.schema.dropTable("workspaces.team_members").execute();
-    await db.schema.dropTable("workspaces.team_invitations").execute();
-    await db.schema.dropTable("workspaces.team_roles").execute();
-    await db.schema.dropTable("workspaces.teams").execute();
+    await db.withSchema(schema).schema.dropTable("timesheets").execute();
+    await db.withSchema(schema).schema.dropTable("timesheet_statuses").execute();
+    await db.withSchema(schema).schema.dropTable("tasks").execute();
+    await db.withSchema(schema).schema.dropTable("team_members").execute();
+    await db.withSchema(schema).schema.dropTable("team_invitations").execute();
+    await db.withSchema(schema).schema.dropTable("team_roles").execute();
+    await db.withSchema(schema).schema.dropTable("teams").execute();
     await db.schema.dropSchema("workspaces").execute();
 }

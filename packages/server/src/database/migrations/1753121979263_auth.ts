@@ -1,6 +1,6 @@
 import { sql, type Kysely } from "kysely";
 
-const schema = "auth";
+export const schema = "auth";
 // `any` is required here since migrations should be frozen in time. alternatively, keep a "snapshot" db interface.\
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function up(db: Kysely<any>): Promise<void> {
