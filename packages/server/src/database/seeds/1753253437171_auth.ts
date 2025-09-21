@@ -1,5 +1,6 @@
 import type { Insertable, Kysely } from "kysely";
 import type { DB, AuthUsers, AuthRoles, AuthScopes, AuthRoleScopes, AuthUserRoles } from "@syncellus/types/database.js";
+import { schema } from "../migrations/1753121979263_auth.js";
 
 const users: Insertable<AuthUsers>[] = [
     {
@@ -97,9 +98,9 @@ const user_roles: Insertable<AuthUserRoles>[] = [
 ];
 
 export async function seed(db: Kysely<DB>): Promise<void> {
-    await db.insertInto("auth.users").values(users).execute();
-    await db.insertInto("auth.roles").values(roles).execute();
-    await db.insertInto("auth.scopes").values(scopes).execute();
-    await db.insertInto("auth.role_scopes").values(role_scopes).execute();
-    await db.insertInto("auth.user_roles").values(user_roles).execute();
+    await db.insertInto(`${schema}.users`).values(users).execute();
+    await db.insertInto(`${schema}.roles`).values(roles).execute();
+    await db.insertInto(`${schema}.scopes`).values(scopes).execute();
+    await db.insertInto(`${schema}.role_scopes`).values(role_scopes).execute();
+    await db.insertInto(`${schema}.user_roles`).values(user_roles).execute();
 }

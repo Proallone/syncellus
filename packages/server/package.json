@@ -13,7 +13,7 @@
         "watch:prod": "NODE_ENV=production DEBUG=* tsx watch --env-file=.env src/server.ts | pino-pretty",
         "test": "vitest --reporter=verbose",
         "test:cov": "vitest run --coverage",
-        "db:up": "kysely migrate:latest & yarn db:postup",
+        "db:up": "kysely migrate:latest && yarn db:postup",
         "db:codegen": "kysely-codegen --out-file ./src/types/database.d.ts",
         "db:postup": "yarn db:codegen && yarn db:seed",
         "db:seed": "kysely seed run",

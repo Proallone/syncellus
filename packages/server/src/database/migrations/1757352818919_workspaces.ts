@@ -38,6 +38,13 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     await createUpdateTimestampTrigger(schema, "team_roles").execute(db);
 
+    await db
+        .withSchema(schema)
+        .schema.createTable("invitation_statuses")
+        .addColumn("id", "int2", (col) => col.primaryKey())
+        .addColumn("name", "varchar(40)", (col) => col.notNull())
+        .execute();
+
     //TODO add invited_by email?
     await db
         .withSchema(schema)
@@ -50,7 +57,7 @@ export async function up(db: Kysely<any>): Promise<void> {
                 .notNull()
                 .check(sql`LENGTH(invited_email) >= 3`)
         )
-        .addColumn("status", "varchar(40)", (col) => col.notNull().defaultTo("pending")) //todo handle better
+        .addColumn("status_id", "int2", (col) => col.notNull().references(`${schema}.invitation_statuses.id`).defaultTo(0))
         .addColumn("invitation_token", "varchar(64)", (col) => col.notNull())
         .addColumn("expires_at", "timestamptz", (col) => col.defaultTo(sql`now() + interval '7 days'`).notNull()) //TODO time from config
         .addColumn("created_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
@@ -124,6 +131,7 @@ export async function down(db: Kysely<any>): Promise<void> {
     await db.withSchema(schema).schema.dropTable("tasks").execute();
     await db.withSchema(schema).schema.dropTable("team_members").execute();
     await db.withSchema(schema).schema.dropTable("team_invitations").execute();
+    await db.withSchema(schema).schema.dropTable("invitation_statuses").execute();
     await db.withSchema(schema).schema.dropTable("team_roles").execute();
     await db.withSchema(schema).schema.dropTable("teams").execute();
     await db.schema.dropSchema("workspaces").execute();

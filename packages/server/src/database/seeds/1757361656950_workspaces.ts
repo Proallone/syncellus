@@ -1,5 +1,15 @@
-import type { DB, WorkspacesTasks, WorkspacesTeamMembers, WorkspacesTeamRoles, WorkspacesTeams, WorkspacesTimesheets, WorkspacesTimesheetStatuses } from "@syncellus/types/database.js";
+import type {
+    DB,
+    WorkspacesInvitationStatuses,
+    WorkspacesTasks,
+    WorkspacesTeamMembers,
+    WorkspacesTeamRoles,
+    WorkspacesTeams,
+    WorkspacesTimesheets,
+    WorkspacesTimesheetStatuses
+} from "@syncellus/types/database.js";
 import type { Insertable, Kysely } from "kysely";
+import { schema } from "../migrations/1757352818919_workspaces.js";
 
 // replace `any` with your database interface.
 export async function seed(db: Kysely<DB>): Promise<void> {
@@ -142,10 +152,26 @@ export async function seed(db: Kysely<DB>): Promise<void> {
         }
     ];
 
-    await db.insertInto("workspaces.timesheet_statuses").values(timesheetStatuses).execute();
-    await db.insertInto("workspaces.team_roles").values(roles).execute();
-    await db.insertInto("workspaces.teams").values(teams).execute();
-    await db.insertInto("workspaces.team_members").values(members).execute();
-    await db.insertInto("workspaces.tasks").values(tasks).execute();
-    await db.insertInto("workspaces.timesheets").values(timesheets).execute();
+    const invitationStatuses: WorkspacesInvitationStatuses[] = [
+        {
+            id: 0,
+            name: "pending"
+        },
+        {
+            id: 1,
+            name: "accepted"
+        },
+        {
+            id: 2,
+            name: "rejected"
+        }
+    ];
+
+    await db.insertInto(`${schema}.invitation_statuses`).values(invitationStatuses).execute();
+    await db.insertInto(`${schema}.timesheet_statuses`).values(timesheetStatuses).execute();
+    await db.insertInto(`${schema}.team_roles`).values(roles).execute();
+    await db.insertInto(`${schema}.teams`).values(teams).execute();
+    await db.insertInto(`${schema}.team_members`).values(members).execute();
+    await db.insertInto(`${schema}.tasks`).values(tasks).execute();
+    await db.insertInto(`${schema}.timesheets`).values(timesheets).execute();
 }

@@ -1,5 +1,6 @@
 import type { Insertable, Kysely } from "kysely";
 import type { DB, AccountsProfiles } from "@syncellus/types/database.js";
+import { schema } from "../migrations/1756406769551_accounts.js";
 
 const accounts: Insertable<AccountsProfiles>[] = [
     {
@@ -29,5 +30,5 @@ const accounts: Insertable<AccountsProfiles>[] = [
 ];
 
 export async function seed(db: Kysely<DB>): Promise<void> {
-    await db.insertInto("accounts.profiles").values(accounts).execute();
+    await db.insertInto(`${schema}.profiles`).values(accounts).execute();
 }

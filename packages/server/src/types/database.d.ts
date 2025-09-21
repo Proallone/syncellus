@@ -124,6 +124,11 @@ export interface AuthUsersView {
     verified: boolean | null;
 }
 
+export interface WorkspacesInvitationStatuses {
+    id: number;
+    name: string;
+}
+
 export interface WorkspacesTasks {
     created_at: Generated<Timestamp>;
     description: string | null;
@@ -140,7 +145,7 @@ export interface WorkspacesTeamInvitations {
     invitation_token: string;
     invited_email: string;
     modified_at: Generated<Timestamp>;
-    status: Generated<string>;
+    status_id: Generated<number>;
     team_id: string;
 }
 
@@ -202,6 +207,7 @@ export interface DB {
     "auth.user_roles_view": AuthUserRolesView;
     "auth.users": AuthUsers;
     "auth.users_view": AuthUsersView;
+    "workspaces.invitation_statuses": WorkspacesInvitationStatuses;
     "workspaces.tasks": WorkspacesTasks;
     "workspaces.team_invitations": WorkspacesTeamInvitations;
     "workspaces.team_members": WorkspacesTeamMembers;
