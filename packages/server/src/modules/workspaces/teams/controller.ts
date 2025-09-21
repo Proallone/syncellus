@@ -46,7 +46,7 @@ export class TeamsController {
     public deleteTeam = async (req: Request, res: Response) => {
         const { id } = req.params;
         const deletion = await this.service.deleteTeamByID(id);
-        if (!deletion) throw new NotFoundError(`Team with ID ${id} not fount!`);
+        if (!deletion.numDeletedRows) throw new NotFoundError(`Team with ID ${id} not fount!`);
 
         return sendResponse(res, HttpStatus.OK, { message: `Team with ID ${id} deleted` });
     };

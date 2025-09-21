@@ -49,8 +49,8 @@ export class TimesheetsController {
     public deleteTimesheet = async (req: Request, res: Response) => {
         const { id } = req.params;
         const deletion = await this.service.deleteTimesheetById(id);
-        if (!deletion) throw new NotFoundError(`Timesheet with ID ${id} not found!`);
+        if (!deletion.numDeletedRows) throw new NotFoundError(`Timesheet with ID ${id} not found!`);
 
-        return sendResponse(res, HttpStatus.OK, { message: `Timesheed ${id} deleted`, data: deletion });
+        return sendResponse(res, HttpStatus.OK, { message: `Timesheet ${id} deleted` });
     };
 }

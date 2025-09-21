@@ -45,7 +45,7 @@ export class TasksController {
     public deleteTask = async (req: Request, res: Response) => {
         const { id } = req.params;
         const deletion = await this.service.deleteTaskByID(id);
-        if (!deletion) throw new NotFoundError(`Task with ID ${id} not fount!`);
+        if (!deletion.numDeletedRows) throw new NotFoundError(`Task with ID ${id} not fount!`);
 
         return sendResponse(res, HttpStatus.OK, { message: `Task with ID ${id} deleted` });
     };
