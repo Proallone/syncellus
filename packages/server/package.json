@@ -30,7 +30,7 @@
         "helmet": "^8.1.0",
         "jsonwebtoken": "^9.0.2",
         "kysely": "^0.28.7",
-        "nanoid": "^5.1.5",
+        "nanoid": "^5.1.6",
         "nodemailer": "^7.0.6",
         "passport": "^0.7.0",
         "passport-jwt": "^4.0.1",
