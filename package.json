@@ -20,15 +20,15 @@
         "packages/*"
     ],
     "devDependencies": {
-        "@eslint/js": "^9.36.0",
+        "@eslint/js": "^9.37.0",
         "concurrently": "^9.2.1",
-        "eslint": "^9.36.0",
+        "eslint": "^9.37.0",
         "eslint-config-prettier": "^10.1.8",
-        "lint-staged": "^16.2.0",
+        "lint-staged": "^16.2.3",
         "prettier": "3.6.2",
         "simple-git-hooks": "^2.13.1",
-        "typescript": "^5.9.2",
-        "typescript-eslint": "^8.44.1"
+        "typescript": "^5.9.3",
+        "typescript-eslint": "^8.45.0"
     },
     "simple-git-hooks": {
         "pre-commit": "npx lint-staged",
