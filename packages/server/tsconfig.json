@@ -2,14 +2,13 @@
     "compilerOptions": {
         "outDir": "./dist",
         "rootDir": "./src",
-        "baseUrl": "./",
         "lib": ["DOM", "DOM.Iterable", "ESNext"],
         "module": "nodenext",
         "moduleResolution": "nodenext",
         "noEmit": false,
         "composite": true,
         "paths": {
-            "@syncellus/*": ["src/*"]
+            "@syncellus/*": ["./src/*"]
         }
     },
     "include": ["src/**/*.ts", "src/**/*.d.ts", "src/types/**/*.d.ts"],

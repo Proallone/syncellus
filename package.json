@@ -31,7 +31,7 @@
         "preserveUnused": true
     },
     "lint-staged": {
-        "*.{ts,tsx,json}": ["biome check --write --unsafe --no-errors-on-unmatched"]
+        "*.{ts,tsx,json}": ["biome check --write --staged --no-errors-on-unmatched"]
     },
     "packageManager": "yarn@4.10.2"
 }
