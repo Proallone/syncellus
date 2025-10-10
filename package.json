@@ -12,7 +12,8 @@
         "dev:server": "yarn workspace @syncellus/server watch",
         "dev:client": "yarn workspace @syncellus/client dev",
         "ci": "yarn install --frozen-lockfile",
-        "build": "tsc --build"
+        "build": "tsc --build",
+        "format": "yarn exec biome format --write ./packages"
     },
     "workspaces": ["packages/*"],
     "devDependencies": {
