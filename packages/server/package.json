@@ -18,8 +18,7 @@
         "db:postup": "yarn db:codegen && yarn db:seed",
         "db:seed": "kysely seed run",
         "db:down": "kysely migrate:rollback --all",
-        "build": "tsc --build",
-        "format": "NODE_OPTIONS='--experimental-strip-types' prettier . --config ../../prettier.config.ts --write"
+        "build": "tsc --build"
     },
     "dependencies": {
         "argon2": "^0.44.0",

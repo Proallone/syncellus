@@ -11,8 +11,6 @@
         "dev": "concurrently \"yarn dev:server\" \"yarn dev:client\"",
         "dev:server": "yarn workspace @syncellus/server watch",
         "dev:client": "yarn workspace @syncellus/client dev",
-        "lint": "eslint 'packages/**/*.{ts,tsx}'",
-        "format": "NODE_OPTIONS='--experimental-strip-types' prettier packages/ --write",
         "ci": "yarn install --frozen-lockfile",
         "build": "tsc --build"
     },
