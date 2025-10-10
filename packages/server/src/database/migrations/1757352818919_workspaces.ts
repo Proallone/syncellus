@@ -1,10 +1,10 @@
-import { sql, type Kysely } from "kysely";
-import { schema as auth_schema } from "./1753121979263_auth.js";
+import { type Kysely, sql } from "kysely";
 import { createUpdateTimestampTrigger } from "../utils/triggers.js";
+import { schema as auth_schema } from "./1753121979263_auth.js";
 
 export const schema = "workspaces";
 // `any` is required here since migrations should be frozen in time. alternatively, keep a "snapshot" db interface.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: required by library
 export async function up(db: Kysely<any>): Promise<void> {
     // up migration code goes here...
     // note: up migrations are mandatory. you must implement this function.
@@ -51,12 +51,7 @@ export async function up(db: Kysely<any>): Promise<void> {
         .schema.createTable("team_invitations")
         .addColumn("id", "uuid", (col) => col.primaryKey())
         .addColumn("team_id", "uuid", (col) => col.notNull().references(`${schema}.teams.id`))
-        .addColumn("invited_email", "varchar(256)", (col) =>
-            col
-                .unique()
-                .notNull()
-                .check(sql`LENGTH(invited_email) >= 3`)
-        )
+        .addColumn("invited_email", "varchar(256)", (col) => col.unique().notNull().check(sql`LENGTH(invited_email) >= 3`))
         .addColumn("status_id", "int2", (col) => col.notNull().references(`${schema}.invitation_statuses.id`).defaultTo(0))
         .addColumn("invitation_token", "varchar(64)", (col) => col.notNull())
         .addColumn("expires_at", "timestamptz", (col) => col.defaultTo(sql`now() + interval '7 days'`).notNull()) //TODO time from config
@@ -120,7 +115,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 }
 
 // `any` is required here since migrations should be frozen in time. alternatively, keep a "snapshot" db interface.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: required by library
 export async function down(db: Kysely<any>): Promise<void> {
     // down migration code goes here...
     // note: down migrations are optional. you can safely delete this function.
