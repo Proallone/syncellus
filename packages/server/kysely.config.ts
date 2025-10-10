@@ -1,5 +1,5 @@
-import { DatabaseService } from "./src/database/database.js";
 import { defineConfig } from "kysely-ctl";
+import { DatabaseService } from "./src/database/database.js";
 
 const db = DatabaseService.getInstance();
 

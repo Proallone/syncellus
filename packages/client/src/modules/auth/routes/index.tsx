@@ -1,7 +1,7 @@
-import { Routes, Route } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
+import { PasswordResetPage } from "../components/PasswordResetPage";
 import { SinginPage } from "../components/SigninPage";
 import { SignupPage } from "../components/SignupPage";
-import { PasswordResetPage } from "../components/PasswordResetPage";
 
 const AuthRoutes = () => (
     <Routes>

@@ -1,5 +1,5 @@
-import { describe, it, expect, vi } from "vitest";
 import { Router } from "express";
+import { describe, expect, it, vi } from "vitest";
 
 // Mock dependencies
 const passportAuthenticateMiddleware = vi.fn((_req, _res, next) => next());

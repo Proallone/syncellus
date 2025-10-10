@@ -1,12 +1,13 @@
 // tests/auth.e2e.test.ts
-import { describe, it, expect, beforeAll, afterAll } from "vitest";
-import request from "supertest";
-import app from "../../../src/app.js";
-import Database from "better-sqlite3-multiple-ciphers";
-import { FileMigrationProvider, Kysely, Migrator, SqliteDialect } from "kysely";
+
 import { Database as DB } from "@syncellus/types/database.js";
-import * as path from "path";
+import Database from "better-sqlite3-multiple-ciphers";
 import { promises as fs } from "fs";
+import { FileMigrationProvider, Kysely, Migrator, SqliteDialect } from "kysely";
+import * as path from "path";
+import request from "supertest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import app from "../../../src/app.js";
 
 let db: Kysely<DB> | undefined = undefined;
 

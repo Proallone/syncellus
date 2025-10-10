@@ -1,6 +1,6 @@
+import type { AccountsRepository } from "@syncellus/modules/accounts/repository.js";
 import type { AccountsProfiles } from "@syncellus/types/database.js";
 import type { GetEmployeeQuery } from "@syncellus/types/index.js";
-import type { AccountsRepository } from "@syncellus/modules/accounts/repository.js";
 import type { Insertable, Updateable } from "kysely";
 import { uuidv7 } from "uuidv7";
 

@@ -1,17 +1,17 @@
-import express, { Router } from "express";
-import { errorHandler } from "@syncellus/middlewares/error.middleware.js";
-import { pinoHttp } from "pino-http";
-import helmet from "helmet";
-import cors from "cors";
 import corsConfig from "@syncellus/configs/cors.js";
-import { limiter } from "@syncellus/core/limiter.js";
-import { configurePassport } from "@syncellus/modules/auth/passport.js";
-import passport from "passport";
 import { container } from "@syncellus/container.js";
-import healthRoutes from "@syncellus/modules/health/routes.js";
+import { limiter } from "@syncellus/core/limiter.js";
+import { errorHandler } from "@syncellus/middlewares/error.middleware.js";
 import accountsRoutes from "@syncellus/modules/accounts/routes.js";
+import { configurePassport } from "@syncellus/modules/auth/passport.js";
 import authRoutes from "@syncellus/modules/auth/routes.js";
+import healthRoutes from "@syncellus/modules/health/routes.js";
 import workspacesRoutes from "@syncellus/modules/workspaces/routes.js";
+import cors from "cors";
+import express, { Router } from "express";
+import helmet from "helmet";
+import passport from "passport";
+import { pinoHttp } from "pino-http";
 
 const app = express();
 app.use(express.json({ limit: "1mb" }));

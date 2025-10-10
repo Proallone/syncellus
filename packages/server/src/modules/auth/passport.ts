@@ -1,9 +1,9 @@
+import { AppConfig } from "@syncellus/configs/config.js";
+import { LoggerService } from "@syncellus/core/logger.js";
 import type { AuthService } from "@syncellus/modules/auth/service.js";
 import passport from "passport";
-import { Strategy as LocalStrategy } from "passport-local";
 import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
-import { LoggerService } from "@syncellus/core/logger.js";
-import { AppConfig } from "@syncellus/configs/config.js";
+import { Strategy as LocalStrategy } from "passport-local";
 
 //TODO cleanup
 const logger = LoggerService.getInstance();

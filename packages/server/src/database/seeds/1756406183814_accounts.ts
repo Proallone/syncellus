@@ -1,5 +1,5 @@
+import type { AccountsProfiles, DB } from "@syncellus/types/database.js";
 import type { Insertable, Kysely } from "kysely";
-import type { DB, AccountsProfiles } from "@syncellus/types/database.js";
 import { schema } from "../migrations/1756406769551_accounts.js";
 
 const accounts: Insertable<AccountsProfiles>[] = [

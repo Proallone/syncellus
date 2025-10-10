@@ -1,9 +1,9 @@
-import type { WorkspacesTeams } from "@syncellus/types/database.js";
-import type { ITeamsService } from "@syncellus/modules/workspaces/teams/types.js";
-import type { Insertable, Updateable } from "kysely";
 import { WorkspacesRepository } from "@syncellus/modules/workspaces/teams/repository.js";
-import { uuidv7 } from "uuidv7";
+import type { ITeamsService } from "@syncellus/modules/workspaces/teams/types.js";
+import type { WorkspacesTeams } from "@syncellus/types/database.js";
 import { nanoid } from "@syncellus/utils/nanoid.js";
+import type { Insertable, Updateable } from "kysely";
+import { uuidv7 } from "uuidv7";
 
 export class TeamsService implements ITeamsService {
     constructor(private readonly repo: WorkspacesRepository) {}

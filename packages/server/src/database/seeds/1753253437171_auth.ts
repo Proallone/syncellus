@@ -1,5 +1,5 @@
+import type { AuthRoleScopes, AuthRoles, AuthScopes, AuthUserRoles, AuthUsers, DB } from "@syncellus/types/database.js";
 import type { Insertable, Kysely } from "kysely";
-import type { DB, AuthUsers, AuthRoles, AuthScopes, AuthRoleScopes, AuthUserRoles } from "@syncellus/types/database.js";
 import { schema } from "../migrations/1753121979263_auth.js";
 
 const users: Insertable<AuthUsers>[] = [

@@ -1,4 +1,4 @@
-import type { DB, AccountsProfiles } from "@syncellus/types/database.js";
+import type { AccountsProfiles, DB } from "@syncellus/types/database.js";
 import type { GetEmployeeQuery } from "@syncellus/types/index.js";
 import type { Insertable, Kysely, Updateable } from "kysely";
 

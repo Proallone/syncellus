@@ -1,10 +1,10 @@
 import { LoggerService } from "@syncellus/core/logger.js";
 import { DatabaseService } from "@syncellus/database/database.js";
-import { AuthRepository } from "./repository.js";
+import { AuthController } from "@syncellus/modules/auth/controller.js";
+import { AuthService } from "@syncellus/modules/auth/service.js";
 import { NodemailerProvider } from "@syncellus/modules/mailer/providers/NodemailerProvider.js";
 import { MailService } from "@syncellus/modules/mailer/service.js";
-import { AuthService } from "@syncellus/modules/auth/service.js";
-import { AuthController } from "@syncellus/modules/auth/controller.js";
+import { AuthRepository } from "./repository.js";
 
 export function buildAuthModule() {
     const db = DatabaseService.getInstance();

@@ -1,9 +1,9 @@
-import type { Request, Response, NextFunction } from "express";
-import type { AppError } from "@syncellus/types/index.js";
+import { AppConfig } from "@syncellus/configs/config.js";
 import { LoggerService } from "@syncellus/core/logger.js";
 import { HttpError } from "@syncellus/errors/http.js";
+import type { AppError } from "@syncellus/types/index.js";
 import { sendResponse } from "@syncellus/utils/responseBuilder.js";
-import { AppConfig } from "@syncellus/configs/config.js";
+import type { NextFunction, Request, Response } from "express";
 
 const logger = LoggerService.getInstance();
 const config = AppConfig.getInstance();

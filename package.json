@@ -13,7 +13,7 @@
         "dev:client": "yarn workspace @syncellus/client dev",
         "ci": "yarn install --frozen-lockfile",
         "build": "tsc --build",
-        "format": "yarn exec biome format --write ./packages"
+        "format": "biome check --write ./packages"
     },
     "workspaces": ["packages/*"],
     "devDependencies": {

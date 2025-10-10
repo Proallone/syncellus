@@ -1,10 +1,10 @@
-import type { Request, Response } from "express";
-import type { WorkspacesTeams } from "@syncellus/types/database.js";
-import type { TasksService } from "@syncellus/modules/workspaces/tasks/service.js";
-import type { Selectable } from "kysely";
-import { sendResponse } from "@syncellus/utils/responseBuilder.js";
 import { HttpStatus } from "@syncellus/core/http.js";
 import { NotFoundError } from "@syncellus/errors/http.js";
+import type { TasksService } from "@syncellus/modules/workspaces/tasks/service.js";
+import type { WorkspacesTeams } from "@syncellus/types/database.js";
+import { sendResponse } from "@syncellus/utils/responseBuilder.js";
+import type { Request, Response } from "express";
+import type { Selectable } from "kysely";
 
 export class TasksController {
     constructor(private readonly service: TasksService) {}

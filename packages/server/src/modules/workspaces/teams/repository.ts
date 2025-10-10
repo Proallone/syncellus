@@ -1,6 +1,6 @@
+import type { ITeamsRepository } from "@syncellus/modules/workspaces/teams/types.js";
 import type { DB, WorkspacesTeams } from "@syncellus/types/database.js";
 import type { Insertable, Kysely, Updateable } from "kysely";
-import type { ITeamsRepository } from "@syncellus/modules/workspaces/teams/types.js";
 
 export class WorkspacesRepository implements ITeamsRepository {
     constructor(private readonly db: Kysely<DB>) {}

@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/style/noNamespace: find a better way */
 import type { Request } from "express";
 import type { UserJWTPayload } from "@syncellus/types/index.d.ts";
 export interface TypedRequest<T> extends Request {

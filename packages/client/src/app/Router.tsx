@@ -1,7 +1,7 @@
-import { Suspense, lazy } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Layout } from "./Layout";
+import { lazy, Suspense } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Skeleton } from "@/shared/components/ui/skeleton";
+import { Layout } from "./Layout";
 
 const AuthRoutes = lazy(() => import("../modules/auth/routes"));
 const DashboardRoutes = lazy(() => import("../modules/dashboard/routes"));

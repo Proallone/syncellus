@@ -1,14 +1,14 @@
-import type { MailService } from "@syncellus/modules/mailer/service.js";
-import type { IAuthService } from "@syncellus/modules/auth/types.js";
-import type { AuthCredentials, Credentials, UserJWTPayload } from "@syncellus/types/index.js";
-import type { AuthRepository } from "@syncellus/modules/auth/repository.js";
+import { AppConfig } from "@syncellus/configs/config.js";
 // import { eventBus } from "@syncellus/core/eventBus.js";
 import { ConflictError, NotFoundError, UnauthorizedError } from "@syncellus/errors/http.js";
+import type { AuthRepository } from "@syncellus/modules/auth/repository.js";
+import type { IAuthService } from "@syncellus/modules/auth/types.js";
+import type { MailService } from "@syncellus/modules/mailer/service.js";
+import type { AuthCredentials, Credentials, UserJWTPayload } from "@syncellus/types/index.js";
 import { compareHash, generateToken, hashPassword, sha256 } from "@syncellus/utils/crypto.js";
 import { nanoid } from "@syncellus/utils/nanoid.js";
-import { uuidv7 } from "uuidv7";
 import Jwt from "jsonwebtoken";
-import { AppConfig } from "@syncellus/configs/config.js";
+import { uuidv7 } from "uuidv7";
 
 export class AuthService implements IAuthService {
     constructor(

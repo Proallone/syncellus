@@ -1,6 +1,6 @@
-import path from "path";
 import fs from "fs";
 import Handlebars from "handlebars";
+import path from "path";
 
 export const compileTemplate = (name: string) => {
     const filePath = path.join(path.resolve(import.meta.dirname, "../"), "templates", `${name}.hbs`);

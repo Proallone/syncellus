@@ -1,7 +1,7 @@
-import type { Request, Response } from "express";
+import { HttpStatus } from "@syncellus/core/http.js";
 import type { HealthService } from "@syncellus/modules/health/service.js";
 import { sendResponse } from "@syncellus/utils/responseBuilder.js";
-import { HttpStatus } from "@syncellus/core/http.js";
+import type { Request, Response } from "express";
 
 export class HealthController {
     constructor(private readonly service: HealthService) {}
