@@ -1,7 +1,7 @@
 import { DatabaseService } from "@syncellus/database/database.js";
+import { TasksController } from "@syncellus/modules/workspaces/tasks/controller.js";
 import { TasksRepository } from "@syncellus/modules/workspaces/tasks/repository.js";
 import { TasksService } from "@syncellus/modules/workspaces/tasks/service.js";
-import { TasksController } from "@syncellus/modules/workspaces/tasks/controller.js";
 
 export function buildTasksModule() {
     const db = DatabaseService.getInstance();

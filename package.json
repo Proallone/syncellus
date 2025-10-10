@@ -11,21 +11,17 @@
         "dev": "concurrently \"yarn dev:server\" \"yarn dev:client\"",
         "dev:server": "yarn workspace @syncellus/server watch",
         "dev:client": "yarn workspace @syncellus/client dev",
-        "lint": "eslint 'packages/**/*.{ts,tsx}'",
-        "format": "NODE_OPTIONS='--experimental-strip-types' prettier packages/ --write",
         "ci": "yarn install --frozen-lockfile",
-        "build": "tsc --build"
+        "build": "tsc --build",
+        "format": "biome check --write ./packages"
     },
-    "workspaces": [
-        "packages/*"
-    ],
+    "workspaces": ["packages/*"],
     "devDependencies": {
+        "@biomejs/biome": "2.2.5",
         "@eslint/js": "^9.37.0",
         "concurrently": "^9.2.1",
-        "eslint": "^9.37.0",
         "eslint-config-prettier": "^10.1.8",
         "lint-staged": "^16.2.3",
-        "prettier": "3.6.2",
         "simple-git-hooks": "^2.13.1",
         "typescript": "^5.9.3",
         "typescript-eslint": "^8.46.0"
@@ -35,10 +31,7 @@
         "preserveUnused": true
     },
     "lint-staged": {
-        "!(*.lock|.gitignore|.gitattributes)": [
-            "yarn lint",
-            "yarn format"
-        ]
+        "*.{ts,tsx,json}": ["biome check --write --unsafe --no-errors-on-unmatched"]
     },
     "packageManager": "yarn@4.10.2"
 }

@@ -1,8 +1,8 @@
-import type { ITasksService } from "./types.js";
+import { TasksRepository } from "@syncellus/modules/workspaces/tasks/repository.js";
 import type { WorkspacesTasks } from "@syncellus/types/database.js";
 import type { Insertable, Updateable } from "kysely";
-import { TasksRepository } from "@syncellus/modules/workspaces/tasks/repository.js";
 import { uuidv7 } from "uuidv7";
+import type { ITasksService } from "./types.js";
 
 export class TasksService implements ITasksService {
     constructor(private readonly repo: TasksRepository) {}

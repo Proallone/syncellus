@@ -1,12 +1,12 @@
-import type { Request, Response } from "express";
+import { HttpStatus } from "@syncellus/core/http.js";
+import { NotFoundError } from "@syncellus/errors/http.js";
 import type { AccountsService } from "@syncellus/modules/accounts/service.js";
 import type { AccountsProfiles } from "@syncellus/types/database.js";
 import type { TypedRequest } from "@syncellus/types/express.js";
 import type { NewAccountBody } from "@syncellus/types/index.js";
-import type { Updateable } from "kysely";
 import { sendResponse } from "@syncellus/utils/responseBuilder.js";
-import { HttpStatus } from "@syncellus/core/http.js";
-import { NotFoundError } from "@syncellus/errors/http.js";
+import type { Request, Response } from "express";
+import type { Updateable } from "kysely";
 
 export class AccountsController {
     constructor(private readonly service: AccountsService) {}

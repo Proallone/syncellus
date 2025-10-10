@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { fetchTimesheets } from "../service/timesheet";
 import type { Timesheet } from "../service/timesheet";
+import { fetchTimesheets } from "../service/timesheet";
 
 export const TimesheetList = () => {
     const [timesheets, setTimesheets] = useState<Timesheet[]>([]);

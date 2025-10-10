@@ -1,11 +1,11 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { AuthController } from "@syncellus/modules/auth/controller.js";
-import { AuthService } from "@syncellus/modules/auth/service.js";
-import type { Request, Response, NextFunction } from "express";
-import { AuthRepository } from "@syncellus/modules/auth/repository.js";
-import type { Database as DB, User } from "@syncellus/types/database.js";
-import { Kysely } from "kysely";
 import { LoggerService } from "@syncellus/core/logger.js";
+import { AuthController } from "@syncellus/modules/auth/controller.js";
+import { AuthRepository } from "@syncellus/modules/auth/repository.js";
+import { AuthService } from "@syncellus/modules/auth/service.js";
+import type { Database as DB, User } from "@syncellus/types/database.js";
+import type { NextFunction, Request, Response } from "express";
+import { Kysely } from "kysely";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@syncellus/modules/auth/service.js", () => {
     class MockAuthService {

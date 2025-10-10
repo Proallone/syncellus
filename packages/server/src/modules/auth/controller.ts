@@ -1,11 +1,11 @@
-import type { Request, Response } from "express";
-import type { AuthRequestBody, ForgotPasswordRequestBody, ResetPasswordRequestBody, VerifyEmailRequestBody } from "@syncellus/types/index.js";
-import type { AuthService } from "@syncellus/modules/auth/service.js";
-import type { Logger } from "pino";
-import type { TypedRequest } from "@syncellus/types/express.js";
-import { UserInformationResponse } from "@syncellus/modules/auth/schemas/response.js";
-import { sendResponse } from "@syncellus/utils/responseBuilder.js";
 import { HttpStatus } from "@syncellus/core/http.js";
+import { UserInformationResponse } from "@syncellus/modules/auth/schemas/response.js";
+import type { AuthService } from "@syncellus/modules/auth/service.js";
+import type { TypedRequest } from "@syncellus/types/express.js";
+import type { AuthRequestBody, ForgotPasswordRequestBody, ResetPasswordRequestBody, VerifyEmailRequestBody } from "@syncellus/types/index.js";
+import { sendResponse } from "@syncellus/utils/responseBuilder.js";
+import type { Request, Response } from "express";
+import type { Logger } from "pino";
 
 export class AuthController {
     constructor(

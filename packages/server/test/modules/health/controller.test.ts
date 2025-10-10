@@ -1,11 +1,11 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
 import { HealthController } from "@syncellus/modules/health/controller.js";
-import { HealthService } from "@syncellus/modules/health/service.js";
-import type { Request, Response, NextFunction } from "express";
 import { HealthRepository } from "@syncellus/modules/health/repository.js";
-import type { Database as DB } from "@syncellus/types/database.js";
-import { Kysely } from "kysely";
+import { HealthService } from "@syncellus/modules/health/service.js";
 import type { DatabaseHealthResponse, ServiceHealthResponse } from "@syncellus/modules/health/types.js";
+import type { Database as DB } from "@syncellus/types/database.js";
+import type { NextFunction, Request, Response } from "express";
+import { Kysely } from "kysely";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 // Mock the HealthService dependency using the same class-based factory pattern.
 vi.mock("@syncellus/modules/health/service.js", () => {

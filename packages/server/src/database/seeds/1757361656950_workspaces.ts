@@ -5,8 +5,8 @@ import type {
     WorkspacesTeamMembers,
     WorkspacesTeamRoles,
     WorkspacesTeams,
-    WorkspacesTimesheets,
-    WorkspacesTimesheetStatuses
+    WorkspacesTimesheetStatuses,
+    WorkspacesTimesheets
 } from "@syncellus/types/database.js";
 import type { Insertable, Kysely } from "kysely";
 import { schema } from "../migrations/1757352818919_workspaces.js";

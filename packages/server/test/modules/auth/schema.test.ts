@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { AuthSchema, AuthBasePayload } from "@syncellus/modules/auth/schemas/request.js";
+import { AuthBasePayload, AuthSchema } from "@syncellus/modules/auth/schemas/request.js";
+import { describe, expect, it } from "vitest";
 
 describe("AuthBasePayload", () => {
     it("should validate a correct email and password", () => {

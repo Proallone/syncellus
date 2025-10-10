@@ -1,6 +1,6 @@
-import { type Kysely, sql } from "kysely";
-import type { DbHealthResponse } from "@syncellus/types/index.js";
 import type { DB } from "@syncellus/types/database.js";
+import type { DbHealthResponse } from "@syncellus/types/index.js";
+import { type Kysely, sql } from "kysely";
 import type { IHealthRepository } from "./types.js";
 
 export class HealthRepository implements IHealthRepository {

@@ -1,7 +1,7 @@
 import { DatabaseService } from "@syncellus/database/database.js";
+import { TeamsController } from "@syncellus/modules/workspaces/teams/controller.js";
 import { WorkspacesRepository } from "@syncellus/modules/workspaces/teams/repository.js";
 import { TeamsService } from "@syncellus/modules/workspaces/teams/service.js";
-import { TeamsController } from "@syncellus/modules/workspaces/teams/controller.js";
 
 export function buildTeamsModule() {
     const db = DatabaseService.getInstance();

@@ -1,8 +1,8 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { HealthService } from "@syncellus/modules/health/service.js";
 import { HealthRepository } from "@syncellus/modules/health/repository.js";
-import { Kysely } from "kysely";
+import { HealthService } from "@syncellus/modules/health/service.js";
 import type { Database as DB } from "@syncellus/types/database.js";
+import { Kysely } from "kysely";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@syncellus/modules/health/repository.js", () => {
     class MockHealthRepository {

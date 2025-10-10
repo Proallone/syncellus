@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { hashPassword, compareHash } from "../../src/utils/crypto.js"; // Assuming your crypto.js now uses argon2
+import { describe, expect, it } from "vitest";
+import { compareHash, hashPassword } from "../../src/utils/crypto.js"; // Assuming your crypto.js now uses argon2
 
 describe("Crypto utils (Argon2)", () => {
     it("should hash a password with a valid Argon2 format", async () => {

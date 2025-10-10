@@ -1,5 +1,5 @@
-import { describe, it, expect, vi } from "vitest";
 import { Router } from "express";
+import { describe, expect, it, vi } from "vitest";
 
 const getApplicationHealthHandler = vi.fn();
 const getDatabaseHealthHandler = vi.fn();

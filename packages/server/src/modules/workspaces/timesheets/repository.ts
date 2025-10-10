@@ -1,6 +1,6 @@
+import { ITimesheetsRepository } from "@syncellus/modules/workspaces/timesheets/types.js";
 import type { DB, WorkspacesTimesheets } from "@syncellus/types/database.js";
 import type { Insertable, Kysely, Updateable } from "kysely";
-import { ITimesheetsRepository } from "@syncellus/modules/workspaces/timesheets/types.js";
 
 export class TimesheetsRepository implements ITimesheetsRepository {
     constructor(private readonly db: Kysely<DB>) {}

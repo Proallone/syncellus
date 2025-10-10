@@ -1,6 +1,6 @@
-import { Router } from "express";
-import { hw } from "@syncellus/utils/handlerWrapper.js";
 import { buildHealthModule } from "@syncellus/modules/health/module.js";
+import { hw } from "@syncellus/utils/handlerWrapper.js";
+import { Router } from "express";
 
 const router = Router();
 const controller = buildHealthModule();

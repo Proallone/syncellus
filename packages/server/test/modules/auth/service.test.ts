@@ -1,10 +1,10 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { AuthService } from "@syncellus/modules/auth/service.js";
 import { eventBus } from "@syncellus/core/eventBus.js";
 import { HttpError } from "@syncellus/errors/http.js";
+import { AuthService } from "@syncellus/modules/auth/service.js";
 import Jwt from "jsonwebtoken";
 import { customAlphabet } from "nanoid";
 import { uuidv7 } from "uuidv7";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@syncellus/configs/config.js", () => ({
     default: { jwt_secret: "test-secret" }
@@ -41,7 +41,7 @@ vi.mock("jsonwebtoken", () => ({
     }
 }));
 
-import { hashPassword, compareHash } from "@syncellus/utils/crypto.js";
+import { compareHash, hashPassword } from "@syncellus/utils/crypto.js";
 
 describe("AuthService", () => {
     let mockRepo: any;

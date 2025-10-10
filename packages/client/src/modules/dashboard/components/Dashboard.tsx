@@ -1,8 +1,9 @@
 import { ClipboardClock, PersonStanding } from "lucide-react";
 import "./Dashboard.css"; // optional styles
-import { ModuleTile } from "./ModuleTile";
-import { useNavigate } from "react-router-dom";
 import type React from "react";
+import { useNavigate } from "react-router-dom";
+import { ModuleTile } from "./ModuleTile";
+
 interface Module {
     name: string;
     description: string;

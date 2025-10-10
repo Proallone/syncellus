@@ -1,9 +1,9 @@
-import { sql, type Kysely } from "kysely";
+import { type Kysely, sql } from "kysely";
 import { createUpdateTimestampTrigger } from "../utils/triggers.js";
 
 export const schema = "auth";
 // `any` is required here since migrations should be frozen in time. alternatively, keep a "snapshot" db interface.\
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: required by library
 export async function up(db: Kysely<any>): Promise<void> {
     // note: up migrations are mandatory. you must implement this function.
     // For more info, see: https://kysely.dev/docs/migrations
@@ -14,12 +14,7 @@ export async function up(db: Kysely<any>): Promise<void> {
         .schema.createTable("users")
         .addColumn("id", "uuid", (col) => col.primaryKey().notNull())
         .addColumn("public_id", "varchar(10)", (col) => col.unique().notNull())
-        .addColumn("email", "varchar(256)", (col) =>
-            col
-                .unique()
-                .notNull()
-                .check(sql`LENGTH(email) >= 3`)
-        )
+        .addColumn("email", "varchar(256)", (col) => col.unique().notNull().check(sql`LENGTH(email) >= 3`))
         .addColumn("password", "varchar(256)", (col) => col.notNull())
         .addColumn("created_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
         .addColumn("modified_at", "timestamptz", (col) => col.defaultTo(sql`now()`).notNull())
@@ -165,7 +160,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 }
 
 // `any` is required here since migrations should be frozen in time. alternatively, keep a "snapshot" db interface.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: required by library
 export async function down(db: Kysely<any>): Promise<void> {
     // down migration code goes here...
     // note: down migrations are optional. you can safely delete this function.

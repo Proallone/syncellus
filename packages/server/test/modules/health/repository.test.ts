@@ -1,9 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { Kysely, SqliteDialect } from "kysely";
-import Database from "better-sqlite3-multiple-ciphers";
+import { DatabaseService } from "@syncellus/database/database.js";
 import { HealthRepository } from "@syncellus/modules/health/repository.js";
 import type { Database as DB } from "@syncellus/types/database.js";
-import { DatabaseService } from "@syncellus/database/database.js";
+import Database from "better-sqlite3-multiple-ciphers";
+import { Kysely, SqliteDialect } from "kysely";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@syncellus/database/database", () => {
     const inMemoryDb = new Database(":memory:");

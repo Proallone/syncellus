@@ -1,6 +1,6 @@
+import type { ITasksRepository } from "@syncellus/modules/workspaces/tasks/types.js";
 import type { DB, WorkspacesTasks } from "@syncellus/types/database.js";
 import type { Insertable, Kysely, Updateable } from "kysely";
-import type { ITasksRepository } from "@syncellus/modules/workspaces/tasks/types.js";
 
 export class TasksRepository implements ITasksRepository {
     constructor(private readonly db: Kysely<DB>) {}

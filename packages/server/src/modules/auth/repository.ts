@@ -1,5 +1,5 @@
-import type { DB, AuthEmailVerificationTokens, AuthPasswordResetTokens, AuthUsers } from "@syncellus/types/database.js";
 import type { IAuthRepository } from "@syncellus/modules/auth/types.js";
+import type { AuthEmailVerificationTokens, AuthPasswordResetTokens, AuthUsers, DB } from "@syncellus/types/database.js";
 import type { DeleteResult, Insertable, Kysely, Selectable } from "kysely";
 
 export class AuthRepository implements IAuthRepository {
