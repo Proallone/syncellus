@@ -1,6 +1,6 @@
-import { HttpStatus } from "@syncellus/core/http.js";
-import type { HealthService } from "@syncellus/modules/health/service.js";
-import { sendResponse } from "@syncellus/utils/responseBuilder.js";
+import { HttpStatus } from "@syncellus/core/http.ts";
+import type { HealthService } from "@syncellus/modules/health/service.ts";
+import { sendResponse } from "@syncellus/utils/responseBuilder.ts";
 import type { Request, Response } from "express";
 
 export class HealthController {

@@ -1,4 +1,4 @@
-import type { WorkspacesTasks } from "@syncellus/types/database.js";
+import type { WorkspacesTasks } from "@syncellus/types/database.d.ts";
 import type { DeleteResult, Insertable, Updateable, Selectable } from "kysely";
 
 export interface ITasksRepository {

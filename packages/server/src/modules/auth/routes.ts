@@ -1,8 +1,8 @@
-import { authenticate } from "@syncellus/middlewares/auth.middleware.js";
-import { validate } from "@syncellus/middlewares/validator.middleware.js";
-import { buildAuthModule } from "@syncellus/modules/auth/module.js";
-import { AuthSchema, ForgotPasswordSchema, ResetPasswordSchema, VerifyEmailSchema } from "@syncellus/modules/auth/schemas/request.js";
-import { hw } from "@syncellus/utils/handlerWrapper.js";
+import { authenticate } from "@syncellus/middlewares/auth.middleware.ts";
+import { validate } from "@syncellus/middlewares/validator.middleware.ts";
+import { buildAuthModule } from "@syncellus/modules/auth/module.ts";
+import { AuthSchema, ForgotPasswordSchema, ResetPasswordSchema, VerifyEmailSchema } from "@syncellus/modules/auth/schemas/request.ts";
+import { hw } from "@syncellus/utils/handlerWrapper.ts";
 import { Router } from "express";
 
 const router = Router();

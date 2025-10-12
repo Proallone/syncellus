@@ -1,8 +1,8 @@
-import { authenticate } from "@syncellus/middlewares/auth.middleware.js";
-import { validate } from "@syncellus/middlewares/validator.middleware.js";
-import { buildTimesheetsModule } from "@syncellus/modules/workspaces/timesheets/module.js";
-import { TimesheetsPostSchema, TimesheetsUpdateSchema } from "@syncellus/modules/workspaces/timesheets/schema.js";
-import { hw } from "@syncellus/utils/handlerWrapper.js";
+import { authenticate } from "@syncellus/middlewares/auth.middleware.ts";
+import { validate } from "@syncellus/middlewares/validator.middleware.ts";
+import { buildTimesheetsModule } from "@syncellus/modules/workspaces/timesheets/module.ts";
+import { TimesheetsPostSchema, TimesheetsUpdateSchema } from "@syncellus/modules/workspaces/timesheets/schema.ts";
+import { hw } from "@syncellus/utils/handlerWrapper.ts";
 import { Router } from "express";
 
 const router = Router();

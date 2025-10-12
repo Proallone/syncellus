@@ -1,9 +1,9 @@
-import { HttpStatus } from "@syncellus/core/http.js";
-import { UserInformationResponse } from "@syncellus/modules/auth/schemas/response.js";
-import type { AuthService } from "@syncellus/modules/auth/service.js";
-import type { TypedRequest } from "@syncellus/types/express.js";
-import type { AuthRequestBody, ForgotPasswordRequestBody, ResetPasswordRequestBody, VerifyEmailRequestBody } from "@syncellus/types/index.js";
-import { sendResponse } from "@syncellus/utils/responseBuilder.js";
+import { HttpStatus } from "@syncellus/core/http.ts";
+import { UserInformationResponse } from "@syncellus/modules/auth/schemas/response.ts";
+import type { AuthService } from "@syncellus/modules/auth/service.ts";
+import type { TypedRequest } from "@syncellus/types/express.ts";
+import type { AuthRequestBody, ForgotPasswordRequestBody, ResetPasswordRequestBody, VerifyEmailRequestBody } from "@syncellus/types/index.ts";
+import { sendResponse } from "@syncellus/utils/responseBuilder.ts";
 import type { Request, Response } from "express";
 import type { Logger } from "pino";
 

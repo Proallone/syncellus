@@ -1,8 +1,8 @@
-import { authenticate } from "@syncellus/middlewares/auth.middleware.js";
-import { validate } from "@syncellus/middlewares/validator.middleware.js";
-import { buildTeamsModule } from "@syncellus/modules/workspaces/teams/module.js";
-import { WorkspaceTeamPostSchema, WorkspaceTeamUpdateSchema } from "@syncellus/modules/workspaces/teams/schema.js";
-import { hw } from "@syncellus/utils/handlerWrapper.js";
+import { authenticate } from "@syncellus/middlewares/auth.middleware.ts";
+import { validate } from "@syncellus/middlewares/validator.middleware.ts";
+import { buildTeamsModule } from "@syncellus/modules/workspaces/teams/module.ts";
+import { WorkspaceTeamPostSchema, WorkspaceTeamUpdateSchema } from "@syncellus/modules/workspaces/teams/schema.ts";
+import { hw } from "@syncellus/utils/handlerWrapper.ts";
 import { Router } from "express";
 
 const router = Router();

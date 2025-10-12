@@ -1,7 +1,7 @@
-import { WorkspacesRepository } from "@syncellus/modules/workspaces/teams/repository.js";
-import type { ITeamsService } from "@syncellus/modules/workspaces/teams/types.js";
-import type { WorkspacesTeams } from "@syncellus/types/database.js";
-import { nanoid } from "@syncellus/utils/nanoid.js";
+import { WorkspacesRepository } from "@syncellus/modules/workspaces/teams/repository.ts";
+import type { ITeamsService } from "@syncellus/modules/workspaces/teams/types.d.ts";
+import type { WorkspacesTeams } from "@syncellus/types/database.d.ts";
+import { nanoid } from "@syncellus/utils/nanoid.ts";
 import type { Insertable, Updateable } from "kysely";
 import { uuidv7 } from "uuidv7";
 

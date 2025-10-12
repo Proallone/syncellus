@@ -1,6 +1,6 @@
-import { AppConfig } from "@syncellus/configs/config.js";
-import { LoggerService } from "@syncellus/core/logger.js";
-import type { AuthService } from "@syncellus/modules/auth/service.js";
+import { AppConfig } from "@syncellus/configs/config.ts";
+import { LoggerService } from "@syncellus/core/logger.ts";
+import type { AuthService } from "@syncellus/modules/auth/service.ts";
 import passport from "passport";
 import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
 import { Strategy as LocalStrategy } from "passport-local";

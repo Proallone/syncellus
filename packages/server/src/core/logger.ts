@@ -7,13 +7,7 @@ export class LoggerService {
     public static getInstance(): Logger {
         if (!LoggerService.instance) {
             LoggerService.instance = pino({
-                level: "info",
-                transport: {
-                    target: "pino-pretty",
-                    options: {
-                        colorize: true
-                    }
-                }
+                level: Deno.env.get("LOG_LEVEL") || "info",
             });
         }
         return LoggerService.instance;

@@ -1,5 +1,5 @@
-import { AppConfig } from "@syncellus/configs/config.js";
-import type { IMailProvider, Mail } from "@syncellus/modules/mailer/types.js";
+import { AppConfig } from "@syncellus/configs/config.ts";
+import type { IMailProvider, Mail } from "@syncellus/modules/mailer/types.d.ts";
 import nodemailer, { type Transporter } from "nodemailer";
 
 export class NodemailerProvider implements IMailProvider {

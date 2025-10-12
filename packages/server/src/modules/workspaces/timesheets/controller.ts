@@ -1,19 +1,17 @@
-import { HttpStatus } from "@syncellus/core/http.js";
-import { NotFoundError } from "@syncellus/errors/http.js";
-import type { TimesheetsService } from "@syncellus/modules/workspaces/timesheets/service.js";
-import type { WorkspacesTimesheets } from "@syncellus/types/database.js";
-import { TypedRequest } from "@syncellus/types/express.js";
-import type { NewTimesheetBody } from "@syncellus/types/index.js";
-import { sendResponse } from "@syncellus/utils/responseBuilder.js";
+import { HttpStatus } from "@syncellus/core/http.ts";
+import { NotFoundError } from "@syncellus/errors/http.ts";
+import type { TimesheetsService } from "@syncellus/modules/workspaces/timesheets/service.ts";
+import { TypedRequest } from "@syncellus/types/express.d.ts";
+import type { NewTimesheetBody } from "@syncellus/types/index.d.ts";
+import { sendResponse } from "@syncellus/utils/responseBuilder.ts";
 import type { Request, Response } from "express";
-import type { Insertable } from "kysely";
 
 export class TimesheetsController {
     constructor(private readonly service: TimesheetsService) {}
 
     public createTimesheets = async (req: TypedRequest<NewTimesheetBody>, res: Response) => {
         const { task_id, user_id, timesheets } = req.body;
-        const toInsert: Insertable<WorkspacesTimesheets>[] = timesheets.map((t) => {
+        const toInsert = timesheets.map((t) => {
             return { ...t, task_id, user_id };
         });
         const newTimesheet = await this.service.insertNewTimesheets(toInsert);

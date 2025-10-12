@@ -1,8 +1,8 @@
-import { HttpStatus } from "@syncellus/core/http.js";
-import { NotFoundError } from "@syncellus/errors/http.js";
-import type { TasksService } from "@syncellus/modules/workspaces/tasks/service.js";
-import type { WorkspacesTeams } from "@syncellus/types/database.js";
-import { sendResponse } from "@syncellus/utils/responseBuilder.js";
+import { HttpStatus } from "@syncellus/core/http.ts";
+import { NotFoundError } from "@syncellus/errors/http.ts";
+import type { TasksService } from "@syncellus/modules/workspaces/tasks/service.ts";
+import type { WorkspacesTeams } from "@syncellus/types/database.d.ts";
+import { sendResponse } from "@syncellus/utils/responseBuilder.ts";
 import type { Request, Response } from "express";
 import type { Selectable } from "kysely";
 

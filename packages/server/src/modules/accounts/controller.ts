@@ -1,10 +1,10 @@
-import { HttpStatus } from "@syncellus/core/http.js";
-import { NotFoundError } from "@syncellus/errors/http.js";
-import type { AccountsService } from "@syncellus/modules/accounts/service.js";
-import type { AccountsProfiles } from "@syncellus/types/database.js";
-import type { TypedRequest } from "@syncellus/types/express.js";
-import type { NewAccountBody } from "@syncellus/types/index.js";
-import { sendResponse } from "@syncellus/utils/responseBuilder.js";
+import { HttpStatus } from "@syncellus/core/http.ts";
+import { NotFoundError } from "@syncellus/errors/http.ts";
+import type { AccountsService } from "@syncellus/modules/accounts/service.ts";
+import type { AccountsProfiles } from "@syncellus/types/database.d.ts";
+import type { TypedRequest } from "@syncellus/types/express.ts";
+import type { NewAccountBody } from "@syncellus/types/index.ts";
+import { sendResponse } from "@syncellus/utils/responseBuilder.ts";
 import type { Request, Response } from "express";
 import type { Updateable } from "kysely";
 

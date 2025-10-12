@@ -1,4 +1,4 @@
-import { LoggerService } from "@syncellus/core/logger.js";
+import { LoggerService } from "@syncellus/core/logger.ts";
 import type { NextFunction, Request, Response } from "express";
 import { z } from "zod";
 

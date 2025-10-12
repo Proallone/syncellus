@@ -1,5 +1,5 @@
-import type { HealthRepository } from "@syncellus/modules/health/repository.js";
-import type { DatabaseHealthResponse, IHealthService, ServiceHealthResponse } from "@syncellus/modules/health/types.js";
+import type { HealthRepository } from "@syncellus/modules/health/repository.ts";
+import type { DatabaseHealthResponse, IHealthService, ServiceHealthResponse } from "@syncellus/modules/health/types.d.ts";
 
 export class HealthService implements IHealthService {
     constructor(private readonly repo: HealthRepository) {}

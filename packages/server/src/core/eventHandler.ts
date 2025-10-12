@@ -1,5 +1,5 @@
 // core/event-handler.ts
-import type { AppEvents, EventBus } from "@syncellus/core/eventBus.js";
+import type { AppEvents, EventBus } from "@syncellus/core/eventBus.ts";
 
 export abstract class EventHandler<K extends keyof AppEvents> {
     constructor(protected readonly eventBus: EventBus) {}

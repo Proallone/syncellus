@@ -1,10 +1,10 @@
-import { eventBus } from "@syncellus/core/eventBus.js";
-import { LoggerService } from "@syncellus/core/logger.js";
-import { DatabaseService } from "@syncellus/database/database.js";
-import { AccountsController } from "@syncellus/modules/accounts/controller.js";
-import { AccountsRepository } from "@syncellus/modules/accounts/repository.js";
-import { AccountsService } from "@syncellus/modules/accounts/service.js";
-import { UserCreatedHandler } from "./events.js";
+import { eventBus } from "@syncellus/core/eventBus.ts";
+import { LoggerService } from "@syncellus/core/logger.ts";
+import { DatabaseService } from "@syncellus/database/database.ts";
+import { AccountsController } from "@syncellus/modules/accounts/controller.ts";
+import { AccountsRepository } from "@syncellus/modules/accounts/repository.ts";
+import { AccountsService } from "@syncellus/modules/accounts/service.ts";
+import { UserCreatedHandler } from "./events.ts";
 
 export function buildAccountsModule() {
     const db = DatabaseService.getInstance();

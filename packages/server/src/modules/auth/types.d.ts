@@ -1,5 +1,5 @@
-import type { AuthPasswordResetTokens, AuthEmailVerificationTokens, AuthUsers } from "@syncellus/types/database.js";
-import type { AuthCredentials, Credentials, UserJWTPayload } from "@syncellus/types/index.js";
+import type { AuthPasswordResetTokens, AuthEmailVerificationTokens, AuthUsers } from "@syncellus/types/database.d.ts";
+import type { AuthCredentials, Credentials, UserJWTPayload } from "@syncellus/types/index.ts";
 import type { DeleteResult, Insertable, Selectable } from "kysely";
 
 export interface IAuthRepository {

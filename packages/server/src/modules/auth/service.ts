@@ -1,12 +1,12 @@
-import { AppConfig } from "@syncellus/configs/config.js";
-// import { eventBus } from "@syncellus/core/eventBus.js";
-import { ConflictError, NotFoundError, UnauthorizedError } from "@syncellus/errors/http.js";
-import type { AuthRepository } from "@syncellus/modules/auth/repository.js";
-import type { IAuthService } from "@syncellus/modules/auth/types.js";
-import type { MailService } from "@syncellus/modules/mailer/service.js";
-import type { AuthCredentials, Credentials, UserJWTPayload } from "@syncellus/types/index.js";
-import { compareHash, generateToken, hashPassword, sha256 } from "@syncellus/utils/crypto.js";
-import { nanoid } from "@syncellus/utils/nanoid.js";
+import { AppConfig } from "@syncellus/configs/config.ts";
+// import { eventBus } from "@syncellus/core/eventBus.ts";
+import { ConflictError, NotFoundError, UnauthorizedError } from "@syncellus/errors/http.ts";
+import type { AuthRepository } from "@syncellus/modules/auth/repository.ts";
+import type { IAuthService } from "@syncellus/modules/auth/types.d.ts";
+import type { MailService } from "@syncellus/modules/mailer/service.ts";
+import type { AuthCredentials, Credentials, UserJWTPayload } from "@syncellus/types/index.ts";
+import { compareHash, generateToken, hashPassword, sha256 } from "@syncellus/utils/crypto.ts";
+import { nanoid } from "@syncellus/utils/nanoid.ts";
 import Jwt from "jsonwebtoken";
 import { uuidv7 } from "uuidv7";
 

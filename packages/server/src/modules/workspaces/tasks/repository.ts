@@ -1,5 +1,5 @@
-import type { ITasksRepository } from "@syncellus/modules/workspaces/tasks/types.js";
-import type { DB, WorkspacesTasks } from "@syncellus/types/database.js";
+import type { ITasksRepository } from "@syncellus/modules/workspaces/tasks/types.d.ts";
+import type { DB, WorkspacesTasks } from "@syncellus/types/database.d.ts";
 import type { Insertable, Kysely, Updateable } from "kysely";
 
 export class TasksRepository implements ITasksRepository {

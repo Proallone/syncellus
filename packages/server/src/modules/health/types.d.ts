@@ -1,4 +1,4 @@
-import type { DbHealthResponse } from "@syncellus/types/index.js";
+import type { DbHealthResponse } from "@syncellus/types/index.ts";
 
 export type HealthStatus = "Healthy" | "Unhealthy" | "Degraded";
 

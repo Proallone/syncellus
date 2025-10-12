@@ -1,6 +1,6 @@
-import type { TimesheetsRepository } from "@syncellus/modules/workspaces/timesheets/repository.js";
-import { ITimesheetsService } from "@syncellus/modules/workspaces/timesheets/types.js";
-import type { WorkspacesTimesheets } from "@syncellus/types/database.js";
+import type { TimesheetsRepository } from "@syncellus/modules/workspaces/timesheets/repository.ts";
+import { ITimesheetsService } from "@syncellus/modules/workspaces/timesheets/types.d.ts";
+import type { WorkspacesTimesheets } from "@syncellus/types/database.d.ts";
 import { Insertable, Updateable } from "kysely";
 import { uuidv7 } from "uuidv7";
 

@@ -1,7 +1,7 @@
-import type { DB } from "@syncellus/types/database.js";
-import type { DbHealthResponse } from "@syncellus/types/index.js";
+import type { DB } from "@syncellus/types/database.d.ts";
+import type { DbHealthResponse } from "@syncellus/types/index.ts";
 import { type Kysely, sql } from "kysely";
-import type { IHealthRepository } from "./types.js";
+import type { IHealthRepository } from "./types.d.ts";
 
 export class HealthRepository implements IHealthRepository {
     constructor(private readonly db: Kysely<DB>) {}

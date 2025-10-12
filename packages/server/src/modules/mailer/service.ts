@@ -1,5 +1,5 @@
-import type { IMailProvider, IMailService } from "@syncellus/modules/mailer/types.js";
-import { compileTemplate } from "@syncellus/modules/mailer/utils/compileTemplate.js";
+import type { IMailProvider, IMailService } from "@syncellus/modules/mailer/types.d.ts";
+import { compileTemplate } from "@syncellus/modules/mailer/utils/compileTemplate.ts";
 
 //TODO fix 500 if mailer provider is not available
 export class MailService implements IMailService {

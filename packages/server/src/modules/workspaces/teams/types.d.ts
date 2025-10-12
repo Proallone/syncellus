@@ -1,4 +1,4 @@
-import type { WorkspacesTeams } from "@syncellus/types/database.js";
+import type { WorkspacesTeams } from "@syncellus/types/database.d.ts";
 import type { DeleteResult, Insertable, Selectable, Updateable } from "kysely";
 
 export interface ITeamsRepository {

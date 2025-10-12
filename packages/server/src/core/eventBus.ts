@@ -1,5 +1,5 @@
-import type { AuthUsers } from "@syncellus/types/database.js";
-import { EventEmitter } from "events";
+import type { AuthUsers } from "@syncellus/types/database.d.ts";
+import { EventEmitter } from "node:events";
 
 export interface AppEvents {
     "user.created": AuthUsers;

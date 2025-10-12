@@ -1,8 +1,8 @@
-// import { AppConfig } from "@syncellus/configs/config.js";
-import type { DB } from "@syncellus/types/database.js";
+// import { AppConfig } from "@syncellus/configs/config.ts";
+import type { DB } from "@syncellus/types/database.d.ts";
 import { Kysely, PostgresDialect } from "kysely";
 import { Pool } from "pg";
-import { extractDbCredentials } from "../utils/databaseUrlHelper.js";
+import { extractDbCredentials } from "../utils/databaseUrlHelper.ts";
 
 export class DatabaseService {
     private static instance: Kysely<DB> | null = null;

@@ -1,5 +1,5 @@
-import type { ITeamsRepository } from "@syncellus/modules/workspaces/teams/types.js";
-import type { DB, WorkspacesTeams } from "@syncellus/types/database.js";
+import type { ITeamsRepository } from "@syncellus/modules/workspaces/teams/types.d.ts";
+import type { DB, WorkspacesTeams } from "@syncellus/types/database.d.ts";
 import type { Insertable, Kysely, Updateable } from "kysely";
 
 export class WorkspacesRepository implements ITeamsRepository {
