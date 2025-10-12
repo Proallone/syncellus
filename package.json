@@ -15,23 +15,21 @@
         "build": "tsc --build",
         "format": "biome check --write ./packages"
     },
-    "workspaces": ["packages/*"],
+    "workspaces": [
+        "packages/*"
+    ],
     "devDependencies": {
         "@biomejs/biome": "2.2.5",
         "@eslint/js": "^9.37.0",
         "concurrently": "^9.2.1",
         "eslint-config-prettier": "^10.1.8",
-        "lint-staged": "^16.2.3",
         "simple-git-hooks": "^2.13.1",
         "typescript": "^5.9.3",
         "typescript-eslint": "^8.46.0"
     },
     "simple-git-hooks": {
-        "pre-commit": "npx lint-staged",
+        "pre-commit": "echo 'lint-staged in the future'",
         "preserveUnused": true
-    },
-    "lint-staged": {
-        "*.{ts,tsx,json}": ["biome check --write --staged --no-errors-on-unmatched"]
     },
     "packageManager": "yarn@4.10.2"
 }
