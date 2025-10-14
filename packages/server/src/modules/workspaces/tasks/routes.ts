@@ -1,7 +1,10 @@
 import { authenticate } from "@syncellus/middlewares/auth.middleware.ts";
 import { validate } from "@syncellus/middlewares/validator.middleware.ts";
 import { buildTasksModule } from "@syncellus/modules/workspaces/tasks/module.ts";
-import { WorkspaceTaskPostSchema, WorkspaceTaskUpdateSchema } from "@syncellus/modules/workspaces/tasks/schema.ts";
+import {
+  WorkspaceTaskPostSchema,
+  WorkspaceTaskUpdateSchema,
+} from "@syncellus/modules/workspaces/tasks/schema.ts";
 import { hw } from "@syncellus/utils/handlerWrapper.ts";
 import { Router } from "express";
 
@@ -13,7 +16,11 @@ const controller = buildTasksModule();
 router.get("/", hw(controller.getTasks));
 router.post("/", validate(WorkspaceTaskPostSchema), hw(controller.createTasks));
 router.get("/:id", hw(controller.getTaskByID));
-router.patch("/:id", validate(WorkspaceTaskUpdateSchema), hw(controller.patchTask));
+router.patch(
+  "/:id",
+  validate(WorkspaceTaskUpdateSchema),
+  hw(controller.patchTask),
+);
 router.delete("/:id", hw(controller.deleteTask));
 
 //TODO later

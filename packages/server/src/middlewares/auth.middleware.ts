@@ -6,4 +6,5 @@ import passport from "passport";
  * @param strategy The name of the Passport strategy to use (e.g., 'local', 'jwt').
  * @returns An Express RequestHandler.
  */
-export const authenticate = (strategy: string): RequestHandler => passport.authenticate(strategy, { session: false });
+export const authenticate = (strategy: string): RequestHandler =>
+  passport.authenticate(strategy, { session: false });

@@ -2,7 +2,7 @@
   "name": "@syncellus/client",
   "version": "0.0.1",
   "exports": "./src/main.tsx",
-  "description": "Simple timesheet application client (Deno-compatible)",  
+  "description": "Simple timesheet application client (Deno-compatible)",
   "compilerOptions": {
     "strict": true,
     "jsx": "react-jsx",
@@ -20,7 +20,7 @@
     "preview": "deno run -A npm:vite preview"
   },
   "imports": {
-    "@/" : "./src/",
+    "@/": "./src/",
     "react": "npm:react@^19.2.0",
     "react-dom": "npm:react-dom@^19.2.0",
     "react-router-dom": "npm:react-router-dom@^7.9.4",

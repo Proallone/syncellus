@@ -1,14 +1,14 @@
 import type { Request } from "express";
 import type { UserJWTPayload } from "@syncellus/types/index.d.ts";
 export interface TypedRequest<T> extends Request {
-    body: T;
+  body: T;
 }
 
 declare global {
-    namespace Express {
-        //TODO fix
-        interface User extends UserJWTPayload {} // eslint-disable-line @typescript-eslint/no-empty-object-type
-    }
+  namespace Express {
+    //TODO fix
+    interface User extends UserJWTPayload {} // eslint-disable-line @typescript-eslint/no-empty-object-type
+  }
 }
 
 /**
@@ -19,19 +19,19 @@ declare global {
  * that are not part of the default Express type definitions.
  */
 declare namespace Express {
+  /**
+   * Represents a custom User object from your authentication system.
+   * This augments the default Express.User type.
+   */
+  export interface User {
     /**
-     * Represents a custom User object from your authentication system.
-     * This augments the default Express.User type.
+     * The unique identifier for the user.
      */
-    export interface User {
-        /**
-         * The unique identifier for the user.
-         */
-        id: string;
+    id: string;
 
-        /**
-         * Optional: The user's email address.
-         */
-        email?: string;
-    }
+    /**
+     * Optional: The user's email address.
+     */
+    email?: string;
+  }
 }

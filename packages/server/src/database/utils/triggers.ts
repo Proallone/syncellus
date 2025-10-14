@@ -7,12 +7,15 @@ import { sql } from "kysely";
  * @param schemaName - The database schema name (e.g., 'auth', 'workspaces').
  * @param tableName - The name of the table to apply the trigger to.
  */
-export const createUpdateTimestampTrigger = (schemaName: string, tableName: string) => {
-    const functionName = `${tableName}_update_timestamp`;
+export const createUpdateTimestampTrigger = (
+  schemaName: string,
+  tableName: string,
+) => {
+  const functionName = `${tableName}_update_timestamp`;
 
-    const triggerName = `${tableName}_update_timestamp_trigger`;
+  const triggerName = `${tableName}_update_timestamp_trigger`;
 
-    return sql`
+  return sql`
         CREATE OR REPLACE FUNCTION ${sql.id(functionName)}()
         RETURNS TRIGGER AS $$
         BEGIN

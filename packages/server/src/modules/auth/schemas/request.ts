@@ -1,35 +1,35 @@
 import { z } from "zod";
 
 export const AuthBasePayload = z.strictObject({
-    email: z.email(),
-    password: z.string().min(8).max(40)
+  email: z.email(),
+  password: z.string().min(8).max(40),
 });
 
 export const AuthSchema = z.object({
-    body: AuthBasePayload
+  body: AuthBasePayload,
 });
 
 export const ForgotPasswordPayload = z.strictObject({
-    email: z.email()
+  email: z.email(),
 });
 
 export const ForgotPasswordSchema = z.object({
-    body: ForgotPasswordPayload
+  body: ForgotPasswordPayload,
 });
 
 export const ResetPasswordPayload = z.strictObject({
-    token: z.string().length(64),
-    newPassword: z.string().min(8).max(40)
+  token: z.string().length(64),
+  newPassword: z.string().min(8).max(40),
 });
 
 export const ResetPasswordSchema = z.object({
-    body: ResetPasswordPayload
+  body: ResetPasswordPayload,
 });
 
 export const VerifyEmailPayload = z.strictObject({
-    token: z.string().length(64)
+  token: z.string().length(64),
 });
 
 export const VerifyEmailSchema = z.object({
-    body: VerifyEmailPayload
+  body: VerifyEmailPayload,
 });

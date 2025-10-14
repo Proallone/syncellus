@@ -11,7 +11,6 @@
     "strict": true
   },
   "imports": {
-    
     "@syncellus/": "./src/",
     "express": "npm:express@5.1.0",
     "cors": "npm:cors@2.8.5",

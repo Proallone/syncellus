@@ -7,15 +7,15 @@ import { MailService } from "@syncellus/modules/mailer/service.ts";
 import { AuthRepository } from "./repository.ts";
 
 export function buildAuthModule() {
-    const db = DatabaseService.getInstance();
-    const logger = LoggerService.getInstance();
+  const db = DatabaseService.getInstance();
+  const logger = LoggerService.getInstance();
 
-    const repo = new AuthRepository(db);
-    const mailProvider = new NodemailerProvider();
-    const mailService = new MailService(mailProvider);
+  const repo = new AuthRepository(db);
+  const mailProvider = new NodemailerProvider();
+  const mailService = new MailService(mailProvider);
 
-    const service = new AuthService(repo, mailService);
-    const controller = new AuthController(service, logger);
+  const service = new AuthService(repo, mailService);
+  const controller = new AuthController(service, logger);
 
-    return controller;
+  return controller;
 }

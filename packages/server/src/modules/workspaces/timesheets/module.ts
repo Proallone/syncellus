@@ -4,11 +4,11 @@ import { TimesheetsRepository } from "@syncellus/modules/workspaces/timesheets/r
 import { TimesheetsService } from "@syncellus/modules/workspaces/timesheets/service.ts";
 
 export function buildTimesheetsModule() {
-    const db = DatabaseService.getInstance();
+  const db = DatabaseService.getInstance();
 
-    const repo = new TimesheetsRepository(db);
-    const service = new TimesheetsService(repo);
-    const controller = new TimesheetsController(service);
+  const repo = new TimesheetsRepository(db);
+  const service = new TimesheetsService(repo);
+  const controller = new TimesheetsController(service);
 
-    return controller;
+  return controller;
 }

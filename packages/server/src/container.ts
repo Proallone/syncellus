@@ -19,8 +19,8 @@ const authService = new AuthService(authRepo, mailService);
 configurePassport(authService);
 
 export const container = {
-    db,
-    logger,
-    authService,
-    passport
+  db,
+  logger,
+  authService,
+  passport,
 };

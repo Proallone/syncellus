@@ -7,14 +7,14 @@ import { AccountsService } from "@syncellus/modules/accounts/service.ts";
 import { UserCreatedHandler } from "./events.ts";
 
 export function buildAccountsModule() {
-    const db = DatabaseService.getInstance();
+  const db = DatabaseService.getInstance();
 
-    const repo = new AccountsRepository(db);
-    const service = new AccountsService(repo);
-    const controller = new AccountsController(service);
+  const repo = new AccountsRepository(db);
+  const service = new AccountsService(repo);
+  const controller = new AccountsController(service);
 
-    const logger = LoggerService.getInstance();
-    new UserCreatedHandler(eventBus, repo, logger).register();
+  const logger = LoggerService.getInstance();
+  new UserCreatedHandler(eventBus, repo, logger).register();
 
-    return { controller };
+  return { controller };
 }

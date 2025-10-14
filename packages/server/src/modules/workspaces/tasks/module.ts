@@ -4,11 +4,11 @@ import { TasksRepository } from "@syncellus/modules/workspaces/tasks/repository.
 import { TasksService } from "@syncellus/modules/workspaces/tasks/service.ts";
 
 export function buildTasksModule() {
-    const db = DatabaseService.getInstance();
+  const db = DatabaseService.getInstance();
 
-    const repo = new TasksRepository(db);
-    const service = new TasksService(repo);
-    const controller = new TasksController(service);
+  const repo = new TasksRepository(db);
+  const service = new TasksService(repo);
+  const controller = new TasksController(service);
 
-    return controller;
+  return controller;
 }

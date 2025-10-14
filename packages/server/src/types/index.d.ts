@@ -1,44 +1,53 @@
 import z from "zod";
-import type { AuthBasePayload, ForgotPasswordPayload, ResetPasswordPayload, VerifyEmailPayload } from "@syncellus/modules/auth/schemas/request.ts";
-import type { AccountsGetQuery, AccountsPostPayload, AccountsUpdatePayload } from "@syncellus/modules/accounts/schema.ts";
+import type {
+  AuthBasePayload,
+  ForgotPasswordPayload,
+  ResetPasswordPayload,
+  VerifyEmailPayload,
+} from "@syncellus/modules/auth/schemas/request.ts";
+import type {
+  AccountsGetQuery,
+  AccountsPostPayload,
+  AccountsUpdatePayload,
+} from "@syncellus/modules/accounts/schema.ts";
 import type { Request } from "express";
 import { TimesheetsPostPayload } from "@syncellus/modules/workspaces/timesheets/schema.ts";
 export interface Config {
-    PORT: number;
-    NODE_ENV: string;
-    DEBUG: boolean;
-    DATABASE_URL: string;
-    JWT_TOKEN_SECRET: string;
-    CRYPTO_HMAC_KEY: string;
-    SMTP_HOST: string;
-    SMTP_PORT: number;
-    APP_URL: string;
+  PORT: number;
+  NODE_ENV: string;
+  DEBUG: boolean;
+  DATABASE_URL: string;
+  JWT_TOKEN_SECRET: string;
+  CRYPTO_HMAC_KEY: string;
+  SMTP_HOST: string;
+  SMTP_PORT: number;
+  APP_URL: string;
 }
 
 export type AuthCredentials = z.infer<typeof AuthBasePayload>;
 export type GetEmployeeQuery = z.infer<typeof AccountsGetQuery>;
 
 export interface DbHealthResponse {
-    postgres_version: string;
+  postgres_version: string;
 }
 
 export interface UserJWTPayload {
-    public_id: string;
-    roles?: string[];
-    scopes?: string[];
+  public_id: string;
+  roles?: string[];
+  scopes?: string[];
 }
 
 export interface AuthRequest extends Request {
-    user?: UserJWTPayload;
+  user?: UserJWTPayload;
 }
 
 export interface AppError extends Error {
-    status?: number;
+  status?: number;
 }
 
 export interface Credentials {
-    email: string;
-    password: string;
+  email: string;
+  password: string;
 }
 
 export type AuthRequestBody = z.infer<typeof AuthBasePayload>;

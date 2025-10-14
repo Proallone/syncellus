@@ -9,17 +9,19 @@ const config = AppConfig.getInstance();
 const logger = LoggerService.getInstance();
 
 const server = app.listen(config.PORT, () => {
-    logger.info(`Server running on port ${config.PORT} in ${config.NODE_ENV} environment`);
+  logger.info(
+    `Server running on port ${config.PORT} in ${config.NODE_ENV} environment`,
+  );
 });
 
 const shutdown = () => {
-    logger.info("\nShutting down...");
-    server.close(() => {
-        const db = DatabaseService.getInstance();
-        db.destroy();
-        logger.info("Server closed. Database closed. Cleanup complete.");
-        process.exit(0);
-    });
+  logger.info("\nShutting down...");
+  server.close(() => {
+    const db = DatabaseService.getInstance();
+    db.destroy();
+    logger.info("Server closed. Database closed. Cleanup complete.");
+    process.exit(0);
+  });
 };
 
 process.on("SIGINT", shutdown);
