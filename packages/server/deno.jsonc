@@ -1,7 +1,10 @@
 {
+  "name": "@syncellus/server",
+  "version": "0.0.1",
+  "exports": "./src/server.ts",
   "tasks": {
     "start": "deno run --env --allow-net --allow-env src/server.ts",
-    "dev": "deno run -A --env --watch src/server.ts",
+    "dev": "deno run -A --env-file --watch src/server.ts",
     "test": "deno test --allow-net --allow-env"
   },
   "compilerOptions": {
