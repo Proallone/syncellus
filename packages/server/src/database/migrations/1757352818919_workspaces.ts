@@ -4,7 +4,7 @@ import { schema as auth_schema } from "./1753121979263_auth.ts";
 
 export const schema = "workspaces";
 // `any` is required here since migrations should be frozen in time. alternatively, keep a "snapshot" db interface.
-// biome-ignore lint/suspicious/noExplicitAny: required by library
+// deno-lint-ignore no-explicit-any
 export async function up(db: Kysely<any>): Promise<void> {
   // up migration code goes here...
   // note: up migrations are mandatory. you must implement this function.
@@ -249,7 +249,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 }
 
 // `any` is required here since migrations should be frozen in time. alternatively, keep a "snapshot" db interface.
-// biome-ignore lint/suspicious/noExplicitAny: required by library
+// deno-lint-ignore no-explicit-any
 export async function down(db: Kysely<any>): Promise<void> {
   // down migration code goes here...
   // note: down migrations are optional. you can safely delete this function.

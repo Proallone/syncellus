@@ -26,8 +26,6 @@
     }
   },
   "lint": {
-    "files": {
-      "include": ["packages/**/*.ts", "packages/**/*.tsx"]
-    }
+    "include": ["packages/**/*.ts", "packages/**/*.tsx"]
   }
 }
