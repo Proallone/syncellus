@@ -1,6 +1,6 @@
 import { LoggerService } from "@syncellus/core/logger.ts";
 import type { NextFunction, Request, Response } from "express";
-import { z } from "zod";
+import type { z } from "zod";
 
 const logger = LoggerService.getInstance();
 

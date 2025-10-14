@@ -1,4 +1,4 @@
-import { ITimesheetsRepository } from "@syncellus/modules/workspaces/timesheets/types.d.ts";
+import type { ITimesheetsRepository } from "@syncellus/modules/workspaces/timesheets/types.d.ts";
 import type { DB, WorkspacesTimesheets } from "@syncellus/types/database.d.ts";
 import type { Insertable, Kysely, Updateable } from "kysely";
 

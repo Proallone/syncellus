@@ -1,4 +1,4 @@
-import { TasksRepository } from "@syncellus/modules/workspaces/tasks/repository.ts";
+import type { TasksRepository } from "@syncellus/modules/workspaces/tasks/repository.ts";
 import type { WorkspacesTasks } from "@syncellus/types/database.d.ts";
 import type { Insertable, Updateable } from "kysely";
 import { uuidv7 } from "uuidv7";

@@ -1,7 +1,7 @@
 import { HttpStatus } from "@syncellus/core/http.ts";
 import { NotFoundError } from "@syncellus/errors/http.ts";
 import type { TimesheetsService } from "@syncellus/modules/workspaces/timesheets/service.ts";
-import { TypedRequest } from "@syncellus/types/express.d.ts";
+import type { TypedRequest } from "@syncellus/types/express.d.ts";
 import type { NewTimesheetBody } from "@syncellus/types/index.d.ts";
 import { sendResponse } from "@syncellus/utils/responseBuilder.ts";
 import type { Request, Response } from "express";

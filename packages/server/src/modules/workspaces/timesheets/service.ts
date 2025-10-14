@@ -1,7 +1,7 @@
 import type { TimesheetsRepository } from "@syncellus/modules/workspaces/timesheets/repository.ts";
-import { ITimesheetsService } from "@syncellus/modules/workspaces/timesheets/types.d.ts";
+import type { ITimesheetsService } from "@syncellus/modules/workspaces/timesheets/types.d.ts";
 import type { WorkspacesTimesheets } from "@syncellus/types/database.d.ts";
-import { Insertable, Updateable } from "kysely";
+import type { Insertable, Updateable } from "kysely";
 import { uuidv7 } from "uuidv7";
 
 export class TimesheetsService implements ITimesheetsService {

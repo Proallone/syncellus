@@ -1,6 +1,6 @@
-import { AppEvents, EventBus } from "@syncellus/core/eventBus.ts";
+import type { AppEvents, EventBus } from "@syncellus/core/eventBus.ts";
 import { EventHandler } from "@syncellus/core/eventHandler.ts";
-import { AccountsRepository } from "@syncellus/modules/accounts/repository.ts";
+import type { AccountsRepository } from "@syncellus/modules/accounts/repository.ts";
 import type { Logger } from "pino";
 
 export class UserCreatedHandler extends EventHandler<"user.created"> {

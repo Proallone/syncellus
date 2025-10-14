@@ -24,7 +24,7 @@ export const Layout = () => {
           <ModeToggle />
         </div>
       </header>
-      <Separator decorative={true} />
+      <Separator decorative />
       <main className="flex-1 p-6 overflow-y-clip">
         <Outlet />
       </main>
