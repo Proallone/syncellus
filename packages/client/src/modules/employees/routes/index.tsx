@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import { EmployeeList } from "../components/EmployeeList";
+import { EmployeeList } from "../components/EmployeeList.tsx";
 
 export const EmployeeRoutes = () => (
     <Routes>

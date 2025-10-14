@@ -1,7 +1,7 @@
 import { CircleCheckBig } from "lucide-react";
 import { Outlet, useNavigate } from "react-router-dom";
-import { ModeToggle } from "@/shared/components/mode-toggle";
-import { Separator } from "@/shared/components/ui/separator";
+import { ModeToggle } from "@/shared/components/mode-toggle.tsx";
+import { Separator } from "@/shared/components/ui/separator.tsx";
 
 export const Layout = () => {
     const navigate = useNavigate();

@@ -1,12 +1,12 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Skeleton } from "@/shared/components/ui/skeleton";
-import { Layout } from "./Layout";
+import { Skeleton } from "@/shared/components/ui/skeleton.tsx";
+import { Layout } from "./Layout.tsx";
 
-const AuthRoutes = lazy(() => import("../modules/auth/routes"));
-const DashboardRoutes = lazy(() => import("../modules/dashboard/routes"));
-const EmployeeRoutes = lazy(() => import("../modules/employees/routes"));
-const TimesheetRoutes = lazy(() => import("../modules/timesheets/routes"));
+const AuthRoutes = lazy(() => import("../modules/auth/routes/index.tsx"));
+const DashboardRoutes = lazy(() => import("../modules/dashboard/routes/index.tsx"));
+const EmployeeRoutes = lazy(() => import("../modules/employees/routes/index.tsx"));
+const TimesheetRoutes = lazy(() => import("../modules/timesheets/routes/index.tsx"));
 
 export const AppRouter = () => {
     return (

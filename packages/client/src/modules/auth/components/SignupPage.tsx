@@ -1,4 +1,4 @@
-import { SignupForm } from "@/shared/components/signup-form";
+import { SignupForm } from "@/shared/components/signup-form.tsx";
 
 export const SignupPage = () => {
     return (

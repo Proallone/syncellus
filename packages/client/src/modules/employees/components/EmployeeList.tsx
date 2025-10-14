@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { Skeleton } from "@/shared/components/ui/skeleton";
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/shared/components/ui/table";
-import type { Employee } from "../service/employees";
-import { fetchEmployees } from "../service/employees";
+import { Skeleton } from "@/shared/components/ui/skeleton.tsx";
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/shared/components/ui/table.tsx";
+import { type Employee, fetchEmployees } from "../service/employees.ts";
 
 export const EmployeeList = () => {
     const [employees, setEmployees] = useState<Employee[]>([]);

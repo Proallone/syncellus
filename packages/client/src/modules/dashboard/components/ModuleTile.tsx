@@ -1,4 +1,4 @@
-import { Card, CardDescription, CardHeader, CardTitle } from "@/shared/components/ui/card";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/shared/components/ui/card.tsx";
 
 interface ModuleTileProps {
     title: string;

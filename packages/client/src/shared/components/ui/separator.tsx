@@ -1,7 +1,7 @@
 import * as SeparatorPrimitive from "@radix-ui/react-separator";
-import * as React from "react";
+import type * as React from "react";
 
-import { cn } from "@/shared/components/lib/utils";
+import { cn } from "@/shared/components/lib/utils.ts";
 
 function Separator({ className, orientation = "horizontal", decorative = true, ...props }: React.ComponentProps<typeof SeparatorPrimitive.Root>) {
     return (

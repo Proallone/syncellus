@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useAuth } from "@/modules/auth/hooks/useAuth";
-import { cn } from "@/shared/components/lib/utils";
-import { Button } from "@/shared/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/components/ui/card";
-import { Input } from "@/shared/components/ui/input";
-import { Label } from "@/shared/components/ui/label";
+import { useAuth } from "@/modules/auth/hooks/useAuth.ts";
+import { cn } from "@/shared/components/lib/utils.ts";
+import { Button } from "@/shared/components/ui/button.tsx";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/components/ui/card.tsx";
+import { Input } from "@/shared/components/ui/input.tsx";
+import { Label } from "@/shared/components/ui/label.tsx";
 
 export function PasswordResetForm({ className, ...props }: React.ComponentProps<"div">) {
     const [searchParams] = useSearchParams();

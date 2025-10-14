@@ -1,4 +1,4 @@
-import { PasswordResetForm } from "@/shared/components/password-reset";
+import { PasswordResetForm } from "@/shared/components/password-reset.tsx";
 
 export const PasswordResetPage = () => {
     return (
