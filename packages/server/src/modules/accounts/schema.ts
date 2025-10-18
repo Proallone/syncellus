@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "@zod/zod";
 
 const AccountsBasePayload = z.strictObject({
   user_id: z.string(),

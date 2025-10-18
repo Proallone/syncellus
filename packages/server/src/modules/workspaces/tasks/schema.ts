@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "@zod/zod";
 
 const WorkspaceTaskBasePayload = z.strictObject({
   team_id: z.uuidv7(),

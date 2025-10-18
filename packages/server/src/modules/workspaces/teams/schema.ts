@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "@zod/zod";
 
 const WorkspaceTeamBasePayload = z.strictObject({
   name: z.string().max(256),
