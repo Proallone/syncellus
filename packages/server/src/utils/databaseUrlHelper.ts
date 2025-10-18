@@ -1,9 +1,9 @@
 export type DbCredentials = {
   protocol: string;
   user: string;
-  password?: string; // Password is optional
+  password?: string;
   host: string;
-  port: number | null; // Port can be null if not specified
+  port: number | null; 
   database: string;
 };
 
@@ -27,9 +27,9 @@ export function extractDbCredentials(
     }
 
     const user = url.username;
-    const password = url.password || undefined; // Use undefined if password is not present
+    const password = url.password || undefined;
     const host = url.hostname;
-    // The port comes as a string, convert it to a number.
+
     const port = url.port ? parseInt(url.port, 10) : null;
 
     const database = url.pathname.substring(1);

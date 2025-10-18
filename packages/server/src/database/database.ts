@@ -1,33 +1,29 @@
-// import { AppConfig } from "@syncellus/configs/config.ts";
 import type { DB } from "@syncellus/types/database.d.ts";
 import { Kysely, PostgresDialect } from "kysely";
 import { Pool } from "pg";
-import { extractDbCredentials } from "../utils/databaseUrlHelper.ts";
-import process from "node:process";
+import { extractDbCredentials } from "@syncellus/utils/databaseUrlHelper.ts";
+import { AppConfig } from "@syncellus/configs/config.ts";
 
 export class DatabaseService {
   private static instance: Kysely<DB> | null = null;
 
   public static getInstance(): Kysely<DB> {
-    // const config = AppConfig.getInstance(); //TODO fix
+    const config = AppConfig.getInstance(); 
 
     if (!DatabaseService.instance) {
-      const DATABASE_URL = process.env.DATABASE_URL;
-      const { database, host, user, password, port } = extractDbCredentials(
-        DATABASE_URL,
-      );
+
+      if (!config.DATABASE_URL) throw new Error("DATABASE_URL env variable not provided");
+
+      const credentials = extractDbCredentials(config.DATABASE_URL);
+
       //TODO this is the first time database is accessed - but it might change in the future, change this pool config
-      const config = {
-        database: database,
-        host: host,
-        user: user,
-        password: password,
-        port: port,
+      const dbConfig = {
+        ...credentials,
         max: 10,
       };
 
       const dialect = new PostgresDialect({
-        pool: new Pool(config),
+        pool: new Pool(dbConfig),
       });
 
       DatabaseService.instance = new Kysely<DB>({ dialect });
