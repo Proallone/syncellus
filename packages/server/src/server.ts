@@ -2,7 +2,6 @@ import app from "@syncellus/app.ts";
 import { AppConfig } from "@syncellus/configs/config.ts";
 import { LoggerService } from "@syncellus/core/logger.ts";
 import { DatabaseService } from "@syncellus/database/database.ts";
-import process from "node:process";
 
 const config = AppConfig.getInstance();
 
@@ -20,9 +19,9 @@ const shutdown = () => {
     const db = DatabaseService.getInstance();
     db.destroy();
     logger.info("Server closed. Database closed. Cleanup complete.");
-    process.exit(0);
+    Deno.exit(0);
   });
 };
 
-process.on("SIGINT", shutdown);
-process.on("SIGTERM", shutdown);
+Deno.addSignalListener("SIGINT", shutdown);
+Deno.addSignalListener("SIGTERM", shutdown);

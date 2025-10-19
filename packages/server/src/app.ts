@@ -8,12 +8,13 @@ import authRoutes from "@syncellus/modules/auth/routes.ts";
 import healthRoutes from "@syncellus/modules/health/routes.ts";
 import workspacesRoutes from "@syncellus/modules/workspaces/routes.ts";
 import cors from "cors";
-import express, { Router } from "express";
+import express, { Router, type Express } from "express";
 import helmet from "helmet";
 import passport from "passport";
 import { pinoHttp } from "pino-http";
 
-const app = express();
+const app: Express = express();
+
 app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ limit: "100kb", extended: true }));
 app.use(passport.initialize());
@@ -25,7 +26,7 @@ app.use(cors(corsConfig));
 app.use(helmet());
 app.use(pinoHttp(container.logger));
 
-const apiRouter = Router();
+const apiRouter: Router = Router();
 
 apiRouter.use("/health", healthRoutes);
 apiRouter.use("/auth", authRoutes);

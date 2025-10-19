@@ -1,6 +1,6 @@
-// deno.jsonc
 {
   "description": "Small and modular timesheets app",
+  "nodeModulesDir": "auto",
   "compilerOptions": {
     "strict": true,
     "lib": [
@@ -21,9 +21,7 @@
     "build": "deno check packages/server/main.ts"
   },
   "fmt": {
-    "files": {
-      "include": ["packages/**/*.ts", "packages/**/*.tsx", "deno.jsonc"]
-    }
+    "include": ["packages/**/*.ts", "packages/**/*.tsx", "deno.jsonc"]
   },
   "lint": {
     "include": ["packages/**/*.ts", "packages/**/*.tsx"]
