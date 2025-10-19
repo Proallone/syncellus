@@ -1,13 +1,13 @@
 // core/event-handler.ts
-import type { AppEvents, EventBus } from "@syncellus/core/eventBus.js";
+import type { AppEvents, EventBus } from "@syncellus/core/eventBus.ts";
 
 export abstract class EventHandler<K extends keyof AppEvents> {
-    constructor(protected readonly eventBus: EventBus) {}
+  constructor(protected readonly eventBus: EventBus) {}
 
-    abstract eventName(): K;
-    abstract handle(payload: AppEvents[K]): Promise<void> | void;
+  abstract eventName(): K;
+  abstract handle(payload: AppEvents[K]): Promise<void> | void;
 
-    register(): void {
-        this.eventBus.on(this.eventName(), this.handle.bind(this));
-    }
+  register(): void {
+    this.eventBus.on(this.eventName(), this.handle.bind(this));
+  }
 }

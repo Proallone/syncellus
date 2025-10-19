@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "@zod/zod";
 
 //TODO fix patch payload
 /**
@@ -7,8 +7,8 @@ import { z } from "zod";
  * start and end times, ensuring both date and time are present.
  */
 export const WorksheetBasePayload = z.strictObject({
-    start_time: z.iso.datetime(),
-    end_time: z.iso.datetime()
+  start_time: z.iso.datetime(),
+  end_time: z.iso.datetime(),
 });
 
 /**
@@ -17,9 +17,12 @@ export const WorksheetBasePayload = z.strictObject({
  * worksheet entries.
  */
 export const TimesheetsPostPayload = z.strictObject({
-    user_id: z.uuidv7(),
-    task_id: z.uuidv7(),
-    timesheets: z.array(WorksheetBasePayload).min(1, "The 'timesheets' array must not be empty.")
+  user_id: z.uuidv7(),
+  task_id: z.uuidv7(),
+  timesheets: z.array(WorksheetBasePayload).min(
+    1,
+    "The 'timesheets' array must not be empty.",
+  ),
 });
 
 /**
@@ -34,12 +37,12 @@ export const TimesheetsUpdatePayload = TimesheetsPostPayload.partial();
  * The full schema for a POST request body, containing the new Timesheets payload.
  */
 export const TimesheetsPostSchema = z.object({
-    body: TimesheetsPostPayload
+  body: TimesheetsPostPayload,
 });
 
 /**
  * The full schema for a PATCH/PUT request body, containing the update payload.
  */
 export const TimesheetsUpdateSchema = z.object({
-    body: TimesheetsUpdatePayload
+  body: TimesheetsUpdatePayload,
 });

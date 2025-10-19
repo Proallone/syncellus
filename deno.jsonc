@@ -1,0 +1,29 @@
+{
+  "description": "Small and modular timesheets app",
+  "nodeModulesDir": "auto",
+  "compilerOptions": {
+    "strict": true,
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "deno.ns"
+    ]
+  },
+  "workspace": [
+    "packages/client",
+    "packages/server"
+  ],
+  "tasks": {
+    "dev": "deno task dev:server & deno task dev:client",
+    "dev:server": "cd packages/server && deno run -A --env-file --watch src/server.ts",
+    "dev:client": "cd packages/client && deno run -A npm:vite dev --config vite.config.ts",
+    "ci": "deno cache --lock-write packages/server/main.ts && deno task build",
+    "build": "deno check packages/server/main.ts"
+  },
+  "fmt": {
+    "include": ["packages/**/*.ts", "packages/**/*.tsx", "deno.jsonc"]
+  },
+  "lint": {
+    "include": ["packages/**/*.ts", "packages/**/*.tsx"]
+  }
+}

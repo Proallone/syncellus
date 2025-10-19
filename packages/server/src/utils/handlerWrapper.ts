@@ -2,7 +2,10 @@ import type { NextFunction, Request, RequestHandler, Response } from "express";
 
 type MaybePromise<T> = T | Promise<T>;
 
-type AnyRequestHandler<Req extends Request = Request, Res extends Response = Response> = (req: Req, res: Res, next: NextFunction) => MaybePromise<unknown>;
+type AnyRequestHandler<
+  Req extends Request = Request,
+  Res extends Response = Response,
+> = (req: Req, res: Res, next: NextFunction) => MaybePromise<unknown>;
 
 /**
  * Express async handler wrapper.
@@ -17,7 +20,9 @@ type AnyRequestHandler<Req extends Request = Request, Res extends Response = Res
  * @returns {import("express").RequestHandler} The wrapped handler.
  */
 export const hw =
-    <Req extends Request = Request, Res extends Response = Response>(fn: AnyRequestHandler<Req, Res>): RequestHandler =>
-    (req, res, next) => {
-        Promise.resolve(fn(req as Req, res as Res, next)).catch(next);
-    };
+  <Req extends Request = Request, Res extends Response = Response>(
+    fn: AnyRequestHandler<Req, Res>,
+  ): RequestHandler =>
+  (req, res, next) => {
+    Promise.resolve(fn(req as Req, res as Res, next)).catch(next);
+  };
