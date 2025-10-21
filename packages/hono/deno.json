@@ -1,9 +1,10 @@
 {
   "imports": {
+    "@syncellus/hono": "./src/",
     "hono": "jsr:@hono/hono@^4.10.1"
   },
   "tasks": {
-    "start": "deno run --allow-net main.ts"
+    "start": "deno run --allow-net src/main.ts"
   },
   "compilerOptions": {
     "jsx": "precompile",
