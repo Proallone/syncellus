@@ -1,5 +1,5 @@
 import { defineConfig } from "kysely-ctl";
-import { DatabaseService } from "./src/database/database.ts";
+import { DatabaseService } from "@syncellus/database/database.ts";
 
 const db = DatabaseService.getInstance();
 
