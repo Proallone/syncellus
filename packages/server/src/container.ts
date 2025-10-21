@@ -5,7 +5,7 @@ import { AuthService } from "@syncellus/modules/auth/service.ts";
 import { NodemailerProvider } from "@syncellus/modules/mailer/providers/NodemailerProvider.ts";
 import { MailService } from "@syncellus/modules/mailer/service.ts";
 import passport from "passport";
-import { DatabaseService } from "./database/database.ts";
+import { DatabaseService } from "@syncellus/database/database.ts";
 
 const db = DatabaseService.getInstance();
 const logger = LoggerService.getInstance();

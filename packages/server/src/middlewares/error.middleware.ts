@@ -1,7 +1,7 @@
 import { AppConfig } from "@syncellus/configs/config.ts";
 import { LoggerService } from "@syncellus/core/logger.ts";
 import { HttpError } from "@syncellus/errors/http.ts";
-import type { AppError } from "@syncellus/types/index.ts";
+import type { AppError } from "@syncellus/types/index.d.ts";
 import { sendResponse } from "@syncellus/utils/responseBuilder.ts";
 import type { NextFunction, Request, Response } from "express";
 

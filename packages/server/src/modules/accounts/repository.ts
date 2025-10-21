@@ -1,5 +1,5 @@
 import type { AccountsProfiles, DB } from "@syncellus/types/database.d.ts";
-import type { GetEmployeeQuery } from "@syncellus/types/index.ts";
+import type { GetEmployeeQuery } from "@syncellus/types/index.d.ts";
 import type { Insertable, Kysely, Updateable } from "kysely";
 
 export class AccountsRepository {

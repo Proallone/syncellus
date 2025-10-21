@@ -9,7 +9,7 @@ import type {
   WorkspacesTimesheetStatuses,
 } from "@syncellus/types/database.d.ts";
 import type { Insertable, Kysely } from "kysely";
-import { schema } from "../migrations/1757352818919_workspaces.ts";
+import { schema } from "@syncellus/database/migrations/1757352818919_workspaces.ts";
 
 // replace `any` with your database interface.
 export async function seed(db: Kysely<DB>): Promise<void> {

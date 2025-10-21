@@ -1,5 +1,5 @@
 import type { DB } from "@syncellus/types/database.d.ts";
-import type { DbHealthResponse } from "@syncellus/types/index.ts";
+import type { DbHealthResponse } from "@syncellus/types/index.d.ts";
 import { type Kysely, sql } from "kysely";
 import type { IHealthRepository } from "./types.d.ts";
 

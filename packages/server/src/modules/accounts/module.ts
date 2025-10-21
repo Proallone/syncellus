@@ -4,7 +4,7 @@ import { DatabaseService } from "@syncellus/database/database.ts";
 import { AccountsController } from "@syncellus/modules/accounts/controller.ts";
 import { AccountsRepository } from "@syncellus/modules/accounts/repository.ts";
 import { AccountsService } from "@syncellus/modules/accounts/service.ts";
-import { UserCreatedHandler } from "./events.ts";
+import { UserCreatedHandler } from "@syncellus/modules/accounts/events.ts";
 
 export function buildAccountsModule() {
   const db = DatabaseService.getInstance();

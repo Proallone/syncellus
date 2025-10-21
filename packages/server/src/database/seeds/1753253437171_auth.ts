@@ -7,7 +7,7 @@ import type {
   DB,
 } from "@syncellus/types/database.d.ts";
 import type { Insertable, Kysely } from "kysely";
-import { schema } from "../migrations/1753121979263_auth.ts";
+import { schema } from "@syncellus/database/migrations/1753121979263_auth.ts";
 
 const users: Insertable<AuthUsers>[] = [
   {

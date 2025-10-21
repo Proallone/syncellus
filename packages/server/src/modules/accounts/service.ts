@@ -1,6 +1,6 @@
 import type { AccountsRepository } from "@syncellus/modules/accounts/repository.ts";
 import type { AccountsProfiles } from "@syncellus/types/database.d.ts";
-import type { GetEmployeeQuery } from "@syncellus/types/index.ts";
+import type { GetEmployeeQuery } from "@syncellus/types/index.d.ts";
 import type { Insertable, Updateable } from "kysely";
 import { uuidv7 } from "uuidv7";
 

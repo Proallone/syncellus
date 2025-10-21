@@ -1,13 +1,13 @@
 import { HttpStatus } from "@syncellus/core/http.ts";
 import { UserInformationResponse } from "@syncellus/modules/auth/schemas/response.ts";
 import type { AuthService } from "@syncellus/modules/auth/service.ts";
-import type { TypedRequest } from "@syncellus/types/express.ts";
+import type { TypedRequest } from "@syncellus/types/express.d.ts";
 import type {
   AuthRequestBody,
   ForgotPasswordRequestBody,
   ResetPasswordRequestBody,
   VerifyEmailRequestBody,
-} from "@syncellus/types/index.ts";
+} from "@syncellus/types/index.d.ts";
 import { sendResponse } from "@syncellus/utils/responseBuilder.ts";
 import type { Request, Response } from "express";
 import type { Logger } from "pino";

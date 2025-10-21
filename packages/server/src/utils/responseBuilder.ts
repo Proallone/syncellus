@@ -1,5 +1,5 @@
 import type { Response } from "express";
-import type { ZodObject } from "zod";
+import type { ZodObject } from "@zod/zod";
 
 interface ApiResponse<T = unknown> {
   success?: boolean;

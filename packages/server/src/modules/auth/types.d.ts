@@ -7,7 +7,7 @@ import type {
   AuthCredentials,
   Credentials,
   UserJWTPayload,
-} from "@syncellus/types/index.ts";
+} from "@syncellus/types/index.d.ts";
 import type { DeleteResult, Insertable, Selectable } from "kysely";
 
 export interface IAuthRepository {

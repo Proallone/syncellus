@@ -15,8 +15,8 @@
   ],
   "tasks": {
     "dev": "deno task dev:server & deno task dev:client",
-    "dev:server": "cd packages/server && deno run -A --env-file --watch src/server.ts",
-    "dev:client": "cd packages/client && deno run -A npm:vite dev --config vite.config.ts",
+    "dev:server": "deno run -A --env-file --watch packages/server/src/server.ts",
+    "dev:client": "deno run -A npm:vite dev --config packages/client/vite.config.ts",
     "ci": "deno cache --lock-write packages/server/main.ts && deno task build",
     "build": "deno check packages/server/main.ts"
   },

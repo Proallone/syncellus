@@ -1,6 +1,6 @@
 import { AppConfig } from "@syncellus/configs/config.ts";
 import { LoggerService } from "@syncellus/core/logger.ts";
-import type { AuthRequest } from "@syncellus/types/index.ts";
+import type { AuthRequest } from "@syncellus/types/index.d.ts";
 import type { NextFunction, Response } from "express";
 
 const config = AppConfig.getInstance();

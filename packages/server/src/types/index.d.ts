@@ -1,4 +1,4 @@
-import type z from "zod";
+import type z from "@zod/zod";
 import type {
   AuthBasePayload,
   ForgotPasswordPayload,

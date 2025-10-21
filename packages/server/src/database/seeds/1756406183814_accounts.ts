@@ -1,6 +1,6 @@
 import type { AccountsProfiles, DB } from "@syncellus/types/database.d.ts";
 import type { Insertable, Kysely } from "kysely";
-import { schema } from "../migrations/1756406769551_accounts.ts";
+import { schema } from "@syncellus/database/migrations/1756406769551_accounts.ts";
 
 const accounts: Insertable<AccountsProfiles>[] = [
   {

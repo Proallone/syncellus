@@ -1,5 +1,5 @@
 import { type Kysely, sql } from "kysely";
-import { createUpdateTimestampTrigger } from "../utils/triggers.ts";
+import { createUpdateTimestampTrigger } from "@syncellus/database/utils/triggers.ts";
 
 export const schema = "auth";
 // `any` is required here since migrations should be frozen in time. alternatively, keep a "snapshot" db interface.\
