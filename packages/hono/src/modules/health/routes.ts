@@ -1,21 +1,24 @@
 import { Hono } from "hono";
-import { HealthService } from "./service.ts";
 
-const router = new Hono();
+const router = new Hono<{ Variables: { deps: any } }>();
 
 router.get("/app", async (c) => {
-    const res = await HealthService.getApplicationStatus();
+    const { healthService } = c.get('deps');
+    const res = await healthService.getApplicationStatus();
     return c.json(res);
 });
 
 router.get("/database", async (c) => {
-    const res = await HealthService.getDatabaseStatus();
+    const { healthService } = c.get('deps');
+
+    const res = await healthService.getDatabaseStatus();
     return c.json(res);
 });
 
 router.get("/full", async (c) => {
-    const app = await HealthService.getApplicationStatus();
-    const db = await HealthService.getDatabaseStatus();
+    const { healthService } = c.get('deps');
+    const app = await healthService.getApplicationStatus();
+    const db = await healthService.getDatabaseStatus();
     return c.json({ app, db });
 });
 

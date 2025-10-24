@@ -1,7 +1,11 @@
 {
   "imports": {
-    "@syncellus/hono": "./src/",
-    "hono": "jsr:@hono/hono@^4.10.1"
+    "@kysely-org/kysely-ctl": "jsr:@kysely-org/kysely-ctl@^0.12.2",
+    "@syncellus/hono/": "./src/",
+    "hono": "jsr:@hono/hono@^4.10.1",
+    "kysely": "npm:kysely@^0.28.8",
+    "kysely-codegen": "npm:kysely-codegen@^0.19.0",
+    "pg": "npm:pg@^8.16.3"
   },
   "tasks": {
     "start": "deno run --allow-net src/main.ts"
