@@ -3,7 +3,7 @@ export type DbCredentials = {
   user: string;
   password?: string;
   host: string;
-  port: number | null; 
+  port: number | null;
   database: string;
 };
 
@@ -13,9 +13,9 @@ export type DbCredentials = {
  * @param connectionString The full database connection URL string.
  * @returns A DbCredentials object containing the parsed components, or null if the string is invalid.
  */
-export function extractDbCredentials(
+export const extractDbCredentials = (
   connectionString: string,
-): DbCredentials | null {
+): DbCredentials | null => {
   try {
     const url = new URL(connectionString);
 
@@ -53,4 +53,4 @@ export function extractDbCredentials(
     console.error("Failed to parse the connection string:", error);
     return null;
   }
-}
+};

@@ -1,24 +1,21 @@
 import { Hono } from "hono";
+import { getApplicationStatus, getDatabaseStatus } from "@syncellus/hono/modules//health/service.ts";
 
-const router = new Hono<{ Variables: { deps: any } }>();
+const router = new Hono();
 
 router.get("/app", async (c) => {
-    const { healthService } = c.get('deps');
-    const res = await healthService.getApplicationStatus();
+    const res = await getApplicationStatus();
     return c.json(res);
 });
 
 router.get("/database", async (c) => {
-    const { healthService } = c.get('deps');
-
-    const res = await healthService.getDatabaseStatus();
+    const res = await getDatabaseStatus();
     return c.json(res);
 });
 
 router.get("/full", async (c) => {
-    const { healthService } = c.get('deps');
-    const app = await healthService.getApplicationStatus();
-    const db = await healthService.getDatabaseStatus();
+    const app = await getApplicationStatus();
+    const db = await getDatabaseStatus();
     return c.json({ app, db });
 });
 

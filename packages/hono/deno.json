@@ -9,6 +9,7 @@
   },
   "tasks": {
     "start": "deno run --allow-net --env-file src/main.ts",
+    "watch": "deno run --watch -A --env-file src/main.ts",
     "db:up": "kysely migrate:latest && deno run db:postup",
     "db:codegen": "kysely-codegen --out-file ./src/types/database.d.ts",
     "db:postup": "deno run db:codegen && deno run db:seed",

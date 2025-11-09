@@ -1,18 +1,14 @@
-import { HealthRepository } from "@syncellus/hono/modules/health/repository.ts";
+import { getDatabaseVersionFromDb } from "@syncellus/hono/modules/health/repository.ts";
 
-export class HealthService {
-    constructor(private readonly repo: HealthRepository) { }
+export const getApplicationStatus = async () => {
+  return await { status: "Healthy" };
+};
 
-    public getApplicationStatus = async () => {
-        return await { status: "Healthy" };
-    };
+export const getDatabaseStatus = async () => {
+  const version = await getDatabaseVersionFromDb();
 
-    public getDatabaseStatus = async () => {
-        const version = await this.repo.getDatabaseVersionFromDb();
-
-        return {
-            status: "Healthy",
-            postgres_version: version.postgres_version,
-        };
-    };
-}
+  return {
+    status: "Healthy",
+    postgres_version: version.postgres_version,
+  };
+};
