@@ -3,6 +3,9 @@
   "specifiers": {
     "jsr:@hono/hono@^4.10.1": "4.10.1",
     "jsr:@kysely-org/kysely-ctl@~0.12.2": "0.12.2",
+    "jsr:@std/bytes@^1.0.6": "1.0.6",
+    "jsr:@std/crypto@^1.0.5": "1.0.5",
+    "jsr:@std/uuid@^1.0.9": "1.0.9",
     "jsr:@zod/zod@^4.1.12": "4.1.12",
     "npm:@radix-ui/react-dropdown-menu@^2.1.16": "2.1.16_@types+react@19.2.2_@types+react-dom@19.2.1__@types+react@19.2.2_react@19.2.0_react-dom@19.2.0__react@19.2.0",
     "npm:@radix-ui/react-label@^2.1.7": "2.1.7_@types+react@19.2.2_@types+react-dom@19.2.1__@types+react@19.2.2_react@19.2.0_react-dom@19.2.0__react@19.2.0",
@@ -13,6 +16,7 @@
     "npm:@types/react-dom@^19.2.1": "19.2.1_@types+react@19.2.2",
     "npm:@types/react@^19.2.2": "19.2.2",
     "npm:@vitejs/plugin-react@^5.0.4": "5.0.4_vite@7.1.10__@types+node@24.2.0__jiti@2.6.1__picomatch@4.0.3_@babel+core@7.28.4_@types+node@24.2.0_jiti@2.6.1",
+    "npm:argon2@0.44": "0.44.0",
     "npm:argon2@0.44.0": "0.44.0",
     "npm:c12@^2.0.1": "2.0.4",
     "npm:class-variance-authority@~0.7.1": "0.7.1",
@@ -79,6 +83,19 @@
         "npm:std-env",
         "npm:type-fest",
         "npm:typescript@^5.8.2"
+      ]
+    },
+    "@std/bytes@1.0.6": {
+      "integrity": "f6ac6adbd8ccd99314045f5703e23af0a68d7f7e58364b47d2c7f408aeb5820a"
+    },
+    "@std/crypto@1.0.5": {
+      "integrity": "0dcfbb319fe0bba1bd3af904ceb4f948cde1b92979ec1614528380ed308a3b40"
+    },
+    "@std/uuid@1.0.9": {
+      "integrity": "44b627bf2d372fe1bd099e2ad41b2be41a777fc94e62a3151006895a037f1642",
+      "dependencies": [
+        "jsr:@std/bytes",
+        "jsr:@std/crypto"
       ]
     },
     "@zod/zod@4.1.12": {
@@ -3428,8 +3445,11 @@
         "dependencies": [
           "jsr:@hono/hono@^4.10.1",
           "jsr:@kysely-org/kysely-ctl@~0.12.2",
+          "jsr:@std/uuid@^1.0.9",
+          "npm:argon2@0.44",
           "npm:kysely-codegen@0.19",
           "npm:kysely@~0.28.8",
+          "npm:nanoid@^5.1.6",
           "npm:pg@^8.16.3"
         ]
       },
