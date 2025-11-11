@@ -4,7 +4,7 @@
 		"@std/uuid": "jsr:@std/uuid@^1.0.9",
 		"@syncellus/hono/": "./src/",
 		"argon2": "npm:argon2@^0.44.0",
-		"hono": "jsr:@hono/hono@^4.10.1",
+		"hono": "jsr:@hono/hono@^4.10.4",
 		"kysely": "npm:kysely@^0.28.8",
 		"kysely-codegen": "npm:kysely-codegen@^0.19.0",
 		"nanoid": "npm:nanoid@^5.1.6",

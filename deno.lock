@@ -1,7 +1,7 @@
 {
   "version": "5",
   "specifiers": {
-    "jsr:@hono/hono@^4.10.1": "4.10.1",
+    "jsr:@hono/hono@^4.10.4": "4.10.4",
     "jsr:@kysely-org/kysely-ctl@~0.12.2": "0.12.2",
     "jsr:@std/bytes@^1.0.6": "1.0.6",
     "jsr:@std/crypto@^1.0.5": "1.0.5",
@@ -67,8 +67,8 @@
     "npm:vite@^7.1.9": "7.1.10_@types+node@24.2.0_jiti@2.6.1_picomatch@4.0.3"
   },
   "jsr": {
-    "@hono/hono@4.10.1": {
-      "integrity": "cea3f17677afcd84a654cd1633c136e6bb2220bfa512fdac56614bb97c39fdbf"
+    "@hono/hono@4.10.4": {
+      "integrity": "e54d00c4cf994e7ae297d7321793cf940656b9c5e934564c03ffc15499041b9e"
     },
     "@kysely-org/kysely-ctl@0.12.2": {
       "integrity": "9326c9c1f0b897165772755659c9cfa544bdff6680583c82e8e1652f7c9bac7b",
@@ -3443,7 +3443,7 @@
       },
       "packages/hono": {
         "dependencies": [
-          "jsr:@hono/hono@^4.10.1",
+          "jsr:@hono/hono@^4.10.4",
           "jsr:@kysely-org/kysely-ctl@~0.12.2",
           "jsr:@std/uuid@^1.0.9",
           "npm:argon2@0.44",
