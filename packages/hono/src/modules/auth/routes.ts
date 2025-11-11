@@ -11,6 +11,8 @@ import {
 import { HttpStatus } from "@syncellus/hono/common/http.ts";
 import { basicAuth } from "hono/basic-auth";
 import { LoggerService } from "@syncellus/hono/common/logger.ts";
+import { sValidator } from "@hono/standard-validator";
+import { z } from "@zod/zod";
 
 type Variables = { user_public_id: string };
 
@@ -32,8 +34,13 @@ router.use(
 	}),
 );
 
-router.post("/register", async (c) => {
-	const { email, password } = await c.req.json(); //TODO add validation
+const registerSchema = z.strictObject({
+	email: z.email(),
+	password: z.string().min(8).max(40),
+});
+
+router.post("/register", sValidator("json", registerSchema), async (c) => {
+	const { email, password } = await c.req.valid("json");
 	const newUser = await registerNewUser({ email, password });
 	logger.info({ email, action: "register" }, "Registration attempt");
 
@@ -55,8 +62,12 @@ router.post("/login", async (c) => {
 	return c.json({ message: "Login successful", data: { accessToken } });
 });
 
-router.post("/verify-email", async (c) => {
-	const { token } = await c.req.json();
+const verifyEmailSchema = z.strictObject({
+	token: z.string().length(64),
+});
+
+router.post("/verify-email", sValidator("json", verifyEmailSchema), async (c) => {
+	const { token } = await c.req.valid("json");
 	logger.info({ action: "verify-email" }, "Verification attempt");
 	verifyAccountEmail(token);
 
@@ -64,16 +75,25 @@ router.post("/verify-email", async (c) => {
 	return c.json({ message: "Email verified successfully" });
 });
 
-router.post("forgot-password", async (c) => {
-	const { email } = await c.req.json();
+const forgotPasswordSchema = z.strictObject({
+	email: z.email(),
+});
+
+router.post("forgot-password", sValidator("json", forgotPasswordSchema), async (c) => {
+	const { email } = await c.req.valid("json");
 	logger.info({ email, action: "forgot-password" }, "Password reset requested");
 	await issuePasswordResetToken(email);
 	c.status(HttpStatus.OK);
 	return c.json({});
 });
 
-router.post("/reset-password", async (c) => {
-	const { token, newPassword } = await c.req.json();
+const resetPasswordSchema = z.strictObject({
+	token: z.string().length(64),
+	newPassword: z.string().min(8).max(40),
+});
+
+router.post("/reset-password", sValidator("json", resetPasswordSchema), async (c) => {
+	const { token, newPassword } = await c.req.valid("json");
 	logger.info({ action: "reset-password" }, "Password reset attempt");
 	await performPasswordReset(token, newPassword);
 	c.status(HttpStatus.OK);
@@ -81,7 +101,7 @@ router.post("/reset-password", async (c) => {
 });
 
 router.get("/me", async (c) => {
-	const { user } = await c.req.json();
+	const { user } = await c.req.json(); // TODO use get/set with jwt strategy
 	logger.info({ userId: user.public_id, action: "get-profile" }, "Profile requested");
 	const profile = await findUserByPublicID(user.public_id);
 

@@ -1,10 +1,12 @@
 {
 	"imports": {
+		"@hono/standard-validator": "jsr:@hono/standard-validator@^0.1.5",
 		"@kysely-org/kysely-ctl": "jsr:@kysely-org/kysely-ctl@^0.12.2",
 		"@std/crypto": "jsr:@std/crypto@^1.0.5",
 		"@std/path": "jsr:@std/path@^1.1.2",
 		"@std/uuid": "jsr:@std/uuid@^1.0.9",
 		"@syncellus/hono/": "./src/",
+		"@zod/zod": "jsr:@zod/zod@^4.1.12",
 		"argon2": "npm:argon2@^0.44.0",
 		"handlebars": "npm:handlebars@^4.7.8",
 		"hono": "jsr:@hono/hono@^4.10.4",

@@ -2,6 +2,8 @@
   "version": "5",
   "specifiers": {
     "jsr:@hono/hono@^4.10.4": "4.10.4",
+    "jsr:@hono/hono@^4.8.3": "4.10.4",
+    "jsr:@hono/standard-validator@~0.1.5": "0.1.5",
     "jsr:@kysely-org/kysely-ctl@~0.12.2": "0.12.2",
     "jsr:@std/bytes@^1.0.6": "1.0.6",
     "jsr:@std/crypto@^1.0.5": "1.0.5",
@@ -73,6 +75,12 @@
   "jsr": {
     "@hono/hono@4.10.4": {
       "integrity": "e54d00c4cf994e7ae297d7321793cf940656b9c5e934564c03ffc15499041b9e"
+    },
+    "@hono/standard-validator@0.1.5": {
+      "integrity": "5c655632ba5e0a52d9590cb26dc244fc29261778a04f2b25f59487abe285c271",
+      "dependencies": [
+        "jsr:@hono/hono@^4.8.3"
+      ]
     },
     "@kysely-org/kysely-ctl@0.12.2": {
       "integrity": "9326c9c1f0b897165772755659c9cfa544bdff6680583c82e8e1652f7c9bac7b",
@@ -3477,10 +3485,12 @@
       "packages/hono": {
         "dependencies": [
           "jsr:@hono/hono@^4.10.4",
+          "jsr:@hono/standard-validator@~0.1.5",
           "jsr:@kysely-org/kysely-ctl@~0.12.2",
           "jsr:@std/crypto@^1.0.5",
           "jsr:@std/path@^1.1.2",
           "jsr:@std/uuid@^1.0.9",
+          "jsr:@zod/zod@^4.1.12",
           "npm:argon2@0.44",
           "npm:handlebars@^4.7.8",
           "npm:kysely-codegen@0.19",
