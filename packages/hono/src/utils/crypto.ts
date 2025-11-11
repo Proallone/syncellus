@@ -51,5 +51,4 @@ export const sha256 = async (token: string): Promise<string> => {
  * @param bytes The byte array to convert.
  * @returns The hexadecimal representation of the byte array.
  */
-const toHex = (bytes: Uint8Array): string =>
-	Array.from(bytes).map((b) => b.toString(16).padStart(2, "0")).join("");
+const toHex = (bytes: Uint8Array): string => Array.from(bytes).map((b) => b.toString(16).padStart(2, "0")).join("");

@@ -19,12 +19,12 @@ import {
 import { generate as uuidv7 } from "@std/uuid/unstable-v7";
 import { nanoid } from "@syncellus/hono/utils/nanoid.ts";
 import { compareHash, generateToken, hashPassword, sha256 } from "@syncellus/hono/utils/crypto.ts";
-import { HTTPException } from 'hono/http-exception';
+import { HTTPException } from "hono/http-exception";
 import { HttpStatus } from "@syncellus/hono/common/http.ts";
 import { MailService } from "@syncellus/hono/modules/mail/service.ts";
 import { NodemailerProvider } from "@syncellus/hono/modules/mail/providers/NodemailerProvider.ts";
 import { AppConfig } from "@syncellus/hono/config/config.ts";
-import { decode, sign, verify } from 'hono/jwt'
+import { sign } from "hono/jwt";
 import type { Context } from "hono";
 
 //TODO maybe rethink how to better handle accessing mail service
@@ -55,8 +55,7 @@ export const registerNewUser = async (
 	});
 
 	const config = AppConfig.getInstance();
-	const verificationLink =
-		`${config.APP_URL}/auth/verify-email?token=${verificationToken}`;
+	const verificationLink = `${config.APP_URL}/auth/verify-email?token=${verificationToken}`;
 
 	await mailService.sendWelcome(
 		user.email,
@@ -67,7 +66,7 @@ export const registerNewUser = async (
 	return newUser;
 };
 
-export const verifyUserCredentials = async (credentials: { username: string, password: string }, c: Context): Promise<boolean> => {
+export const verifyUserCredentials = async (credentials: { username: string; password: string }, c: Context): Promise<boolean> => {
 	const userFromDb = await selectUserByEmail(credentials.username);
 	if (!userFromDb) return false;
 
@@ -84,7 +83,7 @@ export const issueLoginToken = async (userPublicId: string) => {
 		sub: userPublicId,
 		roles,
 		scopes,
-		exp: Math.floor(Date.now() / 1000) + 60 * 30,//30 minutes
+		exp: Math.floor(Date.now() / 1000) + 60 * 30, //30 minutes
 	};
 	const config = AppConfig.getInstance();
 	return await sign(payload, config.JWT_TOKEN_SECRET);
@@ -107,9 +106,7 @@ export const verifyAccountEmail = async (token: string) => {
 
 	const user = await selectUserByID(tokenRecord.user_id);
 	if (!user) {
-		throw new HTTPException(HttpStatus.NOT_FOUND,
-			{ message: "User not found for this email verification token" },
-		);
+		throw new HTTPException(HttpStatus.NOT_FOUND, { message: "User not found for this email verification token" });
 	}
 
 	await verifyUserEmail(user.id!); //TODO what if fails?
@@ -134,8 +131,7 @@ export const issuePasswordResetToken = async (email: string) => {
 
 	//TODO address
 	const config = AppConfig.getInstance();
-	const resetLink =
-		`${config.APP_URL}/auth/reset-password?token=${resetToken}`;
+	const resetLink = `${config.APP_URL}/auth/reset-password?token=${resetToken}`;
 
 	await mailService.sendPasswordReset(user.email!, resetLink);
 

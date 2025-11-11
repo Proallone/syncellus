@@ -9,25 +9,26 @@ import {
 	verifyUserCredentials,
 } from "@syncellus/hono/modules/auth/service.ts";
 import { HttpStatus } from "@syncellus/hono/common/http.ts";
-import { basicAuth } from 'hono/basic-auth'
+import { basicAuth } from "hono/basic-auth";
 
 type Variables = { user_public_id: string };
 
 const router = new Hono<{ Variables: Variables }>();
 
 router.use(
-	'/login',
+	"/login",
 	basicAuth({
 		verifyUser: async (username, password, c) => {
 			return await verifyUserCredentials(
 				{
 					username,
-					password
-				}, c
+					password,
+				},
+				c,
 			);
 		},
-	})
-)
+	}),
+);
 
 router.post("/register", async (c) => {
 	const { email, password } = await c.req.json(); //TODO add validation
