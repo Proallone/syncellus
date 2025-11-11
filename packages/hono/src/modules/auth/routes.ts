@@ -10,9 +10,11 @@ import {
 } from "@syncellus/hono/modules/auth/service.ts";
 import { HttpStatus } from "@syncellus/hono/common/http.ts";
 import { basicAuth } from "hono/basic-auth";
+import { LoggerService } from "@syncellus/hono/common/logger.ts";
 
 type Variables = { user_public_id: string };
 
+const logger = LoggerService.getInstance();
 const router = new Hono<{ Variables: Variables }>();
 
 router.use(
@@ -33,7 +35,7 @@ router.use(
 router.post("/register", async (c) => {
 	const { email, password } = await c.req.json(); //TODO add validation
 	const newUser = await registerNewUser({ email, password });
-	//   this.logger.info({ email, action: "register" }, "Registration attempt"); //TODO add global logger
+	logger.info({ email, action: "register" }, "Registration attempt");
 
 	//   return sendResponse(res, HttpStatus.CREATED, {
 	//     message: "Registration successful",
@@ -45,8 +47,8 @@ router.post("/register", async (c) => {
 });
 
 router.post("/login", async (c) => {
-	// this.logger.info({ public_id: user.public_id }, "User login attempt"); //TODO add global logger
 	const userPublicId = c.get("user_public_id");
+	logger.info({ public_id: userPublicId }, "User login attempt");
 	const accessToken = await issueLoginToken(userPublicId);
 
 	c.status(HttpStatus.OK);
@@ -55,7 +57,7 @@ router.post("/login", async (c) => {
 
 router.post("/verify-email", async (c) => {
 	const { token } = await c.req.json();
-	// this.logger.info({ action: "verify-email" }, "Verification attempt"); // TODO add global logger
+	logger.info({ action: "verify-email" }, "Verification attempt");
 	verifyAccountEmail(token);
 
 	c.status(HttpStatus.OK);
@@ -64,10 +66,7 @@ router.post("/verify-email", async (c) => {
 
 router.post("forgot-password", async (c) => {
 	const { email } = await c.req.json();
-	// this.logger.info(
-	//   { email, action: "forgot-password" },
-	//   "Password reset requested",
-	// ); //TODO add global logger
+	logger.info({ email, action: "forgot-password" }, "Password reset requested");
 	await issuePasswordResetToken(email);
 	c.status(HttpStatus.OK);
 	return c.json({});
@@ -75,7 +74,7 @@ router.post("forgot-password", async (c) => {
 
 router.post("/reset-password", async (c) => {
 	const { token, newPassword } = await c.req.json();
-	// this.logger.info({ action: "reset-password" }, "Password reset attempt"); //TODO add global logger
+	logger.info({ action: "reset-password" }, "Password reset attempt");
 	await performPasswordReset(token, newPassword);
 	c.status(HttpStatus.OK);
 	return c.json({});
@@ -83,11 +82,7 @@ router.post("/reset-password", async (c) => {
 
 router.get("/me", async (c) => {
 	const { user } = await c.req.json();
-	// this.logger.info(
-	//   { userId: user.public_id, action: "get-profile" },
-	//   "Profile requested",
-	// ); //TODO add global logger
-
+	logger.info({ userId: user.public_id, action: "get-profile" }, "Profile requested");
 	const profile = await findUserByPublicID(user.public_id);
 
 	c.status(HttpStatus.OK);

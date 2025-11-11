@@ -12,7 +12,8 @@
 		"kysely-codegen": "npm:kysely-codegen@^0.19.0",
 		"nanoid": "npm:nanoid@^5.1.6",
 		"nodemailer": "npm:nodemailer@^7.0.10",
-		"pg": "npm:pg@^8.16.3"
+		"pg": "npm:pg@^8.16.3",
+		"pino": "npm:pino@^10.1.0"
 	},
 	"tasks": {
 		"start": "deno run --allow-net --env-file src/main.ts",
