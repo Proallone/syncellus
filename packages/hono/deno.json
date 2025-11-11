@@ -1,6 +1,7 @@
 {
 	"imports": {
 		"@kysely-org/kysely-ctl": "jsr:@kysely-org/kysely-ctl@^0.12.2",
+		"@std/crypto": "jsr:@std/crypto@^1.0.5",
 		"@std/uuid": "jsr:@std/uuid@^1.0.9",
 		"@syncellus/hono/": "./src/",
 		"argon2": "npm:argon2@^0.44.0",

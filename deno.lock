@@ -3445,6 +3445,7 @@
         "dependencies": [
           "jsr:@hono/hono@^4.10.4",
           "jsr:@kysely-org/kysely-ctl@~0.12.2",
+          "jsr:@std/crypto@^1.0.5",
           "jsr:@std/uuid@^1.0.9",
           "npm:argon2@0.44",
           "npm:kysely-codegen@0.19",
