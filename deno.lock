@@ -5,6 +5,8 @@
     "jsr:@kysely-org/kysely-ctl@~0.12.2": "0.12.2",
     "jsr:@std/bytes@^1.0.6": "1.0.6",
     "jsr:@std/crypto@^1.0.5": "1.0.5",
+    "jsr:@std/internal@^1.0.10": "1.0.12",
+    "jsr:@std/path@^1.1.2": "1.1.2",
     "jsr:@std/uuid@^1.0.9": "1.0.9",
     "jsr:@zod/zod@^4.1.12": "4.1.12",
     "npm:@radix-ui/react-dropdown-menu@^2.1.16": "2.1.16_@types+react@19.2.2_@types+react-dom@19.2.1__@types+react@19.2.2_react@19.2.0_react-dom@19.2.0__react@19.2.0",
@@ -40,7 +42,8 @@
     "npm:kysely@~0.28.8": "0.28.8",
     "npm:lucide-react@0.545": "0.545.0_react@19.2.0",
     "npm:nanoid@^5.1.6": "5.1.6",
-    "npm:nodemailer@^7.0.9": "7.0.9",
+    "npm:nodemailer@^7.0.10": "7.0.10",
+    "npm:nodemailer@^7.0.9": "7.0.10",
     "npm:passport-jwt@^4.0.1": "4.0.1",
     "npm:passport-local@1": "1.0.0",
     "npm:passport@0.7": "0.7.0",
@@ -90,6 +93,15 @@
     },
     "@std/crypto@1.0.5": {
       "integrity": "0dcfbb319fe0bba1bd3af904ceb4f948cde1b92979ec1614528380ed308a3b40"
+    },
+    "@std/internal@1.0.12": {
+      "integrity": "972a634fd5bc34b242024402972cd5143eac68d8dffaca5eaa4dba30ce17b027"
+    },
+    "@std/path@1.1.2": {
+      "integrity": "c0b13b97dfe06546d5e16bf3966b1cadf92e1cc83e56ba5476ad8b498d9e3038",
+      "dependencies": [
+        "jsr:@std/internal"
+      ]
     },
     "@std/uuid@1.0.9": {
       "integrity": "44b627bf2d372fe1bd099e2ad41b2be41a777fc94e62a3151006895a037f1642",
@@ -2539,8 +2551,8 @@
     "node-releases@2.0.23": {
       "integrity": "sha512-cCmFDMSm26S6tQSDpBCg/NR8NENrVPhAJSf+XbxBG4rPFaaonlEoE9wHQmun+cls499TQGSb7ZyPBRlzgKfpeg=="
     },
-    "nodemailer@7.0.9": {
-      "integrity": "sha512-9/Qm0qXIByEP8lEV2qOqcAW7bRpL8CR9jcTwk3NBnHJNmP9fIJ86g2fgmIXqHY+nj55ZEMwWqYAT2QTDpRUYiQ=="
+    "nodemailer@7.0.10": {
+      "integrity": "sha512-Us/Se1WtT0ylXgNFfyFSx4LElllVLJXQjWi2Xz17xWw7amDKO2MLtFnVp1WACy7GkVGs+oBlRopVNUzlrGSw1w=="
     },
     "nypm@0.5.4": {
       "integrity": "sha512-X0SNNrZiGU8/e/zAB7sCTtdxWTMSIO73q+xuKgglm2Yvzwlo8UoC5FNySQFCvl84uPaeADkqHUZUkWy4aH4xOA==",
@@ -3446,11 +3458,14 @@
           "jsr:@hono/hono@^4.10.4",
           "jsr:@kysely-org/kysely-ctl@~0.12.2",
           "jsr:@std/crypto@^1.0.5",
+          "jsr:@std/path@^1.1.2",
           "jsr:@std/uuid@^1.0.9",
           "npm:argon2@0.44",
+          "npm:handlebars@^4.7.8",
           "npm:kysely-codegen@0.19",
           "npm:kysely@~0.28.8",
           "npm:nanoid@^5.1.6",
+          "npm:nodemailer@^7.0.10",
           "npm:pg@^8.16.3"
         ]
       },

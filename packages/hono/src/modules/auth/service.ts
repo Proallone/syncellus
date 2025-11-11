@@ -21,6 +21,13 @@ import { nanoid } from "@syncellus/hono/utils/nanoid.ts";
 import { generateToken, hashPassword, sha256 } from "@syncellus/hono/utils/crypto.ts";
 import { HTTPException } from 'hono/http-exception';
 import { HttpStatus } from "@syncellus/hono/common/http.ts";
+import { MailService } from "../mail/service.ts";
+import { NodemailerProvider } from "../mail/providers/NodemailerProvider.ts";
+import { AppConfig } from "../../config/config.ts";
+
+//TODO maybe rethink how to better handle accessing mail service
+const mailProvider = new NodemailerProvider();
+const mailService = new MailService(mailProvider);
 
 export const registerNewUser = async (
 	user: { email: string; password: string },
@@ -45,15 +52,15 @@ export const registerNewUser = async (
 		token_hash: tokenHash,
 	});
 
-	//TODO incorporate mail service once it is available
-	//   const config = AppConfig.getInstance();
-	// const verificationLink =
-	//   `${config.APP_URL}/auth/verify-email?token=${verificationToken}`;
-	// await this.mailService.sendWelcome(
-	//   user.email,
-	//   newUser.email,
-	//   verificationLink,
-	// );
+	const config = AppConfig.getInstance();
+	const verificationLink =
+		`${config.APP_URL}/auth/verify-email?token=${verificationToken}`;
+
+	await mailService.sendWelcome(
+		user.email,
+		newUser.email,
+		verificationLink,
+	);
 
 	return newUser;
 };
@@ -116,13 +123,13 @@ export const issuePasswordResetToken = async (email: string) => {
 	});
 
 	//TODO address
-	// const config = AppConfig.getInstance();
-	// const resetLink =
-	//   `${config.APP_URL}/auth/reset-password?token=${resetToken}`;
+	const config = AppConfig.getInstance();
+	const resetLink =
+		`${config.APP_URL}/auth/reset-password?token=${resetToken}`;
 
-	// await this.mailService.sendPasswordReset(user.email, resetLink);
+	await mailService.sendPasswordReset(user.email!, resetLink);
 
-	return "blablabl"; //TODO resetLink
+	return resetLink;
 };
 
 export const performPasswordReset = async (
