@@ -18,12 +18,14 @@ import {
 } from "@syncellus/hono/modules/auth/repository.ts";
 import { generate as uuidv7 } from "@std/uuid/unstable-v7";
 import { nanoid } from "@syncellus/hono/utils/nanoid.ts";
-import { generateToken, hashPassword, sha256 } from "@syncellus/hono/utils/crypto.ts";
+import { compareHash, generateToken, hashPassword, sha256 } from "@syncellus/hono/utils/crypto.ts";
 import { HTTPException } from 'hono/http-exception';
 import { HttpStatus } from "@syncellus/hono/common/http.ts";
-import { MailService } from "../mail/service.ts";
-import { NodemailerProvider } from "../mail/providers/NodemailerProvider.ts";
-import { AppConfig } from "../../config/config.ts";
+import { MailService } from "@syncellus/hono/modules/mail/service.ts";
+import { NodemailerProvider } from "@syncellus/hono/modules/mail/providers/NodemailerProvider.ts";
+import { AppConfig } from "@syncellus/hono/config/config.ts";
+import { decode, sign, verify } from 'hono/jwt'
+import type { Context } from "hono";
 
 //TODO maybe rethink how to better handle accessing mail service
 const mailProvider = new NodemailerProvider();
@@ -65,19 +67,27 @@ export const registerNewUser = async (
 	return newUser;
 };
 
-export const issueLoginToken = async (
-	user: any, //TODO fix
-) => {
-	const roles = await getUserRoles(user.public_id);
-	const scopes = await getUserScopes(user.public_id);
+export const verifyUserCredentials = async (credentials: { username: string, password: string }, c: Context): Promise<boolean> => {
+	const userFromDb = await selectUserByEmail(credentials.username);
+	if (!userFromDb) return false;
+
+	const match = compareHash(credentials.password, userFromDb.password!);
+	if (!match) return false;
+	c.set("user_public_id", userFromDb.public_id); //TODO find a nicer place?
+	return match;
+};
+
+export const issueLoginToken = async (userPublicId: string) => {
+	const roles = await getUserRoles(userPublicId);
+	const scopes = await getUserScopes(userPublicId);
 	const payload = {
-		sub: user.public_id,
+		sub: userPublicId,
 		roles,
 		scopes,
+		exp: Math.floor(Date.now() / 1000) + 60 * 30,//30 minutes
 	};
-	// const config = AppConfig.getInstance();
-	// return Jwt.sign(payload, config.JWT_TOKEN_SECRET, { expiresIn: "30m" }); //TODO fix
-	return "blablabla";
+	const config = AppConfig.getInstance();
+	return await sign(payload, config.JWT_TOKEN_SECRET);
 };
 
 export const verifyAccountEmail = async (token: string) => {

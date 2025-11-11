@@ -6,10 +6,28 @@ import {
 	performPasswordReset,
 	registerNewUser,
 	verifyAccountEmail,
+	verifyUserCredentials,
 } from "@syncellus/hono/modules/auth/service.ts";
 import { HttpStatus } from "@syncellus/hono/common/http.ts";
+import { basicAuth } from 'hono/basic-auth'
 
-const router = new Hono();
+type Variables = { user_public_id: string };
+
+const router = new Hono<{ Variables: Variables }>();
+
+router.use(
+	'/login',
+	basicAuth({
+		verifyUser: async (username, password, c) => {
+			return await verifyUserCredentials(
+				{
+					username,
+					password
+				}, c
+			);
+		},
+	})
+)
 
 router.post("/register", async (c) => {
 	const { email, password } = await c.req.json(); //TODO add validation
@@ -26,9 +44,9 @@ router.post("/register", async (c) => {
 });
 
 router.post("/login", async (c) => {
-	const { user } = await c.req.json();
 	// this.logger.info({ public_id: user.public_id }, "User login attempt"); //TODO add global logger
-	const accessToken = await issueLoginToken(user);
+	const userPublicId = c.get("user_public_id");
+	const accessToken = await issueLoginToken(userPublicId);
 
 	c.status(HttpStatus.OK);
 	return c.json({ message: "Login successful", data: { accessToken } });
