@@ -36,7 +36,7 @@ export const registerNewUser = async (
 	});
 
 	const verificationToken = generateToken();
-	const tokenHash = sha256(verificationToken);
+	const tokenHash = await sha256(verificationToken);
 
 	await deleteEmailVerificationTokensByUserID(newUser.id);
 	await insertEmailVerificationToken({
@@ -74,7 +74,7 @@ export const issueLoginToken = async (
 };
 
 export const verifyAccountEmail = async (token: string) => {
-	const tokenHash = sha256(token);
+	const tokenHash = await sha256(token);
 	const tokenRecord = await selectEmailVerificationTokenByHash(
 		tokenHash,
 	);
@@ -106,7 +106,7 @@ export const issuePasswordResetToken = async (email: string) => {
 	if (!user) throw new HTTPException(HttpStatus.NOT_FOUND, { message: `User with email ${email} not found` });
 
 	const resetToken = generateToken();
-	const tokenHash = sha256(resetToken);
+	const tokenHash = await sha256(resetToken);
 
 	await deletePasswordResetTokensByUserID(user.id!);
 	await insertPasswordResetToken({
@@ -129,7 +129,7 @@ export const performPasswordReset = async (
 	token: string,
 	newPassword: string,
 ) => {
-	const tokenHash = sha256(token);
+	const tokenHash = await sha256(token);
 	const tokenRecord = await selectPasswordResetTokenByHash(
 		tokenHash,
 	);

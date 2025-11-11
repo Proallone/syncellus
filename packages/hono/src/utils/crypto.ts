@@ -41,7 +41,7 @@ export const generateToken = (tokenLength: number = 32): string => {
  */
 export const sha256 = async (token: string): Promise<string> => {
 	const tokenEncoded = new TextEncoder().encode(token);
-	const digest = await crypto.subtle.digest("SHA-256", tokenEncoded);
+	const digest = await crypto.subtle.digest("SHA-256", tokenEncoded); //TODO consider BLAKE3 for better performance
 	const hashBuffer = new Uint8Array(digest);
 	return toHex(hashBuffer);
 };
