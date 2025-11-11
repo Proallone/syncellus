@@ -5,30 +5,29 @@ import { extractDbCredentials } from "@syncellus/hono/utils/databaseUrlHelper.ts
 import { AppConfig } from "@syncellus/hono/config/config.ts";
 
 export class DatabaseService {
-  private static instance: Kysely<DB> | null = null;
+	private static instance: Kysely<DB> | null = null;
 
-  public static getInstance(): Kysely<DB> {
-    const config = AppConfig.getInstance(); 
+	public static getInstance(): Kysely<DB> {
+		const config = AppConfig.getInstance();
 
-    if (!DatabaseService.instance) {
+		if (!DatabaseService.instance) {
+			if (!config.DATABASE_URL) throw new Error("DATABASE_URL env variable not provided");
 
-      if (!config.DATABASE_URL) throw new Error("DATABASE_URL env variable not provided");
+			const credentials = extractDbCredentials(config.DATABASE_URL);
 
-      const credentials = extractDbCredentials(config.DATABASE_URL);
+			//TODO this is the first time database is accessed - but it might change in the future, change this pool config
+			const dbConfig = {
+				...credentials,
+				max: 10,
+			};
 
-      //TODO this is the first time database is accessed - but it might change in the future, change this pool config
-      const dbConfig = {
-        ...credentials,
-        max: 10,
-      };
+			const dialect = new PostgresDialect({
+				pool: new Pool(dbConfig),
+			});
 
-      const dialect = new PostgresDialect({
-        pool: new Pool(dbConfig),
-      });
+			DatabaseService.instance = new Kysely<DB>({ dialect });
+		}
 
-      DatabaseService.instance = new Kysely<DB>({ dialect });
-    }
-
-    return DatabaseService.instance;
-  }
+		return DatabaseService.instance;
+	}
 }

@@ -7,7 +7,7 @@ import { createHash, randomBytes } from "node:crypto"; //TODO do the deno way
  * @returns A Promise that resolves to the hashed password string.
  */
 export const hashPassword = async (password: string): Promise<string> => {
-  return await argon2.hash(password);
+	return await argon2.hash(password);
 };
 
 /**
@@ -17,10 +17,10 @@ export const hashPassword = async (password: string): Promise<string> => {
  * @returns A Promise that resolves to a boolean indicating if the passwords match.
  */
 export const compareHash = async (
-  password: string,
-  passwordHash: string,
+	password: string,
+	passwordHash: string,
 ): Promise<boolean> => {
-  return await argon2.verify(passwordHash, password);
+	return await argon2.verify(passwordHash, password);
 };
 
 /**
@@ -28,7 +28,7 @@ export const compareHash = async (
  * @returns A random token as a hexadecimal string.
  */
 export const generateToken = (): string => {
-  return randomBytes(32).toString("hex");
+	return randomBytes(32).toString("hex");
 };
 
 /**
@@ -37,5 +37,5 @@ export const generateToken = (): string => {
  * @returns The SHA-256 hash as a hexadecimal string.
  */
 export const sha256 = (token: string) => {
-  return createHash("sha256").update(token).digest("hex");
+	return createHash("sha256").update(token).digest("hex");
 };
