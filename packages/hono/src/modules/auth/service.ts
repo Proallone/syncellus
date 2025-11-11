@@ -16,7 +16,7 @@ import {
 	updateUserPassword,
 	verifyUserEmail,
 } from "@syncellus/hono/modules/auth/repository.ts";
-import { generate } from "@std/uuid/unstable-v7";
+import { generate as uuidv7 } from "@std/uuid/unstable-v7";
 import { nanoid } from "@syncellus/hono/utils/nanoid.ts";
 import { generateToken, hashPassword, sha256 } from "@syncellus/hono/utils/crypto.ts";
 import { HTTPException } from 'hono/http-exception';
@@ -29,7 +29,7 @@ export const registerNewUser = async (
 	if (existing) throw new HTTPException(HttpStatus.CONFLICT, { message: `User ${user.email} already exists` });
 
 	const newUser = await insertNewUser({
-		id: generate(),
+		id: uuidv7(),
 		public_id: nanoid(),
 		email: user.email,
 		password: await hashPassword(user.password),
@@ -40,7 +40,7 @@ export const registerNewUser = async (
 
 	await deleteEmailVerificationTokensByUserID(newUser.id);
 	await insertEmailVerificationToken({
-		id: generate(),
+		id: uuidv7(),
 		user_id: newUser.id,
 		token_hash: tokenHash,
 	});
@@ -110,7 +110,7 @@ export const issuePasswordResetToken = async (email: string) => {
 
 	await deletePasswordResetTokensByUserID(user.id!);
 	await insertPasswordResetToken({
-		id: generate(),
+		id: uuidv7(),
 		user_id: user.id!,
 		token_hash: tokenHash,
 	});
