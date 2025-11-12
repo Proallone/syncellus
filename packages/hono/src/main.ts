@@ -5,6 +5,8 @@ import healthRouter from "@syncellus/hono/modules/health/routes.ts";
 import authRouter from "@syncellus/hono/modules/auth/routes.ts";
 import { AppConfig } from "@syncellus/hono/config/config.ts";
 import { HTTPException } from "hono/http-exception";
+import { JwtTokenInvalid } from "hono/utils/jwt/types";
+import { HttpStatus } from "@syncellus/hono/common/http.ts";
 
 const app = new Hono().basePath("/api/v1");
 
@@ -14,10 +16,13 @@ app.use(secureHeaders());
 app.route("/health", healthRouter);
 app.route("/auth", authRouter);
 
-app.onError((error, _c) => {
+app.onError((error, c) => {
 	if (error instanceof HTTPException) {
 		console.error(error);
 		return error.getResponse(); //TODO make better
+	} else if (error instanceof JwtTokenInvalid) {
+		c.status(HttpStatus.UNAUTHORIZED);
+		return c.json({ message: "Invalid JWT token", data: undefined })
 	}
 
 	return new Response("An unexpected error occurred");

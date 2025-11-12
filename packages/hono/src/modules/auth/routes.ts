@@ -13,6 +13,9 @@ import { basicAuth } from "hono/basic-auth";
 import { LoggerService } from "@syncellus/hono/common/logger.ts";
 import { sValidator } from "@hono/standard-validator";
 import { z } from "@zod/zod";
+import { bearerAuth } from "hono/bearer-auth";
+import { verify } from "hono/jwt";
+import { AppConfig } from "@syncellus/hono/config/config.ts";
 
 type Variables = { user_public_id: string };
 
@@ -44,11 +47,6 @@ router.post("/register", sValidator("json", registerSchema), async (c) => {
 	const newUser = await registerNewUser({ email, password });
 	logger.info({ email, action: "register" }, "Registration attempt");
 
-	//   return sendResponse(res, HttpStatus.CREATED, {
-	//     message: "Registration successful",
-	//     data: newUser,
-	//     schema: UserInformationResponse,
-	//   });
 	c.status(HttpStatus.CREATED);
 	return c.json({ message: "Registration succesfull", data: newUser }); //TODO add response sanitization
 });
@@ -100,10 +98,22 @@ router.post("/reset-password", sValidator("json", resetPasswordSchema), async (c
 	return c.json({});
 });
 
+router.use(
+	"/me",
+	bearerAuth({
+		verifyToken: async (token, c) => {
+			const jwtKey = AppConfig.getInstance().JWT_TOKEN_SECRET;
+			const claims = await verify(token, jwtKey);
+			c.set("user_public_id", claims.sub);
+			return Boolean(claims);
+		},
+	}),
+);
+
 router.get("/me", async (c) => {
-	const { user } = await c.req.json(); // TODO use get/set with jwt strategy
-	logger.info({ userId: user.public_id, action: "get-profile" }, "Profile requested");
-	const profile = await findUserByPublicID(user.public_id);
+	const userPublicID = c.get("user_public_id");
+	logger.info({ userId: userPublicID, action: "get-profile" }, "Profile requested");
+	const profile = await findUserByPublicID(userPublicID);
 
 	c.status(HttpStatus.OK);
 	return c.json({ message: "This account information", data: profile }); //TODO sanitize response
