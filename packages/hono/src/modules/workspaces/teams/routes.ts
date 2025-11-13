@@ -1,31 +1,15 @@
 import { Hono } from "hono";
 // import { LoggerService } from "@syncellus/hono/common/logger.ts";
-import { deleteTeamByID, insertNewTeams, selectAllTeams, selectOneTeamByID } from "./service.ts";
-import { HttpStatus } from "../../../common/http.ts";
+import { deleteTeamByID, insertNewTeams, selectAllTeams, selectOneTeamByID } from "@syncellus/hono/modules/workspaces/teams/service.ts";
+import { HttpStatus } from "@syncellus/hono/common/http.ts";
 import { HTTPException } from "hono/http-exception";
 import { sValidator } from "@hono/standard-validator";
 import { z } from "@zod/zod";
-import { bearerAuth } from "hono/bearer-auth";
-import { AppConfig } from "../../../config/config.ts";
-import { verify } from "hono/utils/jwt/jwt";
 
 type Variables = { user_public_id: string };
 
 // const logger = LoggerService.getInstance();
 const router = new Hono<{ Variables: Variables }>();
-
-//TODO deduplicate logic with auth routes (and other in the future)
-router.use(
-	"*",
-	bearerAuth({
-		verifyToken: async (token, c) => {
-			const jwtKey = AppConfig.getInstance().JWT_TOKEN_SECRET;
-			const claims = await verify(token, jwtKey);
-			c.set("user_public_id", claims.sub);
-			return Boolean(claims);
-		},
-	}),
-);
 
 router.get("/", async (c) => {
 	const teams = await selectAllTeams();
@@ -66,7 +50,7 @@ router.delete("/:id", async (c) => {
 	const id = c.req.param("id");
 	const deletion = await deleteTeamByID(id);
 	if (!deletion.numDeletedRows) {
-		throw new HTTPException(HttpStatus.NOT_FOUND, { message: `Team with ID ${id} not fount!` });
+		throw new HTTPException(HttpStatus.NOT_FOUND, { message: `Team with ID ${id} not found!` });
 	}
 
 	c.status(HttpStatus.OK);

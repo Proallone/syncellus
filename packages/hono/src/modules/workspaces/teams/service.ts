@@ -9,8 +9,8 @@ import {
 	selectTeamByIDFromDB,
 	selectTeamByPublicIDFromDB,
 	updateTeamByIDInDB,
-} from "@syncellus/hono/modules//workspace/team/repository.ts";
-import { selectUserByPublicID } from "../../auth/repository.ts";
+} from "@syncellus/hono/modules//workspaces/teams/repository.ts";
+import { selectUserByPublicID } from "@syncellus/hono/modules/auth/repository.ts";
 
 export const insertNewTeams = async (
 	ownerPublicID: string,
