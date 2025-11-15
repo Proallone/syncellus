@@ -8,7 +8,7 @@ import {
 	selectTimesheetByIdFromDb,
 	selectTimesheetsByEmployeeIdFromDb,
 	updateTimesheetByIdInDb,
-} from "@syncellus/hono/modules/workspaces/worksheets/repository.ts";
+} from "@syncellus/hono/modules/workspaces/timesheets/repository.ts";
 
 export const insertNewTimesheets = async (
 	timesheets: Insertable<WorkspacesTimesheets>[],

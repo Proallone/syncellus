@@ -19,7 +19,7 @@ export class NodemailerProvider implements IMailProvider {
 	}
 
 	async send(mail: Mail) {
-		await this.transporter.sendMail({
+		return await this.transporter.sendMail({
 			from: "do-not-reply@syncellus.com", //TODO add to config?
 			to: mail.to,
 			subject: mail.subject,

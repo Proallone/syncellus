@@ -1,6 +1,6 @@
 import { sql } from "kysely";
-import type { DatabaseHealthResponse } from "./types.d.ts";
 import { DatabaseService } from "@syncellus/hono/database/database.ts";
+import type { DatabaseHealthResponse } from "@syncellus/hono/modules/health/types.d.ts";
 
 const db = DatabaseService.getInstance();
 
