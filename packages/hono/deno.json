@@ -9,7 +9,7 @@
 		"@zod/zod": "jsr:@zod/zod@^4.1.12",
 		"argon2": "npm:argon2@^0.44.0",
 		"handlebars": "npm:handlebars@^4.7.8",
-		"hono": "jsr:@hono/hono@^4.10.5",
+		"hono": "jsr:@hono/hono@^4.10.6",
 		"kysely": "npm:kysely@^0.28.8",
 		"kysely-codegen": "npm:kysely-codegen@^0.19.0",
 		"nanoid": "npm:nanoid@^5.1.6",
