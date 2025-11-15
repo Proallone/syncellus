@@ -1,7 +1,12 @@
 import { Hono } from "hono";
 import { bearerAuth } from "hono/bearer-auth";
-import { AppConfig } from "../../../config/config.ts";
+import { AppConfig } from "@syncellus/hono/config/config.ts";
 import { verify } from "hono/utils/jwt/jwt";
+import { deleteTaskByID, insertNewTasks, selectAllTasks, selectTaskByID, updateTaskByID } from "@syncellus/hono/modules/workspaces/tasks/service.ts";
+import { HttpStatus } from "@syncellus/hono/common/http.ts";
+import z from "@zod/zod";
+import { sValidator } from "@hono/standard-validator";
+import { HTTPException } from "hono/http-exception";
 
 type Variables = { user_public_id: string };
 
@@ -22,33 +27,55 @@ router.use(
 );
 
 router.get("/", async (c) => {
-	return c.json({});
+	const tasks = await selectAllTasks();
+	c.status(HttpStatus.OK);
+	return c.json({
+		message: "Tasks fetched",
+		data: tasks,
+	});
 });
 
-router.post("/", async (c) => {
-	return c.json({});
+const workspaceTaskSchema = z.strictObject({
+	team_id: z.uuidv7(),
+	name: z.string().max(256),
+	description: z.string().max(256),
+});
+
+router.post("/", sValidator("json", workspaceTaskSchema), async (c) => {
+	const task = await c.req.valid("json");
+	// const userPublicID = c.get("user_public_id");
+	const newTask = await insertNewTasks(task); //TODO add createdBy?
+	c.status(HttpStatus.CREATED);
+	return c.json({ message: "Task creation successfull", data: newTask });
 });
 
 router.get("/:id", async (c) => {
-	return c.json({});
+	const id = c.req.param("id");
+	const task = await selectTaskByID(id);
+	if (!task) throw new HTTPException(HttpStatus.NOT_FOUND, { message: `Task with ID ${id} not found!` });
+	c.status(HttpStatus.OK);
+	return c.json({ message: `Task with ID ${id} fetched`, data: task });
 });
 
 router.patch(
 	"/:id",
+	sValidator("json", workspaceTaskSchema.partial()),
 	async (c) => {
-		return c.json({});
+		const id = c.req.param("id");
+		const data = await c.req.valid("json");
+		const updatedTask = await updateTaskByID(id, data);
+		c.status(HttpStatus.ACCEPTED);
+		return c.json({ message: `Task with ID ${id} updated`, data: updatedTask });
 	},
 );
 
 router.delete("/:id", async (c) => {
-	return c.json({});
+	const id = c.req.param("id");
+	const deletion = await deleteTaskByID(id);
+	if (!deletion.numDeletedRows) {
+		throw new HTTPException(HttpStatus.NOT_FOUND, { message: `Tas with ID ${id} not found!` });
+	}
+	return c.json({ message: `Task with ID ${id} deleted` });
 });
-
-//TODO later
-// router.get("/team/:teamID/tasks")
-// router.post("/team/:teamID/tasks")
-// router.get("/team/:teamID/tasks/:taskID")
-// router.patch("/team/:teamID/tasks/:taskID")
-// router.delete("/team/:teamID/tasks/:taskID")
 
 export default router;

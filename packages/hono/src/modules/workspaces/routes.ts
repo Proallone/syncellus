@@ -1,10 +1,12 @@
 import { Hono } from "hono";
-import teamsRouter from "./teams/routes.ts";
-import tasksRouter from "./tasks/routes.ts";
+import teamsRouter from "@syncellus/hono/modules/workspaces/teams/routes.ts";
+import tasksRouter from "@syncellus/hono/modules/workspaces/tasks/routes.ts";
+import timesheets from "@syncellus/hono/modules/workspaces/timesheets/routes.ts";
 
 const router = new Hono();
 
 router.route("/teams", teamsRouter);
 router.route("/tasks", tasksRouter);
+router.route("/timesheets", timesheets);
 
 export default router;
