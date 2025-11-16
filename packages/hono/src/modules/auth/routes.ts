@@ -46,7 +46,7 @@ router.post(
 router.post("/verify-email", sValidator("json", verifyEmailSchema), async (c) => {
 	const { token } = await c.req.valid("json");
 	logger.info({ action: "verify-email" }, "Verification attempt");
-	verifyAccountEmail(token);
+	await verifyAccountEmail(token);
 
 	return c.json({ message: "Email verified successfully" });
 });
@@ -55,14 +55,18 @@ router.post("forgot-password", sValidator("json", forgotPasswordSchema), async (
 	const { email } = await c.req.valid("json");
 	logger.info({ email, action: "forgot-password" }, "Password reset requested");
 	await issuePasswordResetToken(email);
-	return c.json({}); //TODO finish
+	return c.json({
+		message: `Password reset process started successfully - mail with details sent to ${email}`,
+	});
 });
 
 router.post("/reset-password", sValidator("json", resetPasswordSchema), async (c) => {
 	const { token, newPassword } = await c.req.valid("json");
 	logger.info({ action: "reset-password" }, "Password reset attempt");
 	await performPasswordReset(token, newPassword);
-	return c.json({}); //TODO finish
+	return c.json({
+		message: "Password reset successfully",
+	});
 });
 
 router.get(
