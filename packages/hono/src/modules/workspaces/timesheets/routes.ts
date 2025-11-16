@@ -10,7 +10,7 @@ import { HTTPException } from "hono/http-exception";
 import { HttpStatus } from "@syncellus/hono/common/http.ts";
 import z from "@zod/zod";
 import { sValidator } from "@hono/standard-validator";
-import { VerifyJWT } from "@syncellus/hono/middlewares/auth.middleware.ts";
+import { verifyJWT } from "@syncellus/hono/middlewares/auth.middleware.ts";
 
 type Variables = { user_public_id: string };
 
@@ -20,7 +20,7 @@ const router = new Hono<{ Variables: Variables }>();
 router.use(
 	"*",
 	bearerAuth({
-		verifyToken: VerifyJWT,
+		verifyToken: verifyJWT,
 	}),
 );
 

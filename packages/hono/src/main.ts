@@ -6,7 +6,7 @@ import authRouter from "@syncellus/hono/modules/auth/routes.ts";
 import workspacesRouter from "@syncellus/hono/modules/workspaces/routes.ts";
 import { AppConfig } from "@syncellus/hono/config/config.ts";
 import { HTTPException } from "hono/http-exception";
-import { JwtTokenInvalid } from "hono/utils/jwt/types";
+import { JwtTokenExpired, JwtTokenInvalid } from "hono/utils/jwt/types";
 import { HttpStatus } from "@syncellus/hono/common/http.ts";
 
 const app = new Hono().basePath("/api/v1");
@@ -25,8 +25,11 @@ app.onError((error, c) => {
 	} else if (error instanceof JwtTokenInvalid) {
 		c.status(HttpStatus.UNAUTHORIZED);
 		return c.json({ message: "Invalid JWT token", data: undefined });
+	} else if (error instanceof JwtTokenExpired) {
+		c.status(HttpStatus.UNAUTHORIZED);
+		return c.json({ message: "Expired JWT token", data: undefined });
 	}
-
+	c.status(HttpStatus.INTERNAL_SERVER_ERROR);
 	return new Response("An unexpected error occurred");
 });
 

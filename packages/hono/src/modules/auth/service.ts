@@ -66,11 +66,11 @@ export const registerNewUser = async (
 	return newUser;
 };
 
-export const verifyUserCredentials = async (credentials: { username: string; password: string }, c: Context): Promise<boolean> => {
-	const userFromDb = await selectUserByEmail(credentials.username);
+export const verifyUserCredentials = async (email: string, password: string, c: Context): Promise<boolean> => {
+	const userFromDb = await selectUserByEmail(email);
 	if (!userFromDb) return false;
 
-	const match = compareHash(credentials.password, userFromDb.password!);
+	const match = compareHash(password, userFromDb.password!);
 	if (!match) return false;
 	c.set("user_public_id", userFromDb.public_id); //TODO find a nicer place?
 	return match;

@@ -6,7 +6,6 @@ import {
 	performPasswordReset,
 	registerNewUser,
 	verifyAccountEmail,
-	verifyUserCredentials,
 } from "@syncellus/hono/modules/auth/service.ts";
 import { HttpStatus } from "@syncellus/hono/common/http.ts";
 import { basicAuth } from "hono/basic-auth";
@@ -14,7 +13,7 @@ import { LoggerService } from "@syncellus/hono/common/logger.ts";
 import { sValidator } from "@hono/standard-validator";
 import { z } from "@zod/zod";
 import { bearerAuth } from "hono/bearer-auth";
-import { VerifyJWT } from "@syncellus/hono/middlewares/auth.middleware.ts";
+import { verifyBasic, verifyJWT } from "@syncellus/hono/middlewares/auth.middleware.ts";
 
 type Variables = { user_public_id: string };
 
@@ -24,15 +23,7 @@ const router = new Hono<{ Variables: Variables }>();
 router.use(
 	"/login",
 	basicAuth({
-		verifyUser: async (username, password, c) => {
-			return await verifyUserCredentials(
-				{
-					username,
-					password,
-				},
-				c,
-			);
-		},
+		verifyUser: verifyBasic,
 	}),
 );
 
@@ -96,7 +87,7 @@ router.post("/reset-password", sValidator("json", resetPasswordSchema), async (c
 router.use(
 	"/me",
 	bearerAuth({
-		verifyToken: VerifyJWT,
+		verifyToken: verifyJWT,
 	}),
 );
 
