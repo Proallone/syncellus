@@ -14,23 +14,12 @@ import { sValidator } from "@hono/standard-validator";
 import { z } from "@zod/zod";
 import { bearerAuth } from "hono/bearer-auth";
 import { verifyBasic, verifyJWT } from "@syncellus/hono/middlewares/auth.middleware.ts";
+import { forgotPasswordSchema, registerSchema, resetPasswordSchema, verifyEmailSchema } from "@syncellus/hono/modules/auth/schema.ts";
 
 type Variables = { user_public_id: string };
 
 const logger = LoggerService.getInstance();
 const router = new Hono<{ Variables: Variables }>();
-
-router.use(
-	"/login",
-	basicAuth({
-		verifyUser: verifyBasic,
-	}),
-);
-
-const registerSchema = z.strictObject({
-	email: z.email(),
-	password: z.string().min(8).max(40),
-});
 
 router.post("/register", sValidator("json", registerSchema), async (c) => {
 	const { email, password } = await c.req.valid("json");
@@ -41,17 +30,19 @@ router.post("/register", sValidator("json", registerSchema), async (c) => {
 	return c.json({ message: "Registration succesfull", data: newUser }); //TODO add response sanitization
 });
 
-router.post("/login", async (c) => {
-	const userPublicId = c.get("user_public_id");
-	logger.info({ public_id: userPublicId }, "User login attempt");
-	const accessToken = await issueLoginToken(userPublicId);
+router.post(
+	"/login",
+	basicAuth({
+		verifyUser: verifyBasic,
+	}),
+	async (c) => {
+		const userPublicId = c.get("user_public_id");
+		logger.info({ public_id: userPublicId }, "User login attempt");
+		const accessToken = await issueLoginToken(userPublicId);
 
-	return c.json({ message: "Login successful", data: { accessToken } });
-});
-
-const verifyEmailSchema = z.strictObject({
-	token: z.string().length(64),
-});
+		return c.json({ message: "Login successful", data: { accessToken } });
+	},
+);
 
 router.post("/verify-email", sValidator("json", verifyEmailSchema), async (c) => {
 	const { token } = await c.req.valid("json");
@@ -61,20 +52,11 @@ router.post("/verify-email", sValidator("json", verifyEmailSchema), async (c) =>
 	return c.json({ message: "Email verified successfully" });
 });
 
-const forgotPasswordSchema = z.strictObject({
-	email: z.email(),
-});
-
 router.post("forgot-password", sValidator("json", forgotPasswordSchema), async (c) => {
 	const { email } = await c.req.valid("json");
 	logger.info({ email, action: "forgot-password" }, "Password reset requested");
 	await issuePasswordResetToken(email);
 	return c.json({}); //TODO finish
-});
-
-const resetPasswordSchema = z.strictObject({
-	token: z.string().length(64),
-	newPassword: z.string().min(8).max(40),
 });
 
 router.post("/reset-password", sValidator("json", resetPasswordSchema), async (c) => {
@@ -84,19 +66,18 @@ router.post("/reset-password", sValidator("json", resetPasswordSchema), async (c
 	return c.json({}); //TODO finish
 });
 
-router.use(
+router.get(
 	"/me",
 	bearerAuth({
 		verifyToken: verifyJWT,
 	}),
+	async (c) => {
+		const userPublicID = c.get("user_public_id");
+		logger.info({ userId: userPublicID, action: "get-profile" }, "Profile requested");
+		const profile = await findUserByPublicID(userPublicID);
+
+		return c.json({ message: "This account information", data: profile }); //TODO sanitize response
+	},
 );
-
-router.get("/me", async (c) => {
-	const userPublicID = c.get("user_public_id");
-	logger.info({ userId: userPublicID, action: "get-profile" }, "Profile requested");
-	const profile = await findUserByPublicID(userPublicID);
-
-	return c.json({ message: "This account information", data: profile }); //TODO sanitize response
-});
 
 export default router;

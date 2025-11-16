@@ -8,9 +8,9 @@ import {
 } from "@syncellus/hono/modules/workspaces/timesheets/service.ts";
 import { HTTPException } from "hono/http-exception";
 import { HttpStatus } from "@syncellus/hono/common/http.ts";
-import z from "@zod/zod";
 import { sValidator } from "@hono/standard-validator";
 import { verifyJWT } from "@syncellus/hono/middlewares/auth.middleware.ts";
+import { timesheetsSchema } from "@syncellus/hono/modules/workspaces/timesheets/schema.ts";
 
 type Variables = { user_public_id: string };
 
@@ -38,18 +38,6 @@ router.get("/:id", async (c) => {
 	}
 
 	return c.json({ message: `Timesheet with ID ${id} fetched`, data: timesheet });
-});
-
-const timesheetsSchema = z.strictObject({
-	user_id: z.uuidv7(), //TODO maybe not a part of payload?
-	task_id: z.uuidv7(),
-	timesheets: z.array(z.strictObject({
-		start_time: z.iso.datetime(),
-		end_time: z.iso.datetime(),
-	})).min(
-		1,
-		"The 'timesheets' array must not be empty.",
-	),
 });
 
 router.post(

@@ -4,9 +4,9 @@ import { deleteTeamByID, insertNewTeams, selectAllTeams, selectOneTeamByID } fro
 import { HttpStatus } from "@syncellus/hono/common/http.ts";
 import { HTTPException } from "hono/http-exception";
 import { sValidator } from "@hono/standard-validator";
-import { z } from "@zod/zod";
 import { verifyJWT } from "@syncellus/hono/middlewares/auth.middleware.ts";
 import { bearerAuth } from "hono/bearer-auth";
+import { workspaceTeamSchema } from "@syncellus/hono/modules/workspaces/teams/schema.ts";
 
 type Variables = { user_public_id: string };
 
@@ -28,10 +28,6 @@ router.get("/", async (c) => {
 		message: "Teams fetched",
 		data: teams,
 	});
-});
-
-const workspaceTeamSchema = z.strictObject({
-	name: z.string().max(256),
 });
 
 router.post("/", sValidator("json", workspaceTeamSchema), async (c) => {

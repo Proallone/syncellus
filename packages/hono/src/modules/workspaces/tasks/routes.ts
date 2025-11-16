@@ -2,10 +2,10 @@ import { Hono } from "hono";
 import { bearerAuth } from "hono/bearer-auth";
 import { deleteTaskByID, insertNewTasks, selectAllTasks, selectTaskByID, updateTaskByID } from "@syncellus/hono/modules/workspaces/tasks/service.ts";
 import { HttpStatus } from "@syncellus/hono/common/http.ts";
-import z from "@zod/zod";
 import { sValidator } from "@hono/standard-validator";
 import { HTTPException } from "hono/http-exception";
 import { verifyJWT } from "@syncellus/hono/middlewares/auth.middleware.ts";
+import { workspaceTaskSchema } from "@syncellus/hono/modules/workspaces/tasks/schema.ts";
 
 type Variables = { user_public_id: string };
 
@@ -27,12 +27,6 @@ router.get("/", async (c) => {
 		message: "Tasks fetched",
 		data: tasks,
 	});
-});
-
-const workspaceTaskSchema = z.strictObject({
-	team_id: z.uuidv7(),
-	name: z.string().max(256),
-	description: z.string().max(256),
 });
 
 router.post("/", sValidator("json", workspaceTaskSchema), async (c) => {
