@@ -4,12 +4,13 @@ import { logger } from "hono/logger";
 import healthRouter from "@syncellus/hono/modules/health/routes.ts";
 import authRouter from "@syncellus/hono/modules/auth/routes.ts";
 import workspacesRouter from "@syncellus/hono/modules/workspaces/routes.ts";
-import { AppConfig } from "@syncellus/hono/config/config.ts";
+import { ConfigService } from "@syncellus/hono/config/config.ts";
 import { HTTPException } from "hono/http-exception";
 import { JwtTokenExpired, JwtTokenInvalid } from "hono/utils/jwt/types";
 import { HttpStatus } from "@syncellus/hono/common/http.ts";
 
-const app = new Hono().basePath("/api/v1");
+const API_BASE_PATH = "/api/v1";
+const app = new Hono().basePath(API_BASE_PATH);
 
 app.use(logger());
 app.use(secureHeaders());
@@ -22,16 +23,13 @@ app.onError((error, c) => {
 	if (error instanceof HTTPException) {
 		console.error(error);
 		return error.getResponse(); //TODO make better
-	} else if (error instanceof JwtTokenInvalid) {
+	} else if (error instanceof JwtTokenInvalid || error instanceof JwtTokenExpired) {
 		c.status(HttpStatus.UNAUTHORIZED);
-		return c.json({ message: "Invalid JWT token", data: undefined });
-	} else if (error instanceof JwtTokenExpired) {
-		c.status(HttpStatus.UNAUTHORIZED);
-		return c.json({ message: "Expired JWT token", data: undefined });
+		return c.json({ message: error.message });
 	}
 	c.status(HttpStatus.INTERNAL_SERVER_ERROR);
 	return new Response("An unexpected error occurred");
 });
 
-const port = AppConfig.getInstance().PORT;
+const port = ConfigService.getInstance().PORT;
 Deno.serve({ port: port }, app.fetch);

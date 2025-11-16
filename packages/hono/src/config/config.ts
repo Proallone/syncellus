@@ -1,14 +1,14 @@
 import type { Config } from "@syncellus/hono/types/index.d.ts";
 
-export class AppConfig {
+export class ConfigService {
 	private static config: Config | null = null;
 
 	private constructor() {}
 	public static getInstance(): Config {
-		if (!AppConfig.config) {
-			AppConfig.config = AppConfig.loadConfig();
+		if (!ConfigService.config) {
+			ConfigService.config = ConfigService.loadConfig();
 		}
-		return AppConfig.config;
+		return ConfigService.config;
 	}
 
 	private static loadConfig(): Config {

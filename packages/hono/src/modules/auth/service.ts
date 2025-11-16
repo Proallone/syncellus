@@ -23,7 +23,7 @@ import { HTTPException } from "hono/http-exception";
 import { HttpStatus } from "@syncellus/hono/common/http.ts";
 import { MailService } from "@syncellus/hono/modules/mail/service.ts";
 import { NodemailerProvider } from "@syncellus/hono/modules/mail/providers/NodemailerProvider.ts";
-import { AppConfig } from "@syncellus/hono/config/config.ts";
+import { ConfigService } from "@syncellus/hono/config/config.ts";
 import { sign } from "hono/jwt";
 import type { Context } from "hono";
 
@@ -54,7 +54,7 @@ export const registerNewUser = async (
 		token_hash: tokenHash,
 	});
 
-	const config = AppConfig.getInstance();
+	const config = ConfigService.getInstance();
 	const verificationLink = `${config.APP_URL}/auth/verify-email?token=${verificationToken}`;
 
 	await mailService.sendWelcome(
@@ -85,7 +85,7 @@ export const issueLoginToken = async (userPublicId: string) => {
 		scopes,
 		exp: Math.floor(Date.now() / 1000) + 60 * 30, //30 minutes
 	};
-	const config = AppConfig.getInstance();
+	const config = ConfigService.getInstance();
 	return await sign(payload, config.JWT_TOKEN_SECRET);
 };
 
@@ -130,7 +130,7 @@ export const issuePasswordResetToken = async (email: string) => {
 	});
 
 	//TODO address
-	const config = AppConfig.getInstance();
+	const config = ConfigService.getInstance();
 	const resetLink = `${config.APP_URL}/auth/reset-password?token=${resetToken}`;
 
 	await mailService.sendPasswordReset(user.email!, resetLink);

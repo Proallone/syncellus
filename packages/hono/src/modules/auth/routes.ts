@@ -11,7 +11,6 @@ import { HttpStatus } from "@syncellus/hono/common/http.ts";
 import { basicAuth } from "hono/basic-auth";
 import { LoggerService } from "@syncellus/hono/common/logger.ts";
 import { sValidator } from "@hono/standard-validator";
-import { z } from "@zod/zod";
 import { bearerAuth } from "hono/bearer-auth";
 import { verifyBasic, verifyJWT } from "@syncellus/hono/middlewares/auth.middleware.ts";
 import { forgotPasswordSchema, registerSchema, resetPasswordSchema, verifyEmailSchema } from "@syncellus/hono/modules/auth/schema.ts";

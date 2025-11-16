@@ -2,13 +2,13 @@ import type { DB } from "@syncellus/hono/types/database.d.ts";
 import { Kysely, PostgresDialect } from "kysely";
 import { Pool } from "pg";
 import { extractDbCredentials } from "@syncellus/hono/utils/databaseUrlHelper.ts";
-import { AppConfig } from "@syncellus/hono/config/config.ts";
+import { ConfigService } from "@syncellus/hono/config/config.ts";
 
 export class DatabaseService {
 	private static instance: Kysely<DB> | null = null;
 
 	public static getInstance(): Kysely<DB> {
-		const config = AppConfig.getInstance();
+		const config = ConfigService.getInstance();
 
 		if (!DatabaseService.instance) {
 			if (!config.DATABASE_URL) throw new Error("DATABASE_URL env variable not provided");
