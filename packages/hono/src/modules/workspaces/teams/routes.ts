@@ -5,15 +5,25 @@ import { HttpStatus } from "@syncellus/hono/common/http.ts";
 import { HTTPException } from "hono/http-exception";
 import { sValidator } from "@hono/standard-validator";
 import { z } from "@zod/zod";
+import { VerifyJWT } from "@syncellus/hono/middlewares/auth.middleware.ts";
+import { bearerAuth } from "hono/bearer-auth";
 
 type Variables = { user_public_id: string };
 
 // const logger = LoggerService.getInstance();
 const router = new Hono<{ Variables: Variables }>();
 
+//TODO deduplicate logic with auth routes (and other in the future)
+router.use(
+	"*",
+	bearerAuth({
+		verifyToken: VerifyJWT,
+	}),
+);
+
 router.get("/", async (c) => {
 	const teams = await selectAllTeams();
-	c.status(HttpStatus.OK);
+
 	return c.json({
 		message: "Teams fetched",
 		data: teams,
@@ -39,7 +49,6 @@ router.get("/:id", async (c) => {
 	const team = await selectOneTeamByID(id);
 	if (!team) throw new HTTPException(HttpStatus.NOT_FOUND, { message: `Team with ID ${id} not found!` });
 
-	c.status(HttpStatus.OK);
 	return c.json({
 		message: `Team with ID ${id} fetched`,
 		data: team,
@@ -53,7 +62,6 @@ router.delete("/:id", async (c) => {
 		throw new HTTPException(HttpStatus.NOT_FOUND, { message: `Team with ID ${id} not found!` });
 	}
 
-	c.status(HttpStatus.OK);
 	return c.json({
 		message: `Team with ID ${id} deleted`,
 	});

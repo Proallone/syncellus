@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { getApplicationStatus, getDatabaseStatus } from "@syncellus/hono/modules//health/service.ts";
+import { getApplicationStatus, getDatabaseStatus } from "@syncellus/hono/modules/health/service.ts";
 
 const router = new Hono();
 

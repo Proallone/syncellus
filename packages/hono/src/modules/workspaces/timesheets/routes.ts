@@ -1,12 +1,16 @@
 import { Hono } from "hono";
 import { bearerAuth } from "hono/bearer-auth";
-import { verify } from "hono/utils/jwt/jwt";
-import { AppConfig } from "@syncellus/hono/config/config.ts";
-import { deleteTimesheetById, insertNewTimesheets, selectAllTimesheets, selectOneTimesheetById } from "./service.ts";
+import {
+	deleteTimesheetById,
+	insertNewTimesheets,
+	selectAllTimesheets,
+	selectOneTimesheetById,
+} from "@syncellus/hono/modules/workspaces/timesheets/service.ts";
 import { HTTPException } from "hono/http-exception";
-import { HttpStatus } from "../../../common/http.ts";
+import { HttpStatus } from "@syncellus/hono/common/http.ts";
 import z from "@zod/zod";
 import { sValidator } from "@hono/standard-validator";
+import { VerifyJWT } from "@syncellus/hono/middlewares/auth.middleware.ts";
 
 type Variables = { user_public_id: string };
 
@@ -16,18 +20,13 @@ const router = new Hono<{ Variables: Variables }>();
 router.use(
 	"*",
 	bearerAuth({
-		verifyToken: async (token, c) => {
-			const jwtKey = AppConfig.getInstance().JWT_TOKEN_SECRET;
-			const claims = await verify(token, jwtKey);
-			c.set("user_public_id", claims.sub);
-			return Boolean(claims);
-		},
+		verifyToken: VerifyJWT,
 	}),
 );
 
 router.get("/", async (c) => {
 	const timesheets = await selectAllTimesheets();
-	c.status(HttpStatus.OK);
+
 	return c.json({ message: "Timesheets fetched", data: timesheets });
 });
 
@@ -37,7 +36,7 @@ router.get("/:id", async (c) => {
 	if (!timesheet) {
 		throw new HTTPException(HttpStatus.NOT_FOUND, { message: `Timesheet with ID ${id} not found!` });
 	}
-	c.status(HttpStatus.OK);
+
 	return c.json({ message: `Timesheet with ID ${id} fetched`, data: timesheet });
 });
 

@@ -14,8 +14,7 @@ import { LoggerService } from "@syncellus/hono/common/logger.ts";
 import { sValidator } from "@hono/standard-validator";
 import { z } from "@zod/zod";
 import { bearerAuth } from "hono/bearer-auth";
-import { verify } from "hono/jwt";
-import { AppConfig } from "@syncellus/hono/config/config.ts";
+import { VerifyJWT } from "@syncellus/hono/middlewares/auth.middleware.ts";
 
 type Variables = { user_public_id: string };
 
@@ -56,7 +55,6 @@ router.post("/login", async (c) => {
 	logger.info({ public_id: userPublicId }, "User login attempt");
 	const accessToken = await issueLoginToken(userPublicId);
 
-	c.status(HttpStatus.OK);
 	return c.json({ message: "Login successful", data: { accessToken } });
 });
 
@@ -69,7 +67,6 @@ router.post("/verify-email", sValidator("json", verifyEmailSchema), async (c) =>
 	logger.info({ action: "verify-email" }, "Verification attempt");
 	verifyAccountEmail(token);
 
-	c.status(HttpStatus.OK);
 	return c.json({ message: "Email verified successfully" });
 });
 
@@ -81,8 +78,7 @@ router.post("forgot-password", sValidator("json", forgotPasswordSchema), async (
 	const { email } = await c.req.valid("json");
 	logger.info({ email, action: "forgot-password" }, "Password reset requested");
 	await issuePasswordResetToken(email);
-	c.status(HttpStatus.OK);
-	return c.json({});
+	return c.json({}); //TODO finish
 });
 
 const resetPasswordSchema = z.strictObject({
@@ -94,19 +90,13 @@ router.post("/reset-password", sValidator("json", resetPasswordSchema), async (c
 	const { token, newPassword } = await c.req.valid("json");
 	logger.info({ action: "reset-password" }, "Password reset attempt");
 	await performPasswordReset(token, newPassword);
-	c.status(HttpStatus.OK);
-	return c.json({});
+	return c.json({}); //TODO finish
 });
 
 router.use(
 	"/me",
 	bearerAuth({
-		verifyToken: async (token, c) => {
-			const jwtKey = AppConfig.getInstance().JWT_TOKEN_SECRET;
-			const claims = await verify(token, jwtKey);
-			c.set("user_public_id", claims.sub);
-			return Boolean(claims);
-		},
+		verifyToken: VerifyJWT,
 	}),
 );
 
@@ -115,7 +105,6 @@ router.get("/me", async (c) => {
 	logger.info({ userId: userPublicID, action: "get-profile" }, "Profile requested");
 	const profile = await findUserByPublicID(userPublicID);
 
-	c.status(HttpStatus.OK);
 	return c.json({ message: "This account information", data: profile }); //TODO sanitize response
 });
 
