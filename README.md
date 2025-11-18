@@ -3,13 +3,11 @@
 ## WIP
 
 This is a small side project, meant to solve day-to-day issues for small
-businesses.
+businesses. Aimed to utilize deno runtime paired with hono backend framework!
 
 ### todo
 
-1. [x] yarn upgrade to newest version
-2. [ ] replace varchar(n) with other type in relevant cases
-3. [ ] add pagination and query params to endpoints
+1. [] migrate api to deno + hono
 
 ### Planned features:
 
