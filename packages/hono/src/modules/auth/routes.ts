@@ -3,6 +3,7 @@ import {
 	findUserByPublicID,
 	issueLoginToken,
 	issuePasswordResetToken,
+	issueRefreshToken,
 	performPasswordReset,
 	registerNewUser,
 	verifyAccountEmail,
@@ -13,7 +14,10 @@ import { LoggerService } from "@syncellus/hono/common/logger.ts";
 import { sValidator } from "@hono/standard-validator";
 import { bearerAuth } from "hono/bearer-auth";
 import { verifyBasic, verifyJWT } from "@syncellus/hono/middlewares/auth.middleware.ts";
-import { forgotPasswordSchema, registerSchema, resetPasswordSchema, verifyEmailSchema } from "@syncellus/hono/modules/auth/schema.ts";
+import { forgotPasswordSchema, refreshTokenSchema, registerSchema, resetPasswordSchema, verifyEmailSchema } from "@syncellus/hono/modules/auth/schema.ts";
+import { verify } from "hono/utils/jwt/jwt";
+import { ConfigService } from "@syncellus/hono/config/config.ts";
+import { HTTPException } from "hono/http-exception";
 
 type Variables = { user_public_id: string };
 
@@ -38,8 +42,9 @@ router.post(
 		const userPublicId = c.get("user_public_id");
 		logger.info({ public_id: userPublicId }, "User login attempt");
 		const accessToken = await issueLoginToken(userPublicId);
+		const refreshToken = await issueRefreshToken(userPublicId);
 
-		return c.json({ message: "Login successful", data: { accessToken } });
+		return c.json({ message: "Login successful", data: { accessToken, refreshToken } });
 	},
 );
 
@@ -66,6 +71,25 @@ router.post("/reset-password", sValidator("json", resetPasswordSchema), async (c
 	await performPasswordReset(token, newPassword);
 	return c.json({
 		message: "Password reset successfully",
+	});
+});
+
+router.post("/refresh-token", sValidator("json", refreshTokenSchema), async (c) => {
+	const { refreshToken } = await c.req.valid("json");
+	logger.info({ action: "refresh-token" }, "JWT token refresh attempt");
+	const { JWT_TOKEN_SECRET } = ConfigService.getInstance();
+	const valid = await verify(refreshToken, JWT_TOKEN_SECRET);
+
+	if (!valid) throw new HTTPException(HttpStatus.UNAUTHORIZED, { message: "Unauthorized!" });
+
+	const accessToken = await issueLoginToken(valid.sub as string);
+	const newRefreshToken = await issueRefreshToken(valid.sub as string);
+	return c.json({
+		message: "Issued new token pair",
+		data: {
+			accessToken,
+			refreshToken: newRefreshToken,
+		},
 	});
 });
 

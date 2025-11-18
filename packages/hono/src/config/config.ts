@@ -17,6 +17,8 @@ export class ConfigService {
 		const DEBUG = Deno.env.get("DEBUG");
 		const DATABASE_URL = Deno.env.get("DATABASE_URL");
 		const JWT_TOKEN_SECRET = Deno.env.get("JWT_TOKEN_SECRET");
+		const JWT_TOKEN_EXPIRATION = Deno.env.get("JWT_TOKEN_EXPIRATION");
+		const JWT_REFRESH_TOKEN_EXPIRATION = Deno.env.get("JWT_REFRESH_TOKEN_EXPIRATION");
 		const CRYPTO_HMAC_KEY = Deno.env.get("CRYPTO_HMAC_KEY");
 		const SMTP_HOST = Deno.env.get("SMTP_HOST");
 		const SMTP_PORT = Deno.env.get("STMP_PORT");
@@ -32,6 +34,8 @@ export class ConfigService {
 			DEBUG: Boolean(DEBUG) || false,
 			DATABASE_URL: DATABASE_URL || "",
 			JWT_TOKEN_SECRET: JWT_TOKEN_SECRET,
+			JWT_TOKEN_EXPIRATION: Number(JWT_TOKEN_EXPIRATION),
+			JWT_REFRESH_TOKEN_EXPIRATION: Number(JWT_REFRESH_TOKEN_EXPIRATION),
 			CRYPTO_HMAC_KEY: CRYPTO_HMAC_KEY || "",
 			SMTP_HOST: SMTP_HOST || "",
 			SMTP_PORT: Number(SMTP_PORT) || 1025,

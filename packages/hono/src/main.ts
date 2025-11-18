@@ -23,13 +23,16 @@ app.onError((error, c) => {
 	if (error instanceof HTTPException) {
 		console.error(error);
 		return error.getResponse(); //TODO make better
-	} else if (error instanceof JwtTokenInvalid || error instanceof JwtTokenExpired) {
+	} else if (error instanceof JwtTokenInvalid) {
 		c.status(HttpStatus.UNAUTHORIZED);
-		return c.json({ message: error.message });
+		return c.json({ message: "Invalid JWT token" });
+	} else if (error instanceof JwtTokenExpired) {
+		c.status(HttpStatus.UNAUTHORIZED);
+		return c.json({ message: "JWT token expired" });
 	}
 	c.status(HttpStatus.INTERNAL_SERVER_ERROR);
 	return new Response("An unexpected error occurred");
 });
 
-const port = ConfigService.getInstance().PORT;
-Deno.serve({ port: port }, app.fetch);
+const { PORT } = ConfigService.getInstance();
+Deno.serve({ port: PORT }, app.fetch);

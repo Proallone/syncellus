@@ -1,6 +1,6 @@
 import { DatabaseService } from "@syncellus/hono/database/database.ts";
 import type { DeleteResult, Insertable, Selectable } from "kysely";
-import type { AuthEmailVerificationTokens, AuthPasswordResetTokens, AuthUsers } from "@syncellus/hono/types/database.d.ts";
+import type { AuthEmailVerificationTokens, AuthPasswordResetTokens, AuthRefreshTokens, AuthUsers } from "@syncellus/hono/types/database.d.ts";
 
 const db = DatabaseService.getInstance();
 
@@ -14,6 +14,14 @@ export const insertNewUser = async (
 export const verifyUserEmail = async (id: string) => {
 	return await db.updateTable("auth.users").set({ verified: true })
 		.where("id", "=", id).executeTakeFirst();
+};
+
+export const activateUserAccount = async (id: string) => {
+	return await db.updateTable("auth.users").set({ active: true }).where("id", "=", id).executeTakeFirst();
+};
+
+export const deactivateUserAccount = async (id: string) => {
+	return await db.updateTable("auth.users").set({ active: false }).where("id", "=", id).executeTakeFirst();
 };
 
 export const selectUserByEmail = async (
@@ -162,4 +170,30 @@ export const deleteEmailVerificationTokensByUserID = async (
 		"=",
 		user_id,
 	).executeTakeFirst();
+};
+
+export const insertRefreshToken = async (
+	entry: Insertable<AuthRefreshTokens>,
+) => {
+	return await db.insertInto("auth.refresh_tokens").values(entry)
+		.returningAll().executeTakeFirstOrThrow();
+};
+
+export const revokeRefreshToken = async (id: string) => {
+	return await db.updateTable("auth.refresh_tokens").set({ revoked_at: new Date() }).where("id", "=", id).executeTakeFirst();
+};
+
+export const revokeUserRefreshTokens = async (user_id: string) => {
+	return await db.updateTable("auth.refresh_tokens").set({ revoked_at: new Date() }).where((eb) =>
+		eb.and({
+			"auth.refresh_tokens.user_id": user_id,
+			"auth.refresh_tokens.revoked_at": null,
+		})
+	).execute();
+};
+
+export const selectRefreshTokenByHash = async (tokenHash: string) => {
+	return await db.selectFrom("auth.refresh_tokens").selectAll()
+		.where("auth.refresh_tokens.token_hash", "=", tokenHash)
+		.executeTakeFirst();
 };

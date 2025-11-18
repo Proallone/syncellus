@@ -1,4 +1,5 @@
 import {
+	activateUserAccount,
 	deleteEmailVerificationTokenByID,
 	deleteEmailVerificationTokensByUserID,
 	deletePasswordResetTokenByID,
@@ -8,8 +9,12 @@ import {
 	insertEmailVerificationToken,
 	insertNewUser,
 	insertPasswordResetToken,
+	insertRefreshToken,
+	revokeRefreshToken,
+	revokeUserRefreshTokens,
 	selectEmailVerificationTokenByHash,
 	selectPasswordResetTokenByHash,
+	selectRefreshTokenByHash,
 	selectUserByEmail,
 	selectUserByID,
 	selectUserByPublicID,
@@ -79,14 +84,35 @@ export const verifyUserCredentials = async (email: string, password: string, c: 
 export const issueLoginToken = async (userPublicId: string) => {
 	const roles = await getUserRoles(userPublicId);
 	const scopes = await getUserScopes(userPublicId);
+	const { JWT_TOKEN_EXPIRATION, JWT_TOKEN_SECRET } = ConfigService.getInstance();
 	const payload = {
 		sub: userPublicId,
 		roles,
 		scopes,
-		exp: Math.floor(Date.now() / 1000) + 60 * 30, //30 minutes
+		exp: Math.floor(Date.now() / 1000) + 60 * JWT_TOKEN_EXPIRATION, //? in minutes (TODO address later in milisec)
 	};
-	const config = ConfigService.getInstance();
-	return await sign(payload, config.JWT_TOKEN_SECRET);
+	const token = await sign(payload, JWT_TOKEN_SECRET);
+	return token;
+};
+
+export const issueRefreshToken = async (userPublicId: string) => {
+	const { JWT_REFRESH_TOKEN_EXPIRATION, JWT_TOKEN_SECRET } = ConfigService.getInstance();
+
+	const payload = {
+		sub: userPublicId,
+		exp: Math.floor(Date.now() / 1000) + 60 * JWT_REFRESH_TOKEN_EXPIRATION, //? in minutes (TODO address later in milisec)
+	};
+
+	const refreshToken = await sign(payload, JWT_TOKEN_SECRET);
+	const user = await selectUserByPublicID(userPublicId);
+
+	if (!user) {
+		throw new HTTPException(HttpStatus.NOT_FOUND, { message: `User with public ID ${userPublicId} not found during issuing refresh token` });
+	}
+
+	await revokeUserRefreshTokens(user.id!); //? this will invalidate all currently issued refresh tokens so user might be logged out from other devices
+	await insertRefreshToken({ id: uuidv7(), token_hash: await sha256(refreshToken), user_id: user.id! });
+	return refreshToken;
 };
 
 export const verifyAccountEmail = async (token: string) => {
@@ -111,6 +137,7 @@ export const verifyAccountEmail = async (token: string) => {
 
 	await verifyUserEmail(user.id!); //TODO what if fails?
 	await deleteEmailVerificationTokensByUserID(user.id!); //TODO what if fails? maybe add delete all user tokens?
+	await activateUserAccount(user.id!);
 	return true;
 };
 
@@ -129,12 +156,10 @@ export const issuePasswordResetToken = async (email: string) => {
 		token_hash: tokenHash,
 	});
 
-	//TODO address
-	const config = ConfigService.getInstance();
-	const resetLink = `${config.APP_URL}/auth/reset-password?token=${resetToken}`;
+	const { APP_URL } = ConfigService.getInstance();
+	const resetLink = `${APP_URL}/auth/reset-password?token=${resetToken}`;
 
 	await mailService.sendPasswordReset(user.email!, resetLink);
-
 	return resetLink;
 };
 
@@ -169,4 +194,27 @@ export const findUserByPublicID = async (public_id: string) => {
 		throw new HTTPException(HttpStatus.UNAUTHORIZED, { message: `User with public_id ${public_id} not found` });
 	}
 	return user;
+};
+
+export const verifyRefreshToken = async (token: string) => {
+	const tokenHash = await sha256(token);
+	const tokenRecord = await selectRefreshTokenByHash(tokenHash);
+
+	if (!tokenRecord) {
+		throw new HTTPException(HttpStatus.NOT_FOUND, { message: "Invalid refresh token" });
+	}
+
+	if (tokenRecord.expires_at < new Date()) {
+		await deletePasswordResetTokenByID(tokenRecord.id);
+		throw new HTTPException(HttpStatus.NOT_FOUND, { message: "Expired refresh token" });
+	}
+	const user = await selectUserByID(tokenRecord.id);
+
+	if (!user) {
+		throw new HTTPException(HttpStatus.NOT_FOUND, { message: `User not found` });
+	}
+
+	const newRefreshToken = await issueRefreshToken(user.public_id!);
+	await revokeRefreshToken(tokenRecord.id);
+	return newRefreshToken;
 };

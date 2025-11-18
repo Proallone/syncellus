@@ -250,6 +250,29 @@ export async function up(db: Kysely<any>): Promise<void> {
 		.schema.createView("email_verification_tokens_view")
 		.as(db.selectFrom(`${schema}.email_verification_tokens`).selectAll())
 		.execute();
+
+	await db.withSchema(schema).schema.createTable("refresh_tokens")
+		.addColumn("id", "uuid", (col) => col.primaryKey().notNull())
+		.addColumn(
+			"token_hash",
+			"varchar(64)",
+			(col) => col.notNull().unique(),
+		)
+		.addColumn("user_id", "uuid", (col) => col.references(`${schema}.users.id`).notNull())
+		.addColumn(
+			"expires_at",
+			"timestamptz",
+			(col) => col.defaultTo(sql`now() + interval '7 day'`).notNull(),
+		) //TODO minutes from config
+		.addColumn(
+			"created_at",
+			"timestamptz",
+			(col) => col.defaultTo(sql`now()`).notNull(),
+		)
+		.addColumn("revoked_at", "timestamptz", (col) => col.defaultTo(null))
+		.execute();
+
+	await db.withSchema(schema).schema.createView("refresh_tokens_view").as(db.selectFrom(`${schema}.refresh_tokens`).selectAll()).execute();
 }
 
 // `any` is required here since migrations should be frozen in time. alternatively, keep a "snapshot" db interface.
@@ -258,6 +281,9 @@ export async function down(db: Kysely<any>): Promise<void> {
 	// down migration code goes here...
 	// note: down migrations are optional. you can safely delete this function.
 	// For more info, see: https://kysely.dev/docs/migrations
+	await db.withSchema(schema).schema.dropView("refresh_tokens_view").execute();
+	await db.withSchema(schema).schema.dropTable("refresh_tokens").execute();
+
 	await db.withSchema(schema).schema.dropView("email_verification_tokens_view")
 		.execute();
 	await db.withSchema(schema).schema.dropTable("email_verification_tokens")
