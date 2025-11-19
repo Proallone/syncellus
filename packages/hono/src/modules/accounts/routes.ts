@@ -1,11 +1,21 @@
 import { Hono } from "hono";
 import { sValidator } from "@hono/standard-validator";
-import { accountSchema } from "./schema.ts";
-import { deleteAccountById, insertNewAccount, selectAllAccounts, selectOneAccountById, updateAccountById } from "./service.ts";
-import { HttpStatus } from "../../common/http.ts";
+import { accountSchema } from "@syncellus/hono/modules/accounts/schema.ts";
+import { deleteAccountById, insertNewAccount, selectAllAccounts, selectOneAccountById, updateAccountById } from "@syncellus/hono/modules/accounts/service.ts";
+import { HttpStatus } from "@syncellus/hono/common/http.ts";
 import { HTTPException } from "hono/http-exception";
+import { bearerAuth } from "hono/bearer-auth";
+import { verifyJWT } from "@syncellus/hono/middlewares/auth.middleware.ts";
 
 const router = new Hono();
+
+//TODO deduplicate logic with auth routes (and other in the future)
+router.use(
+	"*",
+	bearerAuth({
+		verifyToken: verifyJWT,
+	}),
+);
 
 router.post("/", sValidator("json", accountSchema), async (c) => {
 	const body = await c.req.valid("json");

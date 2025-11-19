@@ -1,7 +1,13 @@
 import type { AccountsProfiles } from "@syncellus/hono/types/database.d.ts";
 import type { Insertable, Updateable } from "kysely";
 import { generate as uuidv7 } from "@std/uuid/unstable-v7";
-import { deleteAccountByIdInDb, insertNewAccountToDb, selectAllAccountsFromDb, selectOneAccountByIdFromDb, updateAccountByIdInDb } from "./repository.ts";
+import {
+	deleteAccountByIdInDb,
+	insertNewAccountToDb,
+	selectAllAccountsFromDb,
+	selectOneAccountByIdFromDb,
+	updateAccountByIdInDb,
+} from "@syncellus/hono/modules/accounts/repository.ts";
 
 export const insertNewAccount = async (account: Insertable<AccountsProfiles>) => {
 	return await insertNewAccountToDb({ ...account, id: uuidv7() });

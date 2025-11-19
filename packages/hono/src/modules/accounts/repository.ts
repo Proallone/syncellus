@@ -1,6 +1,6 @@
 import type { AccountsProfiles } from "@syncellus/hono/types/database.d.ts";
 import type { Insertable, Updateable } from "kysely";
-import { DatabaseService } from "../../database/database.ts";
+import { DatabaseService } from "@syncellus/hono/database/database.ts";
 
 const db = DatabaseService.getInstance();
 
