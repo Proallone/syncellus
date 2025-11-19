@@ -3,7 +3,7 @@
   "specifiers": {
     "jsr:@hono/hono@^4.10.6": "4.10.6",
     "jsr:@hono/hono@^4.8.3": "4.10.6",
-    "jsr:@hono/standard-validator@~0.1.5": "0.1.5",
+    "jsr:@hono/standard-validator@0.2": "0.2.0",
     "jsr:@kysely-org/kysely-ctl@~0.12.2": "0.12.2",
     "jsr:@std/bytes@^1.0.6": "1.0.6",
     "jsr:@std/crypto@^1.0.5": "1.0.5",
@@ -76,8 +76,8 @@
     "@hono/hono@4.10.6": {
       "integrity": "bcbbf9753a3570f2fa4609484bae0cead85a3feb110ee9ceb7ffc37d845d9a4d"
     },
-    "@hono/standard-validator@0.1.5": {
-      "integrity": "5c655632ba5e0a52d9590cb26dc244fc29261778a04f2b25f59487abe285c271",
+    "@hono/standard-validator@0.2.0": {
+      "integrity": "3ba16798a99c6124f8f44608c80b82962711105107e561780a7894b648e28929",
       "dependencies": [
         "jsr:@hono/hono@^4.8.3"
       ]
@@ -3485,7 +3485,7 @@
       "packages/hono": {
         "dependencies": [
           "jsr:@hono/hono@^4.10.6",
-          "jsr:@hono/standard-validator@~0.1.5",
+          "jsr:@hono/standard-validator@0.2",
           "jsr:@kysely-org/kysely-ctl@~0.12.2",
           "jsr:@std/crypto@^1.0.5",
           "jsr:@std/path@^1.1.3",
