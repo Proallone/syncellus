@@ -3,6 +3,7 @@ import { secureHeaders } from "hono/secure-headers";
 import { logger } from "hono/logger";
 import healthRouter from "@syncellus/hono/modules/health/routes.ts";
 import authRouter from "@syncellus/hono/modules/auth/routes.ts";
+import accountsRouter from "@syncellus/hono/modules/accounts/routes.ts";
 import workspacesRouter from "@syncellus/hono/modules/workspaces/routes.ts";
 import { ConfigService } from "@syncellus/hono/config/config.ts";
 import { HTTPException } from "hono/http-exception";
@@ -17,6 +18,7 @@ app.use(secureHeaders());
 
 app.route("/health", healthRouter);
 app.route("/auth", authRouter);
+app.route("/accounts", accountsRouter);
 app.route("/workspaces", workspacesRouter);
 
 app.onError((error, c) => {

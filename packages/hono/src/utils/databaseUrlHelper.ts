@@ -1,4 +1,4 @@
-export type DbCredentials = {
+type DbCredentials = {
 	protocol: string;
 	user: string;
 	password?: string;
