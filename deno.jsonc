@@ -11,11 +11,13 @@
   },
   "workspace": [
     "packages/client",
-    "packages/server"
+    "packages/server",
+    "packages/hono"
   ],
   "tasks": {
     "dev": "deno task dev:server & deno task dev:client",
     "dev:server": "deno run -A --env-file=packages/server/.env --watch packages/server/src/server.ts",
+    "dev:hono": "deno run -A --env-file=packages/hono/.env --watch packages/hono/src/main.ts",
     "dev:client": "deno run -A  --env-file=packages/client/.env npm:vite dev --config packages/client/vite.config.ts",
     "ci": "deno cache --lock-write packages/server/main.ts && deno task build",
     "build": "deno check packages/server/main.ts"

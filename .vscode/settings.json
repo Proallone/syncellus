@@ -1,24 +1,8 @@
 {
-    "sqltools.connections": [
-        {
-            "previewLimit": 50,
-            "server": "localhost",
-            "port": 5432,
-            "driver": "PostgreSQL",
-            "name": "pg",
-            "group": "local",
-            "database": "goals",
-            "username": "postgres"
-        },
-        {
-            "previewLimit": 50,
-            "server": "localhost",
-            "port": 5432,
-            "driver": "PostgreSQL",
-            "name": "timesheets",
-            "group": "local",
-            "database": "timesheets",
-            "username": "postgres"
-        }
-    ]
+  "deno.enablePaths": [
+    "./"
+  ],
+  "editor.defaultFormatter": "denoland.vscode-deno",
+  "editor.formatOnSave": true,
+  "editor.inlayHints.enabled": "off"
 }
