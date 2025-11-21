@@ -11,7 +11,7 @@
   },
   "workspace": [
     "packages/client",
-    "packages/hono"
+    "packages/api"
   ],
   "tasks": {
     "dev": "deno task dev:server & deno task dev:client",
