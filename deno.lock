@@ -5,6 +5,7 @@
     "jsr:@hono/hono@^4.8.3": "4.10.6",
     "jsr:@hono/standard-validator@0.2": "0.2.0",
     "jsr:@kysely-org/kysely-ctl@~0.12.2": "0.12.2",
+    "jsr:@standard-schema/spec@1": "1.0.0",
     "jsr:@std/bytes@^1.0.6": "1.0.6",
     "jsr:@std/crypto@^1.0.5": "1.0.5",
     "jsr:@std/internal@^1.0.12": "1.0.12",
@@ -31,6 +32,7 @@
     "npm:jiti@^2.4.2": "2.6.1",
     "npm:kysely-codegen@0.19": "0.19.0_kysely@0.28.8_pg@8.16.3_typescript@5.9.3",
     "npm:kysely-postgres-js@2": "2.0.0_kysely@0.28.8_postgres@3.4.7",
+    "npm:kysely@0.28": "0.28.8",
     "npm:kysely@~0.28.8": "0.28.8",
     "npm:lucide-react@0.545": "0.545.0_react@19.2.0",
     "npm:nanoid@^5.1.6": "5.1.6",
@@ -61,7 +63,8 @@
     "@hono/standard-validator@0.2.0": {
       "integrity": "3ba16798a99c6124f8f44608c80b82962711105107e561780a7894b648e28929",
       "dependencies": [
-        "jsr:@hono/hono@^4.8.3"
+        "jsr:@hono/hono@^4.8.3",
+        "jsr:@standard-schema/spec"
       ]
     },
     "@kysely-org/kysely-ctl@0.12.2": {
@@ -71,12 +74,16 @@
         "npm:consola",
         "npm:jiti",
         "npm:kysely-postgres-js",
+        "npm:kysely@0.28",
         "npm:pathe",
         "npm:pkg-types",
         "npm:std-env",
         "npm:type-fest",
         "npm:typescript@^5.8.2"
       ]
+    },
+    "@standard-schema/spec@1.0.0": {
+      "integrity": "4f20bbcf34e92b92f8c01589b958abc7c87385fa9a96170cecdc643d4d5737c0"
     },
     "@std/bytes@1.0.6": {
       "integrity": "f6ac6adbd8ccd99314045f5703e23af0a68d7f7e58364b47d2c7f408aeb5820a"
