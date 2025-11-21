@@ -6,12 +6,15 @@ export function useAuth() {
   const [user, setUser] = useState(loggedUser);
 
   const login = async (email: string, password: string) => {
+    const credentials = `${email}:${password}`;
+    const encoded = btoa(credentials);
     const response = await fetch("/api/v1/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Basic ${encoded}`,
       },
-      body: JSON.stringify({ email, password }),
+      // body: JSON.stringify({ email, password }),
     });
 
     if (response.ok) {
