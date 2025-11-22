@@ -1,0 +1,16 @@
+meta {
+  name: Get all accounts
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://{{host}}:{{port}}/{{api_prefix}}/accounts/0198b988-0a22-71af-990a-7dce68a5114f
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

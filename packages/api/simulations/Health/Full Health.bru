@@ -1,0 +1,16 @@
+meta {
+  name: Full Health
+  type: http
+  seq: 3
+}
+
+get {
+  url: http://{{host}}:{{port}}/{{api_prefix}}/health/full
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
