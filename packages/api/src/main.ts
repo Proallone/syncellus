@@ -33,7 +33,7 @@ app.onError((error, c) => {
 		return c.json({ message: "JWT token expired" });
 	}
 	c.status(HttpStatus.INTERNAL_SERVER_ERROR);
-	return new Response("An unexpected error occurred");
+	return new Response(`An unexpected error occurred. Details : ${JSON.stringify(error)}`);
 });
 
 const { PORT } = ConfigService.getInstance();

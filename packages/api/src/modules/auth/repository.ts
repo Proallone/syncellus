@@ -4,24 +4,26 @@ import type { AuthEmailVerificationTokens, AuthPasswordResetTokens, AuthRefreshT
 
 const db = DatabaseService.getInstance();
 
+const USERS_TABLE = "auth.users" as const;
+
 export const insertNewUser = async (
 	user: Insertable<AuthUsers>,
 ): Promise<Selectable<AuthUsers>> => {
-	return await db.insertInto("auth.users").values(user).returningAll()
+	return await db.insertInto(USERS_TABLE).values(user).returningAll()
 		.executeTakeFirstOrThrow();
 };
 
 export const verifyUserEmail = async (id: string) => {
-	return await db.updateTable("auth.users").set({ verified: true })
+	return await db.updateTable(USERS_TABLE).set({ verified: true })
 		.where("id", "=", id).executeTakeFirst();
 };
 
 export const activateUserAccount = async (id: string) => {
-	return await db.updateTable("auth.users").set({ active: true }).where("id", "=", id).executeTakeFirst();
+	return await db.updateTable(USERS_TABLE).set({ active: true }).where("id", "=", id).executeTakeFirst();
 };
 
 export const deactivateUserAccount = async (id: string) => {
-	return await db.updateTable("auth.users").set({ active: false }).where("id", "=", id).executeTakeFirst();
+	return await db.updateTable(USERS_TABLE).set({ active: false }).where("id", "=", id).executeTakeFirst();
 };
 
 export const selectUserByEmail = async (
@@ -58,7 +60,7 @@ export const updateUserPassword = async (
 	id: string,
 	newPassword: string,
 ): Promise<Selectable<AuthUsers> | undefined> => {
-	return await db.updateTable("auth.users").set({
+	return await db.updateTable(USERS_TABLE).set({
 		password: newPassword,
 	}).where("id", "=", id).returningAll().executeTakeFirst();
 };

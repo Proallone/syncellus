@@ -34,7 +34,7 @@ router.post("/", sValidator("json", workspaceTeamSchema), async (c) => {
 	const team = c.req.valid("json");
 	const userPublicID = c.get("user_public_id");
 
-	const newTeam = await insertNewTeams(userPublicID, team);
+	const newTeam = await insertNewTeams(userPublicID, team.name);
 
 	c.status(HttpStatus.CREATED);
 	return c.json({ message: "Team creation succesfull", data: newTeam });

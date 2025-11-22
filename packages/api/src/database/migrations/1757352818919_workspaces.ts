@@ -120,12 +120,12 @@ export async function up(db: Kysely<any>): Promise<void> {
 		.addColumn(
 			"team_id",
 			"uuid",
-			(col) => col.notNull().references(`${schema}.teams.id`),
+			(col) => col.notNull().references(`${schema}.teams.id`).onDelete("cascade"),
 		)
 		.addColumn(
 			"user_id",
 			"uuid",
-			(col) => col.notNull().references(`${auth_schema}.users.id`),
+			(col) => col.notNull().references(`${auth_schema}.users.id`).onDelete("cascade"),
 		)
 		.addColumn(
 			"role_id",
@@ -167,7 +167,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 		.addColumn(
 			"team_id",
 			"uuid",
-			(col) => col.notNull().references(`${schema}.teams.id`),
+			(col) => col.notNull().references(`${schema}.teams.id`).onDelete("cascade"),
 		)
 		.addColumn("name", "varchar(256)", (col) => col.notNull())
 		.addColumn("description", "varchar(256)")
@@ -200,12 +200,12 @@ export async function up(db: Kysely<any>): Promise<void> {
 		.addColumn(
 			"user_id",
 			"uuid",
-			(col) => col.references(`${auth_schema}.users.id`).notNull(),
+			(col) => col.references(`${auth_schema}.users.id`).onDelete("cascade").notNull(),
 		)
 		.addColumn(
 			"task_id",
 			"uuid",
-			(col) => col.references(`${schema}.tasks.id`).notNull(),
+			(col) => col.references(`${schema}.tasks.id`).onDelete("cascade").notNull(),
 		)
 		.addColumn(
 			"status_id",

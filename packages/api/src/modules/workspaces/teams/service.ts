@@ -1,6 +1,6 @@
 import type { WorkspacesTeams } from "@syncellus/types/database.d.ts";
 import { nanoid } from "@syncellus/utils/nanoid.ts";
-import type { Insertable, Updateable } from "kysely";
+import type { Updateable } from "kysely";
 import { generate as uuidv7 } from "@std/uuid/unstable-v7";
 import {
 	deleteTeamByIDFromDB,
@@ -11,16 +11,17 @@ import {
 	updateTeamByIDInDB,
 } from "@syncellus/modules//workspaces/teams/repository.ts";
 import { selectUserByPublicID } from "@syncellus/modules/auth/repository.ts";
+import { HTTPException } from "hono/http-exception";
+import { HttpStatus } from "@syncellus/common/http.ts";
 
 export const insertNewTeams = async (
 	ownerPublicID: string,
-	teams: Insertable<WorkspacesTeams>[],
+	teamName: string,
 ) => {
 	const owner = await selectUserByPublicID(ownerPublicID);
-	const values = teams.map((team) => {
-		return { id: uuidv7(), public_id: nanoid(), owner_id: owner?.id!, name: team.name };
-	});
-	return await insertTeamsToDB(values);
+	if (!owner) throw new HTTPException(HttpStatus.NOT_FOUND, { message: `User with public ID ${ownerPublicID} not found` });
+	const newTeam = { id: uuidv7(), public_id: nanoid(), owner_id: owner.id!, name: teamName };
+	return await insertTeamsToDB(newTeam);
 };
 
 export const selectAllTeams = async () => {

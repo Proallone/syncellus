@@ -4,16 +4,18 @@ import { DatabaseService } from "@syncellus/database/database.ts";
 
 const db = DatabaseService.getInstance();
 
+const PROFILES_TABLE = "accounts.profiles" as const;
+
 export const insertNewAccountToDb = async (
 	account: Insertable<AccountsProfiles>,
 ) => {
-	return await db.insertInto("accounts.profiles").values(account)
+	return await db.insertInto(PROFILES_TABLE).values(account)
 		.returningAll().executeTakeFirstOrThrow();
 };
 
 export const selectAllAccountsFromDb = async () => {
 	const q = db
-		.selectFrom("accounts.profiles")
+		.selectFrom(PROFILES_TABLE)
 		.leftJoin("auth.users", "accounts.profiles.user_id", "auth.users.id")
 		.select([
 			"accounts.profiles.id",
@@ -29,7 +31,7 @@ export const selectAllAccountsFromDb = async () => {
 
 export const selectOneAccountByIdFromDb = async (id: string) => {
 	return await db
-		.selectFrom("accounts.profiles")
+		.selectFrom(PROFILES_TABLE)
 		.leftJoin("auth.users", "accounts.profiles.user_id", "auth.users.id")
 		.select([
 			"accounts.profiles.id",
@@ -47,7 +49,7 @@ export const selectOneAccountByIdFromDb = async (id: string) => {
 export const updateAccountByIdInDb = async (
 	account: Updateable<AccountsProfiles>,
 ) => {
-	return await db.updateTable("accounts.profiles").set(account).where(
+	return await db.updateTable(PROFILES_TABLE).set(account).where(
 		"id",
 		"=",
 		account.id!,
@@ -55,6 +57,6 @@ export const updateAccountByIdInDb = async (
 };
 
 export const deleteAccountByIdInDb = async (id: string) => {
-	return await db.deleteFrom("accounts.profiles").where("id", "=", id)
+	return await db.deleteFrom(PROFILES_TABLE).where("id", "=", id)
 		.executeTakeFirst();
 };

@@ -5,12 +5,14 @@ import { WorkspacesTasks } from "@syncellus/types/database.d.ts";
 
 const db = DatabaseService.getInstance();
 
+const TASKS_TABLE = "workspaces.tasks" as const;
+
 export const selectAllTasksFromDB = async () => {
-	return await db.selectFrom("workspaces.tasks").selectAll().execute();
+	return await db.selectFrom(TASKS_TABLE).selectAll().execute();
 };
 
 export const selectTaskByIDFromDB = async (id: string) => {
-	return await db.selectFrom("workspaces.tasks").selectAll().where(
+	return await db.selectFrom(TASKS_TABLE).selectAll().where(
 		"id",
 		"=",
 		id,
@@ -18,7 +20,7 @@ export const selectTaskByIDFromDB = async (id: string) => {
 };
 
 export const insertTasksToDB = async (tasks: Insertable<WorkspacesTasks>[]) => {
-	return await db.insertInto("workspaces.tasks").values(tasks)
+	return await db.insertInto(TASKS_TABLE).values(tasks)
 		.returningAll().execute();
 };
 
@@ -26,7 +28,7 @@ export const updateTaskByIDInDB = async (
 	id: string,
 	task: Updateable<WorkspacesTasks>,
 ) => {
-	return await db.updateTable("workspaces.tasks").set(task).where(
+	return await db.updateTable(TASKS_TABLE).set(task).where(
 		"id",
 		"=",
 		id,
@@ -34,6 +36,6 @@ export const updateTaskByIDInDB = async (
 };
 
 export const deleteTaskByIDinDB = async (id: string) => {
-	return await db.deleteFrom("workspaces.tasks").where("id", "=", id)
+	return await db.deleteFrom(TASKS_TABLE).where("id", "=", id)
 		.executeTakeFirstOrThrow();
 };

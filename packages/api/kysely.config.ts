@@ -1,4 +1,4 @@
-import { defineConfig } from "@kysely-org/kysely-ctl";
+import { defineConfig } from "kysely-ctl";
 import { DatabaseService } from "@syncellus/database/database.ts";
 
 const db = DatabaseService.getInstance();
