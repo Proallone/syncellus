@@ -1,0 +1,16 @@
+meta {
+  name: Get first team
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://{{host}}:{{port}}/{{api_prefix}}/workspaces/teams/01992aed-cc90-71a0-b867-1d86fae1028a
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

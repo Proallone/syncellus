@@ -1,0 +1,29 @@
+meta {
+  name: Create new timesheet
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://{{host}}:{{port}}/{{api_prefix}}/workspaces/timesheets
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "user_id" : "0189f7ea-ae2f-72b9-9be8-9c3d224082ef",
+    "task_id": "01994771-49cc-7459-a52d-375358c173f5",
+    "timesheets" : [
+      {
+        "start_time" : "2025-11-22T02:11:12Z",
+        "end_time": "2025-11-22T05:11:12Z"
+      }
+    ]
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,16 @@
+meta {
+  name: Get first timesheet
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://{{host}}:{{port}}/{{api_prefix}}/workspaces/timesheets/0198b9b5-233d-70c1-85c1-047614b54ffc
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

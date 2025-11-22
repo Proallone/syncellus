@@ -1,0 +1,15 @@
+meta {
+  name: Get all timesheets
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://{{host}}:{{port}}/{{api_prefix}}/workspaces/timesheets
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

@@ -1,0 +1,16 @@
+meta {
+  name: Get all teams
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://{{host}}:{{port}}/{{api_prefix}}/workspaces/teams
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

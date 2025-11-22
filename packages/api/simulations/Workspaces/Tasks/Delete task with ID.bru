@@ -1,0 +1,24 @@
+meta {
+  name: Delete task with ID
+  type: http
+  seq: 4
+}
+
+delete {
+  url: http://{{host}}:{{port}}/{{api_prefix}}/workspaces/tasks/01994771-49cc-7459-a52d-375358c173f5
+  body: none
+  auth: inherit
+}
+
+body:json {
+  {
+    "team_id" : "01992aed-cc90-71a0-b867-1d86fae1028a",
+    "name" : "New task!",
+    "description": "Very urgent task"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

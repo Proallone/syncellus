@@ -1,0 +1,16 @@
+meta {
+  name: Delete team with ID
+  type: http
+  seq: 4
+}
+
+delete {
+  url: http://{{host}}:{{port}}/{{api_prefix}}/workspaces/teams/01992aed-cc90-71a0-b867-1d86fae1028a
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

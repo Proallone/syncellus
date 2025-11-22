@@ -4,31 +4,11 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Express(tsx)",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "program": "${workspaceFolder}/packages/server/src/server.ts",
-            "runtimeExecutable": "tsx",
-            "console": "internalConsole",
-            "runtimeArgs": [
-                "--env-file=${workspaceFolder}/packages/server/.env"
-            ],
-            "restart": true,
-            "outputCapture": "std",
-            "outFiles": [
-                "${workspaceFolder}/**/*.js"
-            ],
-            "cwd": "${workspaceFolder}/packages/server" 
-        },
-        {
-            "type": "node",
-            "request": "launch",
             "name": "Hono API",
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/packages/hono/src/main.ts",
+            "program": "${workspaceFolder}/packages/api/src/main.ts",
             "runtimeExecutable": "deno",
             "console": "internalConsole",
             "runtimeArgs": [
@@ -40,24 +20,7 @@
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
             ],
-            "cwd": "${workspaceFolder}/packages/hono" 
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Launch Program (Compiled Dist)",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "program": "${workspaceFolder}/packages/server/dist/server.js",
-            "cwd": "${workspaceFolder}",
-            "console": "internalConsole",
-            "sourceMaps": true,
-            "outputCapture": "std",
-            "outFiles": [
-                "${workspaceFolder}/dist/**/*.js"
-            ],
-            "preLaunchTask": "tsc: build - tsconfig.json" 
+            "cwd": "${workspaceFolder}/packages/api" 
         }
     ]
 }

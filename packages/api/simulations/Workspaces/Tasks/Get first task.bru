@@ -1,0 +1,16 @@
+meta {
+  name: Get first task
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://{{host}}:{{port}}/{{api_prefix}}/workspaces/tasks/01994771-49cc-7459-a52d-375358c173f5
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

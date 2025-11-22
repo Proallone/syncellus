@@ -1,0 +1,24 @@
+meta {
+  name: Create new task
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://{{host}}:{{port}}/{{api_prefix}}/workspaces/tasks
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "team_id" : "01992aed-cc90-71a0-b867-1d86fae1028a",
+    "name" : "New task!",
+    "description": "Very urgent task"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

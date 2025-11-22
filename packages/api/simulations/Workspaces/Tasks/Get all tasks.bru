@@ -1,0 +1,15 @@
+meta {
+  name: Get all tasks
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://{{host}}:{{port}}/{{api_prefix}}/workspaces/tasks
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}
