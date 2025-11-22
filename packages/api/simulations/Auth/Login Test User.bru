@@ -1,0 +1,31 @@
+meta {
+  name: Login Test User
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://{{host}}:{{port}}/{{api_prefix}}/auth/login
+  body: none
+  auth: basic
+}
+
+auth:basic {
+  username: bartek@manager.com
+  password: password
+}
+
+script:post-response {
+  if(res.body.data.accessToken) {
+      bru.setVar('token', res.body.data.accessToken);
+  }
+  
+  if(res.body.data.refreshToken) {
+      bru.setVar('refresh_token', res.body.data.refreshToken);
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

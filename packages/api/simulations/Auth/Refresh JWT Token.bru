@@ -1,0 +1,22 @@
+meta {
+  name: Refresh JWT Token
+  type: http
+  seq: 7
+}
+
+post {
+  url: http://{{host}}:{{port}}/{{api_prefix}}/auth/refresh-token
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "refreshToken" : "{{refreshToken}}"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

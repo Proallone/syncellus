@@ -1,0 +1,16 @@
+meta {
+  name: App Health
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://{{host}}:{{port}}/{{api_prefix}}/health/app
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
