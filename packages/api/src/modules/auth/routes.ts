@@ -25,7 +25,7 @@ const logger = LoggerService.getInstance();
 const router = new Hono<{ Variables: Variables }>();
 
 router.post("/register", sValidator("json", registerSchema), async (c) => {
-	const { email, password } = await c.req.valid("json");
+	const { email, password } = c.req.valid("json");
 	const newUser = await registerNewUser({ email, password });
 	logger.info({ email, action: "register" }, "Registration attempt");
 
@@ -49,7 +49,7 @@ router.post(
 );
 
 router.post("/verify-email", sValidator("json", verifyEmailSchema), async (c) => {
-	const { token } = await c.req.valid("json");
+	const { token } = c.req.valid("json");
 	logger.info({ action: "verify-email" }, "Verification attempt");
 	await verifyAccountEmail(token);
 
@@ -57,7 +57,7 @@ router.post("/verify-email", sValidator("json", verifyEmailSchema), async (c) =>
 });
 
 router.post("forgot-password", sValidator("json", forgotPasswordSchema), async (c) => {
-	const { email } = await c.req.valid("json");
+	const { email } = c.req.valid("json");
 	logger.info({ email, action: "forgot-password" }, "Password reset requested");
 	await issuePasswordResetToken(email);
 	return c.json({
@@ -66,7 +66,7 @@ router.post("forgot-password", sValidator("json", forgotPasswordSchema), async (
 });
 
 router.post("/reset-password", sValidator("json", resetPasswordSchema), async (c) => {
-	const { token, newPassword } = await c.req.valid("json");
+	const { token, newPassword } = c.req.valid("json");
 	logger.info({ action: "reset-password" }, "Password reset attempt");
 	await performPasswordReset(token, newPassword);
 	return c.json({
@@ -75,7 +75,7 @@ router.post("/reset-password", sValidator("json", resetPasswordSchema), async (c
 });
 
 router.post("/refresh-token", sValidator("json", refreshTokenSchema), async (c) => {
-	const { refreshToken } = await c.req.valid("json");
+	const { refreshToken } = c.req.valid("json");
 	logger.info({ action: "refresh-token" }, "JWT token refresh attempt");
 	const { JWT_TOKEN_SECRET } = ConfigService.getInstance();
 	const valid = await verify(refreshToken, JWT_TOKEN_SECRET);

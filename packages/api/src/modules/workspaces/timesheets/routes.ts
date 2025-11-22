@@ -39,7 +39,7 @@ router.post(
 	"/",
 	sValidator("json", timesheetsSchema),
 	async (c) => {
-		const timesheets = await c.req.valid("json");
+		const timesheets = c.req.valid("json");
 		// const userPublicID = c.get("user_public_id");
 		const newTimesheets = await insertNewTimesheets(timesheets);
 		return c.json({ message: `Timesheets creation successfull`, data: newTimesheets });

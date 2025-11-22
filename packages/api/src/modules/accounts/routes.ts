@@ -18,7 +18,7 @@ router.use(
 );
 
 router.post("/", sValidator("json", accountSchema), async (c) => {
-	const body = await c.req.valid("json");
+	const body = c.req.valid("json");
 	const newAccount = await insertNewAccount(body);
 	c.status(HttpStatus.CREATED);
 	return c.json({ message: `New account with ID ${newAccount.id} created`, data: newAccount });
@@ -40,7 +40,7 @@ router.patch(
 	sValidator("json", accountSchema.partial()),
 	async (c) => {
 		const id = c.req.param("id");
-		const data = await c.req.valid("json");
+		const data = c.req.valid("json");
 		const update = { id, ...data };
 		const result = await updateAccountById(update);
 		return c.json({ message: `Account with ID ${id} updated successfully`, data: result });

@@ -31,7 +31,7 @@ router.get("/", async (c) => {
 });
 
 router.post("/", sValidator("json", workspaceTeamSchema), async (c) => {
-	const team = await c.req.valid("json");
+	const team = c.req.valid("json");
 	const userPublicID = c.get("user_public_id");
 
 	const newTeam = await insertNewTeams(userPublicID, team);

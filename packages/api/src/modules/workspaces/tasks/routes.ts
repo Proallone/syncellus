@@ -30,7 +30,7 @@ router.get("/", async (c) => {
 });
 
 router.post("/", sValidator("json", workspaceTaskSchema), async (c) => {
-	const task = await c.req.valid("json");
+	const task = c.req.valid("json");
 	// const userPublicID = c.get("user_public_id");
 	const newTask = await insertNewTasks(task); //TODO add createdBy?
 	c.status(HttpStatus.CREATED);
@@ -50,7 +50,7 @@ router.patch(
 	sValidator("json", workspaceTaskSchema.partial()),
 	async (c) => {
 		const id = c.req.param("id");
-		const data = await c.req.valid("json");
+		const data = c.req.valid("json");
 		const updatedTask = await updateTaskByID(id, data);
 		c.status(HttpStatus.ACCEPTED);
 		return c.json({ message: `Task with ID ${id} updated`, data: updatedTask });
