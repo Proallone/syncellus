@@ -1,26 +1,4 @@
-import {
-	activateUserAccount,
-	deleteEmailVerificationTokenByID,
-	deleteEmailVerificationTokensByUserID,
-	deletePasswordResetTokenByID,
-	deletePasswordResetTokensByUserID,
-	getUserRoles,
-	getUserScopes,
-	insertEmailVerificationToken,
-	insertNewUser,
-	insertPasswordResetToken,
-	insertRefreshToken,
-	revokeRefreshToken,
-	revokeUserRefreshTokens,
-	selectEmailVerificationTokenByHash,
-	selectPasswordResetTokenByHash,
-	selectRefreshTokenByHash,
-	selectUserByEmail,
-	selectUserByID,
-	selectUserByPublicID,
-	updateUserPassword,
-	verifyUserEmail,
-} from "@syncellus/modules/auth/repository.ts";
+import { AuthRepository } from "@syncellus/modules/auth/repository.ts";
 import { NanoID, UUID } from "@syncellus/utils/Generators.ts";
 import { compareHash, generateToken, hashPassword, sha256 } from "@syncellus/utils/crypto.ts";
 import { HTTPException } from "hono/http-exception";
@@ -40,7 +18,7 @@ const mailService = new MailService(mailProvider);
 export const registerNewUser = async (
 	user: { email: string; password: string },
 ) => { //TODO replace with zod infered type
-	const existing = await selectUserByEmail(user.email);
+	const existing = await AuthRepository.selectUserByEmail(user.email);
 	if (existing) throw new HTTPException(HttpStatus.CONFLICT, { message: `User ${user.email} already exists` });
 
 	const userToInsert: Insertable<AuthUsers> = {
@@ -50,13 +28,13 @@ export const registerNewUser = async (
 		password: await hashPassword(user.password),
 	};
 
-	const newUser = await insertNewUser(userToInsert);
+	const newUser = await AuthRepository.insertNewUser(userToInsert);
 
 	const verificationToken = generateToken();
 	const tokenHash = await sha256(verificationToken);
 
-	await deleteEmailVerificationTokensByUserID(newUser.id);
-	await insertEmailVerificationToken({
+	await AuthRepository.deleteEmailVerificationTokensByUserID(newUser.id);
+	await AuthRepository.insertEmailVerificationToken({
 		id: UUID.generateV7(),
 		user_id: newUser.id,
 		token_hash: tokenHash,
@@ -75,7 +53,7 @@ export const registerNewUser = async (
 };
 
 export const verifyUserCredentials = async (email: string, password: string, c: Context): Promise<boolean> => {
-	const userFromDb = await selectUserByEmail(email);
+	const userFromDb = await AuthRepository.selectUserByEmail(email);
 	if (!userFromDb) return false;
 
 	const match = compareHash(password, userFromDb.password!);
@@ -85,8 +63,8 @@ export const verifyUserCredentials = async (email: string, password: string, c: 
 };
 
 export const issueLoginToken = async (userPublicId: string) => {
-	const roles = await getUserRoles(userPublicId);
-	const scopes = await getUserScopes(userPublicId);
+	const roles = await AuthRepository.getUserRoles(userPublicId);
+	const scopes = await AuthRepository.getUserScopes(userPublicId);
 	const { JWT_TOKEN_EXPIRATION, JWT_TOKEN_SECRET } = ConfigService.getInstance();
 	const payload = {
 		sub: userPublicId,
@@ -107,20 +85,20 @@ export const issueRefreshToken = async (userPublicId: string) => {
 	};
 
 	const refreshToken = await sign(payload, JWT_TOKEN_SECRET);
-	const user = await selectUserByPublicID(userPublicId);
+	const user = await AuthRepository.selectUserByPublicID(userPublicId);
 
 	if (!user) {
 		throw new HTTPException(HttpStatus.NOT_FOUND, { message: `User with public ID ${userPublicId} not found during issuing refresh token` });
 	}
 
-	await revokeUserRefreshTokens(user.id!); //? this will invalidate all currently issued refresh tokens so user might be logged out from other devices
-	await insertRefreshToken({ id: UUID.generateV7(), token_hash: await sha256(refreshToken), user_id: user.id! });
+	await AuthRepository.revokeUserRefreshTokens(user.id!); //? this will invalidate all currently issued refresh tokens so user might be logged out from other devices
+	await AuthRepository.insertRefreshToken({ id: UUID.generateV7(), token_hash: await sha256(refreshToken), user_id: user.id! });
 	return refreshToken;
 };
 
 export const verifyAccountEmail = async (token: string) => {
 	const tokenHash = await sha256(token);
-	const tokenRecord = await selectEmailVerificationTokenByHash(
+	const tokenRecord = await AuthRepository.selectEmailVerificationTokenByHash(
 		tokenHash,
 	);
 
@@ -129,31 +107,31 @@ export const verifyAccountEmail = async (token: string) => {
 	}
 
 	if (tokenRecord.expires_at < new Date()) {
-		await deleteEmailVerificationTokenByID(tokenRecord.id); //TODO what if fails?
+		await AuthRepository.deleteEmailVerificationTokenByID(tokenRecord.id); //TODO what if fails?
 		throw new HTTPException(HttpStatus.NOT_FOUND, { message: "Expired email verification token" });
 	}
 
-	const user = await selectUserByID(tokenRecord.user_id);
+	const user = await AuthRepository.selectUserByID(tokenRecord.user_id);
 	if (!user) {
 		throw new HTTPException(HttpStatus.NOT_FOUND, { message: "User not found for this email verification token" });
 	}
 
-	await verifyUserEmail(user.id!); //TODO what if fails?
-	await deleteEmailVerificationTokensByUserID(user.id!); //TODO what if fails? maybe add delete all user tokens?
-	await activateUserAccount(user.id!);
+	await AuthRepository.verifyUserEmail(user.id!); //TODO what if fails?
+	await AuthRepository.deleteEmailVerificationTokensByUserID(user.id!); //TODO what if fails? maybe add delete all user tokens?
+	await AuthRepository.activateUserAccount(user.id!);
 	return true;
 };
 
 export const issuePasswordResetToken = async (email: string) => {
-	const user = await selectUserByEmail(email);
+	const user = await AuthRepository.selectUserByEmail(email);
 
 	if (!user) throw new HTTPException(HttpStatus.NOT_FOUND, { message: `User with email ${email} not found` });
 
 	const resetToken = generateToken();
 	const tokenHash = await sha256(resetToken);
 
-	await deletePasswordResetTokensByUserID(user.id!);
-	await insertPasswordResetToken({
+	await AuthRepository.deletePasswordResetTokensByUserID(user.id!);
+	await AuthRepository.insertPasswordResetToken({
 		id: UUID.generateV7(),
 		user_id: user.id!,
 		token_hash: tokenHash,
@@ -171,28 +149,28 @@ export const performPasswordReset = async (
 	newPassword: string,
 ) => {
 	const tokenHash = await sha256(token);
-	const tokenRecord = await selectPasswordResetTokenByHash(
+	const tokenRecord = await AuthRepository.selectPasswordResetTokenByHash(
 		tokenHash,
 	);
 
 	if (!tokenRecord) throw new HTTPException(HttpStatus.NOT_FOUND, { message: "Invalid password reset token" });
 
 	if (tokenRecord.expires_at < new Date()) {
-		await deletePasswordResetTokenByID(tokenRecord.id);
+		await AuthRepository.deletePasswordResetTokenByID(tokenRecord.id);
 		throw new HTTPException(HttpStatus.NOT_FOUND, { message: "Expired password reset token" });
 	}
 
-	const user = await selectUserByID(tokenRecord.user_id);
+	const user = await AuthRepository.selectUserByID(tokenRecord.user_id);
 	if (!user) throw new HTTPException(HttpStatus.NOT_FOUND, { message: "User not found for this reset token" });
 
 	const hashedPassword = await hashPassword(newPassword);
 
-	await updateUserPassword(user.id!, hashedPassword);
-	await deletePasswordResetTokensByUserID(user.id!);
+	await AuthRepository.updateUserPassword(user.id!, hashedPassword);
+	await AuthRepository.deletePasswordResetTokensByUserID(user.id!);
 };
 
 export const findUserByPublicID = async (public_id: string) => {
-	const user = await selectUserByPublicID(public_id);
+	const user = await AuthRepository.selectUserByPublicID(public_id);
 	if (!user) {
 		throw new HTTPException(HttpStatus.UNAUTHORIZED, { message: `User with public_id ${public_id} not found` });
 	}
@@ -201,23 +179,24 @@ export const findUserByPublicID = async (public_id: string) => {
 
 export const verifyRefreshToken = async (token: string) => {
 	const tokenHash = await sha256(token);
-	const tokenRecord = await selectRefreshTokenByHash(tokenHash);
+	const tokenRecord = await AuthRepository.selectRefreshTokenByHash(tokenHash);
 
 	if (!tokenRecord) {
 		throw new HTTPException(HttpStatus.NOT_FOUND, { message: "Invalid refresh token" });
 	}
 
 	if (tokenRecord.expires_at < new Date()) {
-		await deletePasswordResetTokenByID(tokenRecord.id);
+		await AuthRepository.deletePasswordResetTokenByID(tokenRecord.id);
 		throw new HTTPException(HttpStatus.NOT_FOUND, { message: "Expired refresh token" });
 	}
-	const user = await selectUserByID(tokenRecord.id);
+
+	const user = await AuthRepository.selectUserByID(tokenRecord.user_id);
 
 	if (!user) {
 		throw new HTTPException(HttpStatus.NOT_FOUND, { message: `User not found` });
 	}
 
 	const newRefreshToken = await issueRefreshToken(user.public_id!);
-	await revokeRefreshToken(tokenRecord.id);
+	await AuthRepository.revokeRefreshToken(tokenRecord.id);
 	return newRefreshToken;
 };

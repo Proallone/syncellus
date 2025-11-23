@@ -79,7 +79,6 @@ router.post("/refresh-token", sValidator("json", refreshTokenSchema), async (c) 
 	logger.info({ action: "refresh-token" }, "JWT token refresh attempt");
 	const { JWT_TOKEN_SECRET } = ConfigService.getInstance();
 
-	//TODO add check if token was not revoked
 	//TODO this should be moved to service entirely
 	const valid = await verify(refreshToken, JWT_TOKEN_SECRET);
 

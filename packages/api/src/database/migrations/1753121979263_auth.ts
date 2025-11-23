@@ -31,7 +31,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 			(col) => col.defaultTo(sql`now()`).notNull(),
 		)
 		.addColumn("verified", "boolean", (col) => col.defaultTo(false))
-		.addColumn("active", "boolean", (col) => col.defaultTo(false))
+		.addColumn("active", "boolean", (col) => col.defaultTo(true))
 		.execute();
 
 	await db

@@ -9,7 +9,7 @@ import {
 	selectTeamByPublicIDFromDB,
 	updateTeamByIDInDB,
 } from "@syncellus/modules//workspaces/teams/repository.ts";
-import { selectUserByPublicID } from "@syncellus/modules/auth/repository.ts";
+import { AuthRepository } from "@syncellus/modules/auth/repository.ts";
 import { HTTPException } from "hono/http-exception";
 import { HttpStatus } from "@syncellus/common/http.ts";
 
@@ -17,7 +17,7 @@ export const insertNewTeams = async (
 	ownerPublicID: string,
 	teamName: string,
 ) => {
-	const owner = await selectUserByPublicID(ownerPublicID);
+	const owner = await AuthRepository.selectUserByPublicID(ownerPublicID);
 	if (!owner) throw new HTTPException(HttpStatus.NOT_FOUND, { message: `User with public ID ${ownerPublicID} not found` });
 	const newTeam = { id: UUID.generateV7(), public_id: NanoID.generate(), owner_id: owner.id!, name: teamName };
 	return await insertTeamsToDB(newTeam);

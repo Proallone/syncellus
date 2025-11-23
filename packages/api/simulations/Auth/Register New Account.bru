@@ -17,6 +17,18 @@ body:json {
   }
 }
 
+tests {
+  test("should be able to register a new account", function () {
+    expect(res.getStatus()).to.equal(201);
+  });
+   
+  // test("should return new user data", function () {
+  //   expect(res.getBody()).to.contain({
+  //     hello: "Bruno",
+  //   });
+  // });
+}
+
 settings {
   encodeUrl: true
   timeout: 0
