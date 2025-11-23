@@ -1,6 +1,5 @@
 import type { WorkspacesTasks } from "@syncellus/types/database.d.ts";
 import type { Insertable, Updateable } from "kysely";
-import { generate as uuidv7 } from "@std/uuid/unstable-v7";
 import {
 	deleteTaskByIDinDB,
 	insertTasksToDB,
@@ -8,10 +7,11 @@ import {
 	selectTaskByIDFromDB,
 	updateTaskByIDInDB,
 } from "@syncellus/modules/workspaces/tasks/repository.ts";
+import { UUID } from "@syncellus/utils/Generators.ts";
 
 export const insertNewTasks = async (tasks: Insertable<WorkspacesTasks>[]) => {
 	const values = tasks.map((task) => {
-		return { id: uuidv7(), name: task.name, team_id: task.team_id };
+		return { id: UUID.generateV7(), name: task.name, team_id: task.team_id };
 	});
 	return await insertTasksToDB(values);
 };

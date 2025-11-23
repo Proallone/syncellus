@@ -1,7 +1,6 @@
 import type { WorkspacesTeams } from "@syncellus/types/database.d.ts";
-import { nanoid } from "@syncellus/utils/nanoid.ts";
+import { NanoID, UUID } from "@syncellus/utils/Generators.ts";
 import type { Updateable } from "kysely";
-import { generate as uuidv7 } from "@std/uuid/unstable-v7";
 import {
 	deleteTeamByIDFromDB,
 	insertTeamsToDB,
@@ -20,7 +19,7 @@ export const insertNewTeams = async (
 ) => {
 	const owner = await selectUserByPublicID(ownerPublicID);
 	if (!owner) throw new HTTPException(HttpStatus.NOT_FOUND, { message: `User with public ID ${ownerPublicID} not found` });
-	const newTeam = { id: uuidv7(), public_id: nanoid(), owner_id: owner.id!, name: teamName };
+	const newTeam = { id: UUID.generateV7(), public_id: NanoID.generate(), owner_id: owner.id!, name: teamName };
 	return await insertTeamsToDB(newTeam);
 };
 

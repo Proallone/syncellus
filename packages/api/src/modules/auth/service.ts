@@ -21,16 +21,17 @@ import {
 	updateUserPassword,
 	verifyUserEmail,
 } from "@syncellus/modules/auth/repository.ts";
-import { generate as uuidv7 } from "@std/uuid/unstable-v7";
-import { nanoid } from "@syncellus/utils/nanoid.ts";
+import { NanoID, UUID } from "@syncellus/utils/Generators.ts";
 import { compareHash, generateToken, hashPassword, sha256 } from "@syncellus/utils/crypto.ts";
 import { HTTPException } from "hono/http-exception";
 import { HttpStatus } from "@syncellus/common/http.ts";
 import { MailService } from "@syncellus/modules/mail/service.ts";
 import { NodemailerProvider } from "@syncellus/modules/mail/providers/NodemailerProvider.ts";
 import { ConfigService } from "@syncellus/config/config.ts";
+import { AuthUsers } from "@syncellus/types/database.d.ts";
 import { sign } from "hono/jwt";
 import type { Context } from "hono";
+import type { Insertable } from "kysely";
 
 //TODO maybe rethink how to better handle accessing mail service
 const mailProvider = new NodemailerProvider();
@@ -42,19 +43,21 @@ export const registerNewUser = async (
 	const existing = await selectUserByEmail(user.email);
 	if (existing) throw new HTTPException(HttpStatus.CONFLICT, { message: `User ${user.email} already exists` });
 
-	const newUser = await insertNewUser({
-		id: uuidv7(),
-		public_id: nanoid(),
+	const userToInsert: Insertable<AuthUsers> = {
+		id: UUID.generateV7(),
+		public_id: NanoID.generate(),
 		email: user.email,
 		password: await hashPassword(user.password),
-	});
+	};
+
+	const newUser = await insertNewUser(userToInsert);
 
 	const verificationToken = generateToken();
 	const tokenHash = await sha256(verificationToken);
 
 	await deleteEmailVerificationTokensByUserID(newUser.id);
 	await insertEmailVerificationToken({
-		id: uuidv7(),
+		id: UUID.generateV7(),
 		user_id: newUser.id,
 		token_hash: tokenHash,
 	});
@@ -111,7 +114,7 @@ export const issueRefreshToken = async (userPublicId: string) => {
 	}
 
 	await revokeUserRefreshTokens(user.id!); //? this will invalidate all currently issued refresh tokens so user might be logged out from other devices
-	await insertRefreshToken({ id: uuidv7(), token_hash: await sha256(refreshToken), user_id: user.id! });
+	await insertRefreshToken({ id: UUID.generateV7(), token_hash: await sha256(refreshToken), user_id: user.id! });
 	return refreshToken;
 };
 
@@ -151,7 +154,7 @@ export const issuePasswordResetToken = async (email: string) => {
 
 	await deletePasswordResetTokensByUserID(user.id!);
 	await insertPasswordResetToken({
-		id: uuidv7(),
+		id: UUID.generateV7(),
 		user_id: user.id!,
 		token_hash: tokenHash,
 	});

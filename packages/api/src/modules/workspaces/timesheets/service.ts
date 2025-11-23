@@ -1,6 +1,5 @@
 import type { WorkspacesTimesheets } from "@syncellus/types/database.d.ts";
 import type { Insertable, Updateable } from "kysely";
-import { generate as uuidv7 } from "@std/uuid/unstable-v7";
 import {
 	deleteTimesheetFromDb,
 	insertTimesheetsInDb,
@@ -9,12 +8,13 @@ import {
 	selectTimesheetsByEmployeeIdFromDb,
 	updateTimesheetByIdInDb,
 } from "@syncellus/modules/workspaces/timesheets/repository.ts";
+import { UUID } from "@syncellus/utils/Generators.ts";
 
 export const insertNewTimesheets = async (
 	timesheets: Insertable<WorkspacesTimesheets>[],
 ) => {
 	const values = timesheets.map((timesheet) => {
-		return { ...timesheet, id: uuidv7() };
+		return { ...timesheet, id: UUID.generateV7() };
 	});
 	return await insertTimesheetsInDb(values);
 };

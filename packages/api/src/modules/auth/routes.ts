@@ -78,6 +78,9 @@ router.post("/refresh-token", sValidator("json", refreshTokenSchema), async (c) 
 	const { refreshToken } = c.req.valid("json");
 	logger.info({ action: "refresh-token" }, "JWT token refresh attempt");
 	const { JWT_TOKEN_SECRET } = ConfigService.getInstance();
+
+	//TODO add check if token was not revoked
+	//TODO this should be moved to service entirely
 	const valid = await verify(refreshToken, JWT_TOKEN_SECRET);
 
 	if (!valid) throw new HTTPException(HttpStatus.UNAUTHORIZED, { message: "Unauthorized!" });
@@ -103,7 +106,7 @@ router.get(
 		logger.info({ userId: userPublicID, action: "get-profile" }, "Profile requested");
 		const profile = await findUserByPublicID(userPublicID);
 
-		return c.json({ message: "This account information", data: profile }); //TODO sanitize response
+		return c.json({ message: "This account information", data: profile });
 	},
 );
 

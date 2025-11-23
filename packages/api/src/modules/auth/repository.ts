@@ -4,7 +4,11 @@ import type { AuthEmailVerificationTokens, AuthPasswordResetTokens, AuthRefreshT
 
 const db = DatabaseService.getInstance();
 
-const USERS_TABLE = "auth.users" as const;
+//TODO rethink if this is a good pattern
+const SCHEMA = "auth" as const;
+const USERS_TABLE = `${SCHEMA}.users` as const;
+const USERS_VIEW = `${SCHEMA}.users_view` as const;
+const ROLES_TABLE = `${SCHEMA}.user_roles` as const;
 
 export const insertNewUser = async (
 	user: Insertable<AuthUsers>,
@@ -29,7 +33,7 @@ export const deactivateUserAccount = async (id: string) => {
 export const selectUserByEmail = async (
 	email: string,
 ) => {
-	return await db.selectFrom("auth.users_view").selectAll().where(
+	return await db.selectFrom(USERS_VIEW).selectAll().where(
 		"email",
 		"=",
 		email,
@@ -39,7 +43,7 @@ export const selectUserByEmail = async (
 export const selectUserByID = async (
 	id: string,
 ) => {
-	return await db.selectFrom("auth.users_view").selectAll().where(
+	return await db.selectFrom(USERS_VIEW).selectAll().where(
 		"id",
 		"=",
 		id,
@@ -49,7 +53,15 @@ export const selectUserByID = async (
 export const selectUserByPublicID = async (
 	public_id: string,
 ) => {
-	return await db.selectFrom("auth.users_view").selectAll().where(
+	return await db.selectFrom(USERS_VIEW).select([
+		"auth.users_view.id",
+		"auth.users_view.public_id",
+		"auth.users_view.email",
+		"auth.users_view.created_at",
+		"auth.users_view.modified_at",
+		"auth.users_view.verified",
+		"auth.users_view.active",
+	]).where(
 		"public_id",
 		"=",
 		public_id,
@@ -73,7 +85,7 @@ export const getUserRoles = async (
 
 	//TODO replace with view read
 	const roles = await db
-		.selectFrom("auth.user_roles")
+		.selectFrom(ROLES_TABLE)
 		.innerJoin("auth.roles", "auth.user_roles.role_id", "auth.roles.id")
 		.select("auth.roles.name")
 		.where("auth.user_roles.user_id", "=", user.id)
@@ -90,7 +102,7 @@ export const getUserScopes = async (
 
 	//TODO replace with view read
 	const scopes = await db
-		.selectFrom("auth.user_roles")
+		.selectFrom(ROLES_TABLE)
 		.innerJoin(
 			"auth.role_scopes",
 			"auth.user_roles.role_id",

@@ -1,6 +1,5 @@
 import type { AccountsProfiles } from "@syncellus/types/database.d.ts";
 import type { Insertable, Updateable } from "kysely";
-import { generate as uuidv7 } from "@std/uuid/unstable-v7";
 import {
 	deleteAccountByIdInDb,
 	insertNewAccountToDb,
@@ -8,9 +7,10 @@ import {
 	selectOneAccountByIdFromDb,
 	updateAccountByIdInDb,
 } from "@syncellus/modules/accounts/repository.ts";
+import { UUID } from "@syncellus/utils/Generators.ts";
 
 export const insertNewAccount = async (account: Insertable<AccountsProfiles>) => {
-	return await insertNewAccountToDb({ ...account, id: uuidv7() });
+	return await insertNewAccountToDb({ ...account, id: UUID.generateV7() });
 };
 
 export const selectAllAccounts = async () => {
