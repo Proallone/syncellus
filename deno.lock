@@ -4,13 +4,14 @@
     "jsr:@hono/hono@^4.11.3": "4.11.3",
     "jsr:@hono/hono@^4.8.3": "4.11.3",
     "jsr:@hono/standard-validator@~0.2.1": "0.2.1",
+    "jsr:@standard-schema/spec@1": "1.0.0",
     "jsr:@std/bytes@^1.0.6": "1.0.6",
     "jsr:@std/crypto@^1.0.5": "1.0.5",
     "jsr:@std/internal@^1.0.12": "1.0.12",
-    "jsr:@std/path@^1.1.3": "1.1.3",
+    "jsr:@std/path@^1.1.3": "1.1.4",
     "jsr:@std/path@^1.1.4": "1.1.4",
     "jsr:@std/uuid@^1.1.0": "1.1.0",
-    "jsr:@zod/zod@^4.2.1": "4.2.1",
+    "jsr:@zod/zod@^4.3.4": "4.3.4",
     "npm:@deno/vite-plugin@^1.0.5": "1.0.5_vite@7.2.4__@types+node@24.2.0__picomatch@4.0.3_@types+node@24.2.0",
     "npm:@radix-ui/react-dropdown-menu@^2.1.16": "2.1.16_@types+react@19.2.6_@types+react-dom@19.2.3__@types+react@19.2.6_react@19.2.0_react-dom@19.2.0__react@19.2.0",
     "npm:@radix-ui/react-label@^2.1.8": "2.1.8_@types+react@19.2.6_@types+react-dom@19.2.3__@types+react@19.2.6_react@19.2.0_react-dom@19.2.0__react@19.2.0",
@@ -54,8 +55,12 @@
     "@hono/standard-validator@0.2.1": {
       "integrity": "8eefe14629f3dbdd4420f41a6d833bb0e219fa39998839009a290d439b17fe47",
       "dependencies": [
-        "jsr:@hono/hono@^4.8.3"
+        "jsr:@hono/hono@^4.8.3",
+        "jsr:@standard-schema/spec"
       ]
+    },
+    "@standard-schema/spec@1.0.0": {
+      "integrity": "4f20bbcf34e92b92f8c01589b958abc7c87385fa9a96170cecdc643d4d5737c0"
     },
     "@std/bytes@1.0.6": {
       "integrity": "f6ac6adbd8ccd99314045f5703e23af0a68d7f7e58364b47d2c7f408aeb5820a"
@@ -85,8 +90,8 @@
         "jsr:@std/crypto"
       ]
     },
-    "@zod/zod@4.2.1": {
-      "integrity": "693a557fccaf73bfcbcd132ca286929f3343cda9efb56e9780985aa41d229b38"
+    "@zod/zod@4.3.4": {
+      "integrity": "7a6abd3cf3470c90f37e90eaffc22c96062986da6ee6860a26c70e7e7a7cd667"
     }
   },
   "npm": {
@@ -2799,7 +2804,7 @@
           "jsr:@std/crypto@^1.0.5",
           "jsr:@std/path@^1.1.4",
           "jsr:@std/uuid@^1.1.0",
-          "jsr:@zod/zod@^4.2.1",
+          "jsr:@zod/zod@^4.3.4",
           "npm:argon2@0.44",
           "npm:handlebars@^4.7.8",
           "npm:kysely-codegen@0.19",

@@ -1,5 +1,5 @@
 import { customAlphabet } from "nanoid";
-import { generate } from "@std/uuid/unstable-v7";
+import { v7 } from "@std/uuid";
 
 export class NanoID {
 	private static readonly ALPHABET = "1234567890abcdef";
@@ -13,6 +13,6 @@ export class NanoID {
 
 export class UUID {
 	public static generateV7(): string {
-		return generate();
+		return v7.generate();
 	}
 }

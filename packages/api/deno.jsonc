@@ -5,7 +5,7 @@
 		"@std/path": "jsr:@std/path@^1.1.4",
 		"@std/uuid": "jsr:@std/uuid@^1.1.0",
 		"@syncellus/": "./src/",
-		"@zod/zod": "jsr:@zod/zod@^4.2.1",
+		"@zod/zod": "jsr:@zod/zod@^4.3.4",
 		"argon2": "npm:argon2@^0.44.0",
 		"handlebars": "npm:handlebars@^4.7.8",
 		"hono": "jsr:@hono/hono@^4.11.3",
